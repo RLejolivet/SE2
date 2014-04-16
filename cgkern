@@ -1,0 +1,39 @@
+
+
+# generation du boot
+cc -traditional -E -Iinclude boot/bootsect.S > tmp/bootsect.s 
+as86 -0 -a -o tmp/bootsect.o tmp/bootsect.s
+ld86 -0 -s -o tmp/bootsect tmp/bootsect.o
+cc -traditional -E -Iinclude boot/setup.S > tmp/setup.s
+as86 -0 -a -o tmp/setup.o tmp/setup.s
+ld86 -0 -s -o tmp/setup tmp/setup.o
+
+# generation du mini_kernel de base 
+gcc minikernel_init/gidt.c -o tmp/gidt ; tmp/gidt > minikernel_init/idt.h
+gcc -traditional -Iinclude -c minikernel_init/head.S -o tmp/head.o
+gcc -Iinclude -c minikernel_init/util.c -o tmp/util.o
+gcc -Iinclude -c minikernel_init/vga.c -o tmp/vga.o
+gcc -Iinclude -c minikernel_init/main.c -o tmp/main.o
+gcc -Iinclude -c minikernel_init/ttyS_asm.S -o tmp/ttyS_asm.o
+gcc -Iinclude -c minikernel_init/ttyS.c -o tmp/ttyS.o
+
+
+# generation du mini_kernel  user 
+gcc -Iinclude -c minikernel_user_cor/entry.c -o tmp/entry.o
+gcc -Iinclude -c minikernel_user_cor/ttyS_util.S -o tmp/ttyS_util.o
+
+# generation du kernel
+ld -m elf_i386 -Ttext 0x1000 -e startup_32 -o tmp/minikernel.elf \
+	tmp/head.o \
+	tmp/util.o \
+	tmp/vga.o \
+	tmp/main.o \
+	tmp/ttyS_asm.o \
+	tmp/ttyS.o \
+	tmp/entry.o \
+	tmp/ttyS_util.o
+objcopy -O binary -R .note -R .comment -S tmp/minikernel.elf tmp/minikernel
+
+# generation de l'image bootable
+test -f tmp/build || cc boot/build.c -o tmp/build
+tmp/build tmp/bootsect tmp/setup tmp/minikernel > mykernel

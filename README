@@ -1,0 +1,18 @@
+GENERATION:
+    To generate a minikernel
+      $ bash gkern
+      $ ls myk* 
+      mykernel  mykernel.vfd
+      $
+
+    mykernel is the minikernel file to copy into a floppy.
+    mykernel.vfd is the file to attach to floppy device in a VM
+
+REQUIREMENT:
+
+    - gcc 32 bits
+    - as86
+    - ld86
+
+    They must be in the PATH
+
