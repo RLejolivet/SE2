@@ -5,23 +5,31 @@ void print_correct_idt();
 
 main()
 {
-int i;
+	int i;
+
 	/* generate the idt table */
 	printf(".globl idt_table\n");
 	printf("idt_table:\n");
-	for (i=0 ; i<256 ; i++) {
+
+	for (i=0 ; i<256 ; i++) 
+	{
 		printf("\t.word interupt_%03d\n"
 		       "\t.word 0x0010\n"
 		       "\t.long interupt_%03d\n",
 			i,i);
 	}
+
 	/* generate the interrupt routines */
 	print_correct_idt();
 	print_ignore_int_code();
+
 	for (i=0 ; i<256 ; i++) {
 		printf(     "\ninterupt_%03d:\n",i);
+
 		printf("%s","\tpushl %eax\n",i);
+
 		printf(     "\tmovl  $%d,%%eax\n",i);
+
 		printf("%s","\tjmp   ignore_int\n");
 	}
 	

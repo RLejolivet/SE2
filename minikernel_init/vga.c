@@ -1,4 +1,3 @@
-
 /*
  * basic print to vga screen for debuging
 */
@@ -14,7 +13,8 @@
 */
 #define SCREEN_INFO (*(struct screen_info *)0x90000)
 
-struct screen_info {
+struct screen_info 
+{
 	unsigned char  orig_x;			/* 0x00 */
 	unsigned char  orig_y;			/* 0x01 */
 	unsigned short dontuse1;		/* 0x02 -- EXT_MEM_K sits here */
@@ -66,20 +66,24 @@ subscreen sc_alive, sc_ttyS0, sc_ttyS1, sc_kernel, sc_user;
 
 void vga_init()
 {
-int nbl;
-int i;
+	int nbl;
+	int i;
 
-	if (SCREEN_INFO.orig_video_mode == 7) {
+	if (SCREEN_INFO.orig_video_mode == 7) 
+	{
 		vidmem = (char *) 0xb0000;
 		vidport = 0x3b4;
-	} else {
+	} 
+	else 
+	{
 		vidmem = (char *) 0xb8000;
 		vidport = 0x3d4;
 	}
 	nblines = SCREEN_INFO.orig_video_lines;
 	nbcols  = SCREEN_INFO.orig_video_cols;
 	/* clear screen */
-	for (i=0 ; i< (nblines*nbcols*2) ; i += 2) {
+	for (i=0 ; i< (nblines*nbcols*2) ; i += 2) 
+	{
 		vidmem[i]=' ';
 	}
 
@@ -135,20 +139,28 @@ void kprintc(subscreen* psc, char c)
 	x = psc->ccol;
 	y = psc->cline;
 
-	if ( c == '\n' ) {
+	if ( c == '\n' ) 
+	{
 		x = 0;
-		if ( ++y >= psc->nblines ) {
+		if ( ++y >= psc->nblines ) 
+		{
 			scroll(psc);
 			y--;
 		}
-	} else {
+	} 
+	else 
+	{
 		psc->vidmem [ ( x + psc->nbcols * y ) * 2 ] = c; 
-		if ( ++x >= psc->nbcols ) {
+		if ( ++x >= psc->nbcols ) 
+		{
 			x = 0;
-			if ( ++y >= psc->nblines ) {
+			if ( ++y >= psc->nblines ) 
+			{
 				scroll(psc);
 				y--;
-	}	}	}
+			}
+		}
+	}
 
 	psc->ccol  = x;
 	psc->cline = y;
@@ -176,10 +188,14 @@ void kprintf(subscreen* psc, const char* fmt, ...)
 }
 
 void vgaprintc(char c)
-{ kprintc(&sc_user,c); }
+{ 
+	kprintc(&sc_user,c); 
+}
 
 void vgaprints(const char* s)
-{ kprints(&sc_user,s); }
+{
+	kprints(&sc_user,s);
+}
 
 void vgaprintf(const char* fmt,...)
 { 
@@ -198,131 +214,166 @@ static void scroll(subscreen *psc)
 			 psc->vidmem + psc->nbcols * 2,
 			( psc->nblines - 1 ) * psc->nbcols * 2
 		);
-	for ( i = ( psc->nblines - 1 ) * psc->nbcols * 2;
-			i < psc->nblines * psc->nbcols * 2; i += 2 )
+
+	for ( i = ( psc->nblines - 1 ) * psc->nbcols * 2; i < psc->nblines * psc->nbcols * 2; i += 2 )
 		psc->vidmem[i] = ' ';
 }
 
 static void vkprintf_str(subscreen* psc, const char* str, int len, char fillwith, int placeleft, int signe)
 {
-int i;
-	if (len==0) {
+	int i;
+	if (len==0) 
+	{
 		if (signe) kprintc(psc,signe);
 		kprints(psc,str);
-	} else {
+	} 
+	else 
+	{
 		int slen=strlen(str) + (signe ? 1 : 0);
-		if (slen >= len) {
+		if (slen >= len) 
+		{
 			if (signe) kprintc(psc,signe);
 			kprints(psc,str);
-		} else if (placeleft) {
+		} 
+		else if (placeleft) 
+		{
 			if (signe) kprintc(psc,signe);
 			kprints(psc,str);
-			for (i=0; i<(len-slen) ; i++) {
+			for (i=0; i<(len-slen) ; i++) 
+			{
 				kprintc(psc,fillwith);
 			}
-		} else {
+		} 
+		else 
+		{
 			if (signe&&(fillwith!=' ')) kprintc(psc,signe);
 			for (i=0; i<(len-slen) ; i++)
 				kprintc(psc,fillwith);
 			if ( signe&&(fillwith==' ')) kprintc(psc,signe);
 			kprints(psc,str);
-	}	}
+		}	
+	}
 }
 
 static void vkprintf(subscreen* psc, const char* fmt, va_list args)
 {
-int len=0;
-char fillwith=' ';
-int	 placeleft=0;
-int	 signe=0;
-char buf[100];
+	int len=0;
+	char fillwith=' ';
+	int	 placeleft=0;
+	int	 signe=0;
+	char buf[100];
 
-	while (*fmt) {
-		switch (*fmt) {
-	      case '%' :
-		  fmt++;
-		  while (*fmt) {
-	  		switch (*fmt) {
-			  case '%' : fmt++; kprintc(psc,'%'); goto leave_printarg;
-			  case 's' : 
-				vkprintf_str(psc,va_arg(args, char*), len, fillwith, placeleft,0);
-				fmt++;
-				goto leave_printarg;
-			  case 'c' :
-				 kprintc(psc,va_arg(args, int)&0xff);
-				fmt++;
-				goto leave_printarg;
-			  case 'x' :
-			  case 'X' : {
-				char* p=buf;
-				unsigned int x= va_arg(args, int);
-				int i;
-				for (i=0 ; i<7 ; i++, x <<= 4) {
-					if ( (x&0xf0000000)!=0 )
-						break;
-				}
-				for ( ; i<8 ; i++, x <<= 4) {
-					char c= (x>>28)&0xf;
-					if ( c>=10 )
-						*p++= c-10+'a';
-					else
-						*p++= c+'0';
-				}
-				*p=0;
-				vkprintf_str(psc,buf, len, fillwith, placeleft,0);
-				fmt++;
-				goto leave_printarg;
-				}
-			  case 'd' :
-			  case 'i' : {
-				char* p=buf;
-				int y=1000000000;
-				int x= va_arg(args, int);
-				if (x<0) {
-					signe = '-';
-					x = -x;
-				} else if (signe)
-					signe = '+';
-				
-				for (    ; y>=10 ; y /= 10) {
-					if ( (x/y)>0 )
-						break;
-				}
-				for (    ; y>=10 ; y /= 10) {
-					*p++ = (x / y) + '0';
-					x = x % y;
-				}
-				*p++ = x + '0';
-				*p=0;
-				if (placeleft)
-					fillwith=' ';
-				vkprintf_str(psc, buf, len, fillwith, placeleft, signe);
-				fmt++;
-				goto leave_printarg;
-				}
-			  case '0' : fmt++; fillwith='0'; continue;
-			  case '+' : fmt++; signe= 1; continue;
-			  case '-' : fmt++; placeleft= 1; continue;
-			  default:
-				if ( (*fmt<'1') || ('9'<=*fmt) ) {
-					/* ignore char */
-					continue;
-				}
-				/* get number */
-				while (*fmt && !((*fmt<'0') || ('9'<*fmt)) ) {
-					len = len*10 + *fmt-'0';
-					fmt++;
-				}
+	while (*fmt) 
+	{
+		switch (*fmt) 
+		{
+			case '%' :
+			fmt++;
+			while (*fmt) 
+			{
+				switch (*fmt) 
+				{
+					case '%' : 
+						fmt++; kprintc(psc,'%'); 
+						goto leave_printarg;
+					case 's' : 
+						vkprintf_str(psc,va_arg(args, char*), len, fillwith, placeleft,0);
+						fmt++;
+						goto leave_printarg;
+					case 'c' :
+						kprintc(psc,va_arg(args, int)&0xff);
+						fmt++;
+						goto leave_printarg;
+					case 'x' :
+					case 'X' : 
+					{
+						char* p=buf;
+						unsigned int x= va_arg(args, int);
+						int i;
+						for (i=0 ; i<7 ; i++, x <<= 4) 
+						{
+							if ( (x&0xf0000000)!=0 )
+								break;
+						}
+						for ( ; i<8 ; i++, x <<= 4) 
+						{
+							char c= (x>>28)&0xf;
+							if ( c>=10 )
+								*p++= c-10+'a';
+							else
+								*p++= c+'0';
+						}
+						*p=0;
+						vkprintf_str(psc,buf, len, fillwith, placeleft,0);
+						fmt++;
+						goto leave_printarg;
+					}
+					case 'd' :
+					case 'i' : 
+					{
+						char* p=buf;
+						int y=1000000000;
+						int x= va_arg(args, int);
+						if (x<0) 
+						{
+							signe = '-';
+							x = -x;
+						} 
+						else if (signe)
+							signe = '+';
+							
+						for (    ; y>=10 ; y /= 10) 
+						{
+							if ( (x/y)>0 )
+								break;
+						}
+						for (    ; y>=10 ; y /= 10) 
+						{
+							*p++ = (x / y) + '0';
+							x = x % y;
+						}
+						*p++ = x + '0';
+						*p=0;
+						if (placeleft)
+							fillwith=' ';
+						vkprintf_str(psc, buf, len, fillwith, placeleft, signe);
+						fmt++;
+						goto leave_printarg;
+					}
+					case '0' : 
+						fmt++; fillwith='0'; 
+						continue;
+					case '+' : 
+						fmt++; signe= 1; 
+						continue;
+					case '-' : 
+						fmt++; placeleft= 1; 
+						continue;
+					default:
+						if ( (*fmt<'1') || ('9'<=*fmt) ) 
+						{
+							/* ignore char */
+							continue;
+						}
+						/* get number */
+						while (*fmt && !((*fmt<'0') || ('9'<*fmt)) ) 
+						{
+							len = len*10 + *fmt-'0';
+							fmt++;
+						}
+						continue;
+				}	
+			}
+			leave_printarg:
+				len=0;
+				fillwith=' ';
+				placeleft=0;
+				signe=0;
 				continue;
-			}	}
-leave_printarg:
-			len=0;
-			fillwith=' ';
-			placeleft=0;
-			signe=0;
-			continue;
-	    default:
-			kprintc(psc,*fmt++);
-			continue;
-}	}	}
+			default:
+				kprintc(psc,*fmt++);
+				continue;
+		}	
+	}	
+}
 

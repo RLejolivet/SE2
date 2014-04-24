@@ -4,9 +4,12 @@
 
 void ttyS_set_uart_name(char *name)
 {
-	if (uart_name[0]==0) {
+	if (uart_name[0]==0) 
+	{
 		strcpy(uart_name,name);
-	} else {
+	}
+	else 
+	{
 		if (strcmp(uart_name,name)!=0)
 			kprintf(&sc_kernel,"ttyS: several UART %s %s\n",
 				uart_name,
@@ -17,8 +20,9 @@ void ttyS_set_uart_name(char *name)
 
 void ttyS_init()
 {
-int i,k,irq;
-	if ( ttyS_detect(0x3F8) ) {
+	int i,k,irq;
+	if ( ttyS_detect(0x3F8) ) 
+	{
 		ttyS0_base=0x3F8;
 		irq=ttyS_getIrq(ttyS0_base);
 		irq= (irq&0x8000)!=0 ? (irq>>8)&0x07 : (irq&0x80)!=0 ? (irq&0x07)+8 : -1;
@@ -28,7 +32,8 @@ int i,k,irq;
 			irq
 		);
 	}
-	if ( ttyS_detect(0x2F8) ) {
+	if ( ttyS_detect(0x2F8) ) 
+	{
 		ttyS1_base=0x2F8;
 		irq=ttyS_getIrq(ttyS1_base);
 		irq= (irq&0x8000)!=0 ? (irq>>8)&0x07 : (irq&0x80)!=0 ? (irq&0x07)+8 : -1;

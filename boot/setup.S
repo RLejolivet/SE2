@@ -446,7 +446,7 @@ done_apm_bios:
 	callf	far * realmode_swtch
 	jmp	rmodeswtch_end
 rmodeswtch_normal:
-        push	cs
+	push	cs
 	call	default_switch
 rmodeswtch_end:
 
@@ -810,7 +810,7 @@ gdt:
 	.word	0x00CF		! granularity=4096, 386 (+5th nibble of limit)
 
 idt_48:
-	.word	0			! idt limit=0
+	.word	0x800			! idt limit=2048, 256 GDT entries
 	.word	0,0			! idt base=0L
 
 gdt_48:

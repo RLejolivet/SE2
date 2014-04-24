@@ -2,7 +2,8 @@
 /**********************************************************************/
 /**** sub screen, and print function                               ****/
 
-typedef struct _subscreen {
+typedef struct _subscreen 
+{
 	char* vidmem;
 	int nblines, nbcols;
 	int cline, ccol;
