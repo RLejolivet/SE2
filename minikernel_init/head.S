@@ -77,6 +77,7 @@ idt_descr:
 .globl minikernel_irq0
 minikernel_irq0:
 	cld
+	cli
 	pushl %eax
 	pushl %ecx
 	pushl %edx
@@ -93,11 +94,13 @@ minikernel_irq0:
 	popl %edx
 	popl %ecx
 	popl %eax
+	sti
 	iret
 	
 .globl minikernel_irq1
 minikernel_irq1:
 	cld
+	cli
 	pushl %eax
 	pushl %ebx
 	pushl %ecx
@@ -126,5 +129,6 @@ minikernel_irq1:
 	popl %ecx
 	popl %ebx
 	popl %eax
+	sti
 	iret
 	
