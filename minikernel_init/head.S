@@ -54,7 +54,7 @@ startup_32:
 	call main_init
 	movb $0xFF,%al
 	outb %al,$0xa1		/* enable IRQ: -8,-9,-10,-11,-12,-13,-14,-15 */
-	movb $0xFA,%al
+	movb $0xF8,%al		
 	outb %al,$0x21		/* enable IRQ: +00,-01,+02,-03,-04,-05,-06,-07  */
 	sti
 	call mini_kernel
@@ -82,7 +82,7 @@ minikernel_irq0:
 	pushl %edx
 	pushl %es
 	pushl %ds
-	movl $(__KERNEL_DS),%eax
+	movl $(__KERNEL_DS),%eax /* __KERNEL_DS = 0x18 */
 	movl %eax,%ds
 	movl %eax,%es
 	call do_minikernel_irq0
@@ -92,6 +92,39 @@ minikernel_irq0:
 	popl %es
 	popl %edx
 	popl %ecx
+	popl %eax
+	iret
+	
+.globl minikernel_irq1
+minikernel_irq1:
+	cld
+	pushl %eax
+	pushl %ebx
+	pushl %ecx
+	pushl %edx
+	pushl %edi
+	pushl %esi
+	pushl %es
+	pushl %ds
+	movl $(__KERNEL_DS),%eax /* __KERNEL_DS = 0x18 */
+	movl %eax,%ds
+	movl %eax,%es
+
+	xor %eax,%eax
+	inb $0x60,%al
+
+	pushl %eax
+	call do_minikernel_irq1
+	add $4,%esp
+	movb $0x20,%al
+	outb %al,$0x20
+	popl %ds
+	popl %es
+	popl %esi
+	popl %edi
+	popl %edx
+	popl %ecx
+	popl %ebx
 	popl %eax
 	iret
 	

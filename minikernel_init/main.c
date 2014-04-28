@@ -62,15 +62,25 @@ void main_init()
 {
 	char rtc_A, rtc_B, rtc_C;
 	int i;
+	extern unsigned long idt_table[];
+
 
 	/* init irq0 entry 0x20 (timer) */
 	{
-		extern unsigned long idt_table[];
 		long addr = (long)minikernel_irq0;
 		unsigned short* pidt = (unsigned short*)(idt_table + (0x20<<1));
 
-		pidt[0] = addr;
-		pidt[3] = (((long)addr)>>16) & 0xffff;
+		pidt[0] = addr; /* première moitié de l'offset */
+		/* on laisse tranquille 32 bits du descripteur */
+		pidt[3] = (((long)addr)>>16) & 0xffff; /* 2e moitié de l'offset */
+	}
+
+	/* init irq1 entry 0x21 (keyboard) */
+	{	
+		long addr = (long)minikernel_irq1;
+		unsigned short* pidt = (unsigned short*)(idt_table + (0x21<<1));
+		pidt[0] = addr ;
+		pidt[3] = (((long)addr)>>16) & 0xffff; 
 	}
 }
 
@@ -81,7 +91,7 @@ void do_minikernel_irq0()
 
 	count++;
 
-	if ((count % 10) == 0) 
+	if ((count % 20) == 0) 
 	{
 		unsigned char irq7_0 = inb(0x21);
 		unsigned char irq15_8 = inb(0xa1);
@@ -94,4 +104,11 @@ void do_minikernel_irq0()
 		count = 0;
 		time++;
 	}
+}
+
+void do_minikernel_irq1(int code)
+{
+	static int count = 0 ;
+
+	vgaprintf("\nkeyboard pressed %010d : %x", ++count, code) ;
 }

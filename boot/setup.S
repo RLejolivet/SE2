@@ -810,7 +810,7 @@ gdt:
 	.word	0x00CF		! granularity=4096, 386 (+5th nibble of limit)
 
 idt_48:
-	.word	0x800			! idt limit=2048, 256 GDT entries
+	.word	0x800		! limit=0
 	.word	0,0			! idt base=0L
 
 gdt_48:

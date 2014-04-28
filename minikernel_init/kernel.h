@@ -30,4 +30,6 @@ void ttyS_set_uart_name(char *name);
 int  ttyS_detect(unsigned int base);
 
 void minikernel_irq0();
+void minikernel_irq1();
 void do_minikernel_irq0();
+void do_minikernel_irq1(int code) ;

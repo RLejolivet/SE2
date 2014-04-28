@@ -16,6 +16,6 @@ void mini_kernel()
 		vgaprintf("%d %ss\n",cnt, "coucou");
 		ttyS_config(ttyS0_base,12);	// 9600 bauds */
 
-		while (1) ;
+//		while (1) ;
 }
 
