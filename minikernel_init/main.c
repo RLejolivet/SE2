@@ -1,5 +1,6 @@
 
 #include "kernel.h"
+#include "keyboard.h"
 
 unsigned char  inb  (unsigned short port) 
 { 

@@ -1,6 +1,51 @@
 # 1 "boot/setup.S"
-# 1 "<interne>"
 # 1 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+
+# 17 "/usr/include/stdc-predef.h" 3 4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 1 "<command-line>" 2
 # 1 "boot/setup.S"
 !
 !	setup.S		Copyright (C) 1991, 1992 Linus Torvalds
@@ -777,7 +822,7 @@ gdt:
 	.word	0x00CF		! granularity=4096, 386 (+5th nibble of limit)
 
 idt_48:
-	.word	0x800			! limit=0
+	.word	0x800		! limit=0
 	.word	0,0			! idt base=0L
 
 gdt_48:
