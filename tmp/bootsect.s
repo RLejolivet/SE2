@@ -1,51 +1,6 @@
 # 1 "boot/bootsect.S"
+# 1 "<interne>"
 # 1 "<command-line>"
-# 1 "/usr/include/stdc-predef.h" 1 3 4
-
-# 17 "/usr/include/stdc-predef.h" 3 4
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# 1 "<command-line>" 2
 # 1 "boot/bootsect.S"
 !
 !	bootsect.s		Copyright (C) 1991, 1992 Linus Torvalds
