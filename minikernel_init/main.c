@@ -1,4 +1,3 @@
-
 #include "kernel.h"
 #include "keyboard.h"
 
@@ -111,5 +110,6 @@ void do_minikernel_irq1(int code)
 {
 	static int count = 0 ;
 
-	vgaprintf("\nkeyboard pressed %010d : %x", ++count, code) ;
+	//vgaprintf("\nkeyboard pressed %010d : %x", ++count, code) ;
+	print_char(code) ;
 }

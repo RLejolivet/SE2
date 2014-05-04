@@ -1,12 +1,11 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
-#endif
 
 #define BUFFER_SIZE 1024
 
 typedef enum bool {false, true} bool ;
 
-struct 
+struct buffer_keyboard 
 {
 	char* buffer1 ;
 	char* buffer2 ;
@@ -26,4 +25,8 @@ struct
 
 
 	char write_to ;
-} buffer_keyboard ;
+} ;
+
+
+void print_char(int code) ;
+#endif
