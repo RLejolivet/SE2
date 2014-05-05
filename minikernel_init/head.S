@@ -132,3 +132,34 @@ minikernel_irq1:
 	sti
 	iret
 	
+.globl minikernel_syscalls
+minikernel_syscalls:
+	cld
+	pushl %eax
+	pushl %ebx
+	pushl %ecx
+	pushl %edx
+	pushl %edi
+	pushl %esi
+	pushl %es
+	pushl %ds
+
+	movl $(__KERNEL_DS),%ebx # __KERNEL_DS = 0x18
+	movl %ebx,%ds
+	movl %ebx,%es
+
+	pushl %ebp
+	pushl %esp
+
+	call do_minikernel_syscalls
+	add $8,%esp
+
+	popl %ds
+	popl %es
+	popl %esi
+	popl %edi
+	popl %edx
+	popl %ecx
+	popl %ebx
+	popl %eax
+	iret

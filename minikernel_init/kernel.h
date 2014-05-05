@@ -31,5 +31,8 @@ int  ttyS_detect(unsigned int base);
 
 void minikernel_irq0();
 void minikernel_irq1();
+void minikernel_syscalls();
+
 void do_minikernel_irq0();
 void do_minikernel_irq1();
+void do_minikernel_syscalls(int esp, int ebp);

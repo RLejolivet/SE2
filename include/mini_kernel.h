@@ -20,3 +20,6 @@ void vgaprintf(const char* fmt,...);	/* basic printf */
 extern	char	       uart_name[64];
 extern	unsigned short ttyS0_base;
 extern	unsigned short ttyS1_base;
+
+/* test functions */
+void function_test();

@@ -82,6 +82,14 @@ void main_init()
 		pidt[0] = addr ;
 		pidt[3] = (((long)addr)>>16) & 0xffff; 
 	}
+
+	/* init syscalls entry 0x80 (syscalls) */
+	{	
+		long addr = (long)minikernel_syscalls;
+		unsigned short* pidt = (unsigned short*)(idt_table + (0x80<<1));
+		pidt[0] = addr ;
+		pidt[3] = (((long)addr)>>16) & 0xffff; 
+	}
 }
 
 void do_minikernel_irq0()
@@ -112,4 +120,9 @@ void do_minikernel_irq1(int code)
 
 	//vgaprintf("\nkeyboard pressed %010d : %x", ++count, code) ;
 	print_char(code) ;
+}
+
+void do_minikernel_syscalls(int esp, int ebp)
+{
+	vgaprintf("esp : %x\nebp : %x\n", esp, ebp);
 }
