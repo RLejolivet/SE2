@@ -1,4 +1,5 @@
-
+#ifndef KERNEL_H
+#define KERNEL_H
 /**********************************************************************/
 /**** sub screen, and print function                               ****/
 
@@ -34,5 +35,7 @@ void minikernel_irq1();
 void minikernel_syscalls();
 
 void do_minikernel_irq0();
-void do_minikernel_irq1();
+void do_minikernel_irq1(int code);
 void do_minikernel_syscalls(int esp, int ebp);
+
+#endif

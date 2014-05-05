@@ -117,9 +117,38 @@ void do_minikernel_irq0()
 void do_minikernel_irq1(int code)
 {
 	static int count = 0 ;
+	static bool caps = false ;
+	char caractere ;
 
-	//vgaprintf("\nkeyboard pressed %010d : %x", ++count, code) ;
-	print_char(code) ;
+	switch(code)
+	{
+		case LEFT_SHIFT_MC :
+		case LEFT_SHIFT_BC :
+		case RIGHT_SHIFT_MC :
+		case RIGHT_SHIFT_BC :
+		case CAPS_LOCK_MC :
+			caps = !caps ;
+			break ;
+		case 0xe0:
+			break ;
+		default :
+			if (code < 0x81)
+			{
+				caractere = mappings[code - 1] ;
+				if(caps)
+					caractere = uppercase(code) ;
+
+				if (caractere != '\0')
+					vgaprintf("%c", caractere) ;
+			}
+			break ;
+			
+	}
+
+/*	if(code  == 0xe0)
+		vgaprintf("extended key pressed %03d : %x\n", ++count, code) ;
+	else
+		vgaprintf("keyboard pressed %010d : %x\n", ++count, code) ;*/
 }
 
 void do_minikernel_syscalls(int esp, int ebp)
