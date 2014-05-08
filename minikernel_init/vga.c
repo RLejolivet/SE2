@@ -148,7 +148,7 @@ void kprintc(subscreen* psc, char c)
 			y--;
 		}
 	} 
-	else 
+	else
 	{
 		psc->vidmem [ ( x + psc->nbcols * y ) * 2 ] = c; 
 		if ( ++x >= psc->nbcols ) 
@@ -373,7 +373,7 @@ static void vkprintf(subscreen* psc, const char* fmt, va_list args)
 			default:
 				kprintc(psc,*fmt++);
 				continue;
-		}	
+		}
 	}	
 }
 

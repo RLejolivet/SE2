@@ -1,5 +1,6 @@
 #include "kernel.h"
 #include "keyboard.h"
+#define SCREEN_INFO (*(struct screen_info *)0x90000)
 
 unsigned char  inb  (unsigned short port) 
 { 
@@ -57,7 +58,7 @@ void outw_p (unsigned   short   value, unsigned short port)
 }
 */
 
-
+char saved_char ;
 void main_init()
 {
 	char rtc_A, rtc_B, rtc_C;
@@ -96,6 +97,8 @@ void do_minikernel_irq0()
 {
 	static int count=-1;
 	static int time=0;
+	static bool blink = false ;
+	char c ;
 
 	count++;
 
@@ -109,16 +112,18 @@ void do_minikernel_irq0()
 			time,irq7_0,irq15_8
 		);
 
-		count = 0;
+
 		time++;
+
 	}
 }
 
 void do_minikernel_irq1(int code)
 {
 	static int count = 0 ;
-	static bool caps = false ;
+	static bool caps = false, make_extended = false, break_extended = false ;
 	char caractere ;
+	subscreen* psc = &sc_user ;
 
 	switch(code)
 	{
@@ -130,9 +135,41 @@ void do_minikernel_irq1(int code)
 			caps = !caps ;
 			break ;
 		case 0xe0:
+			if(!make_extended)
+			{
+				make_extended = true ;
+				break_extended = false ;
+			}
+			else
+			{
+				make_extended = false ;
+				break_extended = true ;
+			}
 			break ;
 		default :
-			if (code < 0x81)
+			if(make_extended)
+			{
+				switch(code)
+				{
+					case 0x48: //haut
+						if(psc->cline > 0)
+							psc->cline-- ;
+						break ;
+					case 0x4d: //droite
+						if(psc->ccol < 16 * 12)
+							psc->ccol++ ;
+						break ;
+					case 0x50: //bas
+						if(psc->cline < 9 * 12)
+							psc->cline++ ;
+						break ;
+					case 0x4b: //gauche
+						if(psc->ccol > 0)
+							psc->ccol-- ;
+						break ;
+				}
+			}
+			else if (code < 0x81)
 			{
 				caractere = mappings[code - 1] ;
 				if(caps)
