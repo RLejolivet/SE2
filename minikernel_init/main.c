@@ -1,5 +1,6 @@
 #include "kernel.h"
 #include "keyboard.h"
+#include "process.h"
 #define SCREEN_INFO (*(struct screen_info *)0x90000)
 
 unsigned char  inb  (unsigned short port) 
@@ -108,8 +109,9 @@ void do_minikernel_irq0()
 		unsigned char irq15_8 = inb(0xa1);
 
 		kprintf(&sc_alive,
-			"\nmini_kernel is alive since %010d secondes, IRQ [15:0]=%02x%02x",
-			time,irq7_0,irq15_8
+			"\nmini_kernel is alive since %010d secondes, IRQ [15:0]=%02x%02x\nP1:%c P2:%c P3:%c P4:%c",
+			time,irq7_0,irq15_8, process_1.state, process_2.state, 
+			process_3.state, process_4.state
 		);
 
 

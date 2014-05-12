@@ -135,31 +135,54 @@ minikernel_irq1:
 .globl minikernel_syscalls
 minikernel_syscalls:
 	cld
-	pushl %eax
-	pushl %ebx
 	pushl %ecx
 	pushl %edx
 	pushl %edi
 	pushl %esi
 	pushl %es
 	pushl %ds
+	pushl %ebx
 
 	movl $(__KERNEL_DS),%ebx # __KERNEL_DS = 0x18
 	movl %ebx,%ds
 	movl %ebx,%es
 
-	pushl %ebp
-	pushl %esp
+	movl $0, %ebx
+	cmpl %eax, %ebx
+	je call_sys_sleep
 
-	call do_minikernel_syscalls
-	add $8,%esp
+	movl $0x1, %ebx
+	cmpl %eax, %ebx
+	je call_sys_write
 
+	movl $0x2, %ebx
+	cmpl %eax, %ebx
+	je call_sys_read
+
+	jmp call_kill_process
+
+call_sys_sleep:
+	call sys_sleep
+	jmp end_minikernel_syscalls
+
+call_sys_write:
+	call sys_write
+	jmp end_minikernel_syscalls
+
+call_sys_read:
+	call sys_read
+	jmp end_minikernel_syscalls
+
+call_kill_process:
+	call kill_process
+	jmp end_minikernel_syscalls # techniquement, si on revient ici, il y a un gros problème
+
+end_minikernel_syscalls:
+	popl %ebx
 	popl %ds
 	popl %es
 	popl %esi
 	popl %edi
 	popl %edx
 	popl %ecx
-	popl %ebx
-	popl %eax
 	iret

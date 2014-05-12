@@ -265,7 +265,7 @@ void vgaprintf(const char* fmt,...)
 { 
 	va_list args;
 	va_start(args, fmt);
-	vkprintf(&sc_user,fmt,args);
+	vkprintf(&sc_p1,fmt,args);
 	va_end(args);
 }
 
