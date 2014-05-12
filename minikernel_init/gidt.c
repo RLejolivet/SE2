@@ -3,7 +3,7 @@
 void print_ignore_int_code();
 void print_correct_idt();
 
-main()
+int main()
 {
 	int i;
 

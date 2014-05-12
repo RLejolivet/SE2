@@ -9,7 +9,7 @@ as86 -0 -a -o tmp/setup.o tmp/setup.s
 ld86 -0 -s -o tmp/setup tmp/setup.o
 
 # generation du mini_kernel de base 
-gcc minikernel_init/gidt.c -o tmp/gidt ; tmp/gidt > minikernel_init/idt.h
+gcc  minikernel_init/gidt.c -o tmp/gidt ; tmp/gidt > minikernel_init/idt.h
 gcc -fno-stack-protector -traditional -Iinclude -c minikernel_init/head.S -o tmp/head.o
 gcc -fno-stack-protector -Iinclude -c minikernel_init/util.c -o tmp/util.o
 gcc -fno-stack-protector -Iinclude -c minikernel_init/vga.c -o tmp/vga.o

@@ -13,40 +13,46 @@
 */
 #define SCREEN_INFO (*(struct screen_info *)0x90000)
 
+
+void outb_p (unsigned   char   value, unsigned short port) 
+{  
+	__asm__ __volatile__ ("out" "b" " %"   "b"   "0,%"  "w"  "1"  "\noutb %%al,$0x80"   : : "a" (value), "Nd" (port));
+}
+
 struct screen_info 
 {
-	unsigned char  orig_x;			/* 0x00 */
-	unsigned char  orig_y;			/* 0x01 */
-	unsigned short dontuse1;		/* 0x02 -- EXT_MEM_K sits here */
+	unsigned char  orig_x;				/* 0x00 */
+	unsigned char  orig_y;				/* 0x01 */
+	unsigned short dontuse1;			/* 0x02 -- EXT_MEM_K sits here */
 	unsigned short orig_video_page;		/* 0x04 */
 	unsigned char  orig_video_mode;		/* 0x06 */
 	unsigned char  orig_video_cols;		/* 0x07 */
-	unsigned short unused2;			/* 0x08 */
+	unsigned short unused2;				/* 0x08 */
 	unsigned short orig_video_ega_bx;	/* 0x0a */
-	unsigned short unused3;			/* 0x0c */
+	unsigned short unused3;				/* 0x0c */
 	unsigned char  orig_video_lines;	/* 0x0e */
 	unsigned char  orig_video_isVGA;	/* 0x0f */
 	unsigned short orig_video_points;	/* 0x10 */
 
 	/* VESA graphic mode -- linear frame buffer */
-	unsigned short lfb_width;		/* 0x12 */
-	unsigned short lfb_height;		/* 0x14 */
-	unsigned short lfb_depth;		/* 0x16 */
-	unsigned long  lfb_base;		/* 0x18 */
-	unsigned long  lfb_size;		/* 0x1c */
+	unsigned short lfb_width;			/* 0x12 */
+	unsigned short lfb_height;			/* 0x14 */
+	unsigned short lfb_depth;			/* 0x16 */
+	unsigned long  lfb_base;			/* 0x18 */
+	unsigned long  lfb_size;			/* 0x1c */
 	unsigned short dontuse2, dontuse3;	/* 0x20 -- CL_MAGIC and CL_OFFSET here */
 	unsigned short lfb_linelength;		/* 0x24 */
-	unsigned char  red_size;		/* 0x26 */
-	unsigned char  red_pos;			/* 0x27 */
-	unsigned char  green_size;		/* 0x28 */
-	unsigned char  green_pos;		/* 0x29 */
-	unsigned char  blue_size;		/* 0x2a */
-	unsigned char  blue_pos;		/* 0x2b */
-	unsigned char  rsvd_size;		/* 0x2c */
-	unsigned char  rsvd_pos;		/* 0x2d */
-	unsigned short vesapm_seg;		/* 0x2e */
-	unsigned short vesapm_off;		/* 0x30 */
-	unsigned short pages;			/* 0x32 */
+	unsigned char  red_size;			/* 0x26 */
+	unsigned char  red_pos;				/* 0x27 */
+	unsigned char  green_size;			/* 0x28 */
+	unsigned char  green_pos;			/* 0x29 */
+	unsigned char  blue_size;			/* 0x2a */
+	unsigned char  blue_pos;			/* 0x2b */
+	unsigned char  rsvd_size;			/* 0x2c */
+	unsigned char  rsvd_pos;			/* 0x2d */
+	unsigned short vesapm_seg;			/* 0x2e */
+	unsigned short vesapm_off;			/* 0x30 */
+	unsigned short pages;				/* 0x32 */
 						/* 0x34 -- 0x3f reserved for future expansion */
 };
 
@@ -62,11 +68,13 @@ static char *vidmem;
 static int vidport;
 
 subscreen sc_alive, sc_ttyS0, sc_ttyS1, sc_kernel, sc_user;
+subscreen sc_p1, sc_p2, sc_p3, sc_p4 ;
 
 
 void vga_init()
 {
 	int nbl;
+	int pos ;
 	int i;
 
 	if (SCREEN_INFO.orig_video_mode == 7) 
@@ -79,19 +87,44 @@ void vga_init()
 		vidmem = (char *) 0xb8000;
 		vidport = 0x3d4;
 	}
+
 	nblines = SCREEN_INFO.orig_video_lines;
 	nbcols  = SCREEN_INFO.orig_video_cols;
+
 	/* clear screen */
 	for (i=0 ; i< (nblines*nbcols*2) ; i += 2) 
 	{
 		vidmem[i]=' ';
 	}
 
+	for(i = 1 ; i < nblines * nbcols*2 ; i += 2)
+	{
+		/*
+		 * 0 : noir
+		 * 1 : bleu foncé
+		 * 2 : vert
+		 * 3 : bleu clair
+		 * 4 : rouge
+		 * 5 : violet 
+		 * 6 : orange
+		 * 7 : blanc 
+		 * 8 : gris
+		 * 9 : bleu 
+		 * A : vert clair
+		 * B : cyan 
+		 * C : rose
+		 * D : fuschia
+		 * E : jaune
+		 * F : blanc
+		 */
+		vidmem[i] = 0x0d ;
+	}
+
 	nbl= nblines;
 
 	/* init alive screen */
 	sc_alive.vidmem= vidmem;
-	sc_alive.nblines= 1;
+	sc_alive.nblines= 2;
 	sc_alive.nbcols= nbcols;
 	sc_alive.cline=0;
 	sc_alive.ccol=0;
@@ -105,6 +138,7 @@ void vga_init()
 	sc_ttyS0.ccol=0;
 	nbl--;
 
+	#if 0
 	/* init sc_ttyS1 screen */
 	sc_ttyS1.vidmem= sc_ttyS0.vidmem + sc_ttyS0.nblines * nbcols * 2;
 	sc_ttyS1.nblines= 1;
@@ -122,11 +156,40 @@ void vga_init()
 	nbl -= sc_kernel.nblines;
 
 	/* init user screen */
-	sc_user.vidmem= sc_kernel.vidmem + sc_kernel.nblines * nbcols * 2;
-	sc_user.nblines= nbl;
+	sc_user.vidmem=  sc_ttyS0.vidmem + sc_ttyS0.nblines * nbcols * 2;
+	sc_user.nblines= 4;
 	sc_user.nbcols= nbcols;
 	sc_user.cline=0;
 	sc_user.ccol=0;
+	#endif
+
+	/* init p1 screen */
+	sc_p1.vidmem= sc_ttyS0.vidmem + sc_ttyS0.nblines * nbcols * 2;
+	sc_p1.nblines= nbl / 2 ;
+	sc_p1.nbcols= nbcols / 2 ;
+	sc_p1.cline=0;
+	sc_p1.ccol=0;
+
+	/* init p2 screen */
+	sc_p2.vidmem= sc_p1.vidmem + sc_p1.nbcols * 2 ;
+	sc_p2.nblines= nbl / 2 ;
+	sc_p2.nbcols= nbcols / 2 ;
+	sc_p2.cline=0;
+	sc_p2.ccol=0;
+
+	/* init p3 screen */
+	sc_p3.vidmem= sc_p1.vidmem + sc_p1.nblines * nbcols * 2;
+	sc_p3.nblines= nbl / 2 ;
+	sc_p3.nbcols= nbcols / 2 ;
+	sc_p3.cline=0;
+	sc_p3.ccol=0;
+
+	/* init p4 screen */
+	sc_p4.vidmem= sc_p3.vidmem + sc_p3.nbcols * 2 ;
+	sc_p4.nblines= nbl / 2 ;
+	sc_p4.nbcols= nbcols / 2 ;
+	sc_p4.cline=0;
+	sc_p4.ccol=0;
 }
 
 static void vkprintf(subscreen* psc, const char* fmt, va_list args);
@@ -164,8 +227,9 @@ void kprintc(subscreen* psc, char c)
 
 	psc->ccol  = x;
 	psc->cline = y;
-#if 0
-	pos = (x + cols * y) * 2;	/* Update cursor position */
+#if 1
+	//pos = (x + psc->nbcols * y) * 2;	/* Update cursor position */
+	pos = -1 ;
 	outb_p(14, vidport);
 	outb_p(0xff & (pos >> 9), vidport+1);
 	outb_p(15, vidport);

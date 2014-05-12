@@ -11,6 +11,7 @@ typedef struct _subscreen
 } subscreen;
 
 extern subscreen sc_alive, sc_ttyS0, sc_ttyS1, sc_kernel, sc_user;
+extern subscreen sc_p1, sc_p2, sc_p3, sc_p4 ;
 
 void kprintc(subscreen*, char c);
 void kprints(subscreen*, const char* s);
