@@ -26,18 +26,15 @@ int scanf(const char* format, ...);
 void sleep(int time);
 
 /*
- * Read waits for keyboard interrupt(s), reads the typed character(s)
- * and writes them into the buffer pointed to by result.
- * It will read at most 'max' or 1024 characters (whichever is lower)
- * The return value is the number of characters read
- * The actual number of characters written in the buffer is one higher (due to '\0' added)
+ * Read waits for a keyboard interrupt, reads the typed character
+ * and returns it.
  */
-int read(char* result, int max);
+char read();
 
 /*
  * Write writes the character 'input' on the vga screen,
  * in the parameter of the current active process.
  */
-int write(char input);
+void write(char input);
 
 #endif
