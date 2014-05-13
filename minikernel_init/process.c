@@ -23,5 +23,16 @@ void init_processes(){
 	process_4.pile_u = pile_u_4;
 	process_4.pile_s = pile_s_4;
 	*/
+	process_0.pid = 0;
+	process_1.pid = 1;
+	process_2.pid = 2;
+	process_3.pid = 3;
+	process_4.pid = 4;
+
+	process_1.state = 'I';
+	process_2.state = 'I';
+	process_3.state = 'I';
+	process_4.state = 'I';
+
 
 };

@@ -47,6 +47,7 @@ typedef struct{
 	char* buffer_read;
 	// il manque le subscreen pour les print
 	unsigned int count;
+	unsigned int pid;
 	void* pile_u;
 	void* pile_s;
 } task_struct;
