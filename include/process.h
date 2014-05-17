@@ -1,7 +1,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#define NODEBUG_PROCESS
+// #define DEBUG_PROCESS
 
 // avant 1ere commutation : lrt (load registre rt)
 typedef struct{

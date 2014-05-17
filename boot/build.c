@@ -39,7 +39,7 @@
 
 typedef unsigned char byte;
 typedef unsigned short word;
-typedef unsigned long u32;
+typedef unsigned int u32;
 
 #define DEFAULT_MAJOR_ROOT 0
 #define DEFAULT_MINOR_ROOT 0

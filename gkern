@@ -1,30 +1,30 @@
 #!/bin/bash
 
 # generation du boot
-cc -traditional -E -Iinclude boot/bootsect.S > tmp/bootsect.s 
+cc -m32 -traditional -E -Iinclude boot/bootsect.S > tmp/bootsect.s 
 as86 -0 -a -o tmp/bootsect.o tmp/bootsect.s
 ld86 -0 -s -o tmp/bootsect tmp/bootsect.o
-cc -traditional -E -Iinclude boot/setup.S > tmp/setup.s
+cc -m32 -traditional -E -Iinclude boot/setup.S > tmp/setup.s
 as86 -0 -a -o tmp/setup.o tmp/setup.s
 ld86 -0 -s -o tmp/setup tmp/setup.o
 
 # generation du mini_kernel de base 
-gcc  minikernel_init/gidt.c -o tmp/gidt ; tmp/gidt > minikernel_init/idt.h
-gcc -fno-stack-protector -traditional -Iinclude -c minikernel_init/head.S -o tmp/head.o
-gcc -fno-stack-protector -Iinclude -c minikernel_init/util.c -o tmp/util.o
-gcc -fno-stack-protector -Iinclude -c minikernel_init/vga.c -o tmp/vga.o
-gcc -fno-stack-protector -Iinclude -c minikernel_init/main.c -o tmp/main.o
-gcc -fno-stack-protector -Iinclude -c minikernel_init/process.c -o tmp/process.o
-gcc -fno-stack-protector -Iinclude -c minikernel_init/syscalls.c -o tmp/syscalls.o
-gcc -fno-stack-protector -Iinclude -c minikernel_init/keyboard.c -o tmp/keyboard.o
-gcc -fno-stack-protector -Iinclude -c minikernel_init/ttyS_asm.S -o tmp/ttyS_asm.o
-gcc -fno-stack-protector -Iinclude -c minikernel_init/ttyS.c -o tmp/ttyS.o
+gcc -m32 minikernel_init/gidt.c -o tmp/gidt ; tmp/gidt > minikernel_init/idt.h
+gcc -m32 -fno-stack-protector -traditional -Iinclude -c minikernel_init/head.S -o tmp/head.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_init/util.c -o tmp/util.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_init/vga.c -o tmp/vga.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_init/main.c -o tmp/main.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_init/process.c -o tmp/process.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_init/syscalls.c -o tmp/syscalls.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_init/keyboard.c -o tmp/keyboard.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_init/ttyS_asm.S -o tmp/ttyS_asm.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_init/ttyS.c -o tmp/ttyS.o
 
 
 # generation du mini_kernel  user 
-gcc -fno-stack-protector -Iinclude -c minikernel_user/test.S -o tmp/user_test.o
-gcc -fno-stack-protector -Iinclude -c minikernel_user/entry.c -o tmp/entry.o
-gcc -fno-stack-protector -Iinclude -c minikernel_user/ttyS_util.S -o tmp/ttyS_util.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_user/test.S -o tmp/user_test.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_user/entry.c -o tmp/entry.o
+gcc -m32 -fno-stack-protector -Iinclude -c minikernel_user/ttyS_util.S -o tmp/ttyS_util.o
 
 # generation du kernel
 ld -m elf_i386 -Ttext 0x1000 -e startup_32 -o tmp/minikernel.elf  tmp/head.o  tmp/util.o  tmp/vga.o  tmp/main.o  tmp/ttyS_asm.o  tmp/ttyS.o  tmp/user_test.o tmp/entry.o  tmp/ttyS_util.o tmp/keyboard.o tmp/process.o tmp/syscalls.o
