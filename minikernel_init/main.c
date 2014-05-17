@@ -129,7 +129,7 @@ void do_minikernel_irq1(int code)
 	static int count = 0 ;
 	static bool caps = false, make_extended = false, break_extended = false ;
 	char caractere ;
-	subscreen* psc = &sc_p2 ;
+	subscreen* psc = &sc_p1 ;
 
 	switch(code)
 	{
@@ -182,7 +182,7 @@ void do_minikernel_irq1(int code)
 					caractere = uppercase(code) ;
 
 				if (caractere != '\0')
-					kprintf(psc, "%c", caractere) ;
+					kprintc(psc, caractere) ;
 				else if (code == 0x0e)
 				{
 					if(psc->ccol > 0)	

@@ -1,4 +1,4 @@
-#include "process.h"
+#include "../include/process.h"
 //#include "alloc.h"
 
 task_struct processes[5];

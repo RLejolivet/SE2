@@ -8,6 +8,8 @@
 #include <mini_kernel.h>
 #include "../minikernel_init/kernel.h"
 
+#define DEBUG_VGA
+
 
 void mini_kernel()
 {
@@ -17,7 +19,7 @@ void mini_kernel()
 
 #ifdef DEBUG_VGA
 	vgaprints("enter mini kernel\n");
-	vgaprintf("%d %ss\n",cnt, "coucou");
+	//vgaprintf("%d %ss\n",cnt, "coucou");
 	//ttyS_config(ttyS0_base,12);	// 9600 bauds */
 	kprintf(&sc_p1, "coucou1\n") ;
 	kprintf(&sc_p2, "coucou2\n") ;
