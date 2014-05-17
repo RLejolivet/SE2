@@ -203,7 +203,3 @@ void do_minikernel_irq1(int code)
 		vgaprintf("keyboard pressed %010d : %x\n", ++count, code) ;*/
 }
 
-void do_minikernel_syscalls(int esp, int ebp)
-{
-	vgaprintf("esp : %x\nebp : %x\n", esp, ebp);
-}
