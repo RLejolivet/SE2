@@ -6,6 +6,7 @@
 typedef struct _subscreen 
 {
 	char* vidmem;
+	int col_org, line_org;
 	int nblines, nbcols;
 	int cline, ccol;
 } subscreen;
