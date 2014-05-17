@@ -1,5 +1,6 @@
 #include "syscalls.h"
 #include "process.h"
+#include "kernel.h"
 
 void sys_sleep(int time)
 {
@@ -25,8 +26,8 @@ void sys_write(int input)
 {
 	char affichage = input;
 	// afficher un caractère dans processes[current_process].stdout
+	kprintc(processes[current_process].stdout, affichage);
 #ifdef DEBUG_SYSCALLS
-	vgaprintf("%c", affichage);
 	vgaprintf("\naffichage successful ! je crois ?\n");
 #endif
 

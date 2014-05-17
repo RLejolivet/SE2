@@ -26,7 +26,7 @@ int main()
 	for (i=0 ; i<256 ; i++) {
 		printf(     "\ninterupt_%03d:\n",i);
 
-		printf("%s","\tpushl %eax\n",i);
+		printf("%s","\tpushl %eax\n");
 
 		printf(     "\tmovl  $%d,%%eax\n",i);
 

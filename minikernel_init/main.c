@@ -122,6 +122,17 @@ void do_minikernel_irq0()
 		time++;
 
 	}
+
+	// On décrémente les compteurs d'attente, et libère les processes qui ne sont plus bloqués
+	for(c=1; c<=4; c++)
+	{
+		if(processes[c].count > 0) 
+		{
+			processes[c].count--;
+			if(processes[c].count == 0 && processes[c].state == 'A') 
+				processes[c].state = 'R';
+		}
+	}
 }
 
 void do_minikernel_irq1(int code)

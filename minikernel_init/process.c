@@ -1,4 +1,4 @@
-#include "../include/process.h"
+#include "process.h"
 //#include "alloc.h"
 
 task_struct processes[5];
@@ -46,6 +46,7 @@ void init_processes(){
 		processes[1].state = 'A';
 		processes[1].pile_u = (void*) 0x24000;
 		processes[1].pile_s = (void*) 0x26000;
+		processes[1].stdout = &sc_p1;
 	}
 
 	if (*table_entry_2 != 0)
@@ -53,6 +54,7 @@ void init_processes(){
 		processes[2].state = 'A';
 		processes[2].pile_u = (void*) 0x28000;
 		processes[2].pile_s = (void*) 0x30000;
+		processes[2].stdout = &sc_p2;
 	}
 
 	if (*table_entry_3 != 0)
@@ -60,6 +62,7 @@ void init_processes(){
 		processes[3].state = 'A';
 		processes[3].pile_u = (void*) 0x32000;
 		processes[3].pile_s = (void*) 0x34000;
+		processes[3].stdout = &sc_p3;
 	}
 
 	if (*table_entry_4 != 0)
@@ -67,6 +70,7 @@ void init_processes(){
 		processes[4].state = 'A';
 		processes[4].pile_u = (void*) 0x36000;
 		processes[4].pile_s = (void*) 0x38000;
+		processes[4].stdout = &sc_p4;
 	}
 
 

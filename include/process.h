@@ -1,6 +1,8 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
+#include "kernel.h"
+
 // #define DEBUG_PROCESS
 
 // avant 1ere commutation : lrt (load registre rt)
@@ -47,7 +49,7 @@ typedef struct{
 	tss* ptss;
 	char state; // I: inactif, R: actif, A: en attente, K: killed
 	char* buffer_read;
-	// il manque le subscreen pour les print
+	subscreen* stdout;
 	unsigned int count;
 	unsigned int pid;
 	void* pile_u;
