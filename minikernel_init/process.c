@@ -16,8 +16,15 @@ void init_processes(){
 	int* table_entry_1 = (int*) 0x9000;
 	int* table_entry_2 = (int*) 0x9004;
 	int* table_entry_3 = (int*) 0x9008;
-	int* table_entry_4 = (int*) 0x9012;
+	int* table_entry_4 = (int*) 0x900c;
 	
+#ifdef DEBUG_PROCESS
+	/* En fait, je savais pas tellement où était ma table :/ */
+	vgaprintf("JE SUIS LAAAA : %x\n%x\n%x\n%x (ici)\n",
+			*table_entry_1, *table_entry_2, 
+			*table_entry_3, *table_entry_4);
+#endif
+
 	/*
 	process_0.pile_s = pile_s_0;
 	process_1.pile_u = pile_u_1;
@@ -43,12 +50,12 @@ void init_processes(){
 	process_3.state = 'I';
 	process_4.state = 'I';
 
-#ifdef DEBUG_PROCESS
-	/* En fait, je savais pas tellement où était ma table :/ */
-	vgaprintf("JE SUIS LAAAA : %x\n%x\n%x\n%x (ici)\n",
-			*table_entry_1, *table_entry_2, 
-			*table_entry_3, *table_entry_4);
-#endif
+	/* Init du processus 0, qui est toujours là */
+	process_0.state = 'A';
+	process_0.pile_s = 0x22000;
+
+
+	/* Du coup, on dit que les process existent si leur entrée n'est pas zéro */
 
 
 };
