@@ -6,6 +6,7 @@ void sys_sleep(int time)
 {
 	processes[current_process].count = 20 * time;
 	processes[current_process].state = 'A';
+	schedule();
 #ifdef DEBUG_SYSCALLS
 	vgaprintf("appel a sleep successful\n");
 #endif
@@ -16,7 +17,7 @@ char sys_read()
 	// lire un caractère dans processes[current_process].stdin
 	
 #ifdef DEBUG_SYSCALLS
-	vgaprintf("Lecture presque successful (en fait, on a rien lu !\n");
+	vgaprintf("Lecture presque successful (en fait, on a rien lu !)\n");
 #endif
 
 	return 'A';
@@ -39,7 +40,8 @@ void kill_process()
 
 #ifdef DEBUG_SYSCALLS
 	vgaprintf("Et BAM, le process il est mort !\n");
-	// lol, à changer hein, il faut appeller schedule
 #endif
+
+	schedule();
 
 }

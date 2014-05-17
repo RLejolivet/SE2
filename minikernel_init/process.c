@@ -36,14 +36,14 @@ void init_processes(){
 	processes[4].state = 'I';
 
 	/* Init du processus 0, qui est toujours là */
-	processes[0].state = 'A';
+	processes[0].state = 'R';
 	processes[0].pile_s = (void*) 0x22000;
 
 
 	/* Du coup, on dit que les process existent si leur entrée n'est pas zéro */
 	if (*table_entry_1 != 0)
 	{
-		processes[1].state = 'A';
+		processes[1].state = 'R';
 		processes[1].pile_u = (void*) 0x24000;
 		processes[1].pile_s = (void*) 0x26000;
 		processes[1].stdout = &sc_p1;
@@ -51,7 +51,7 @@ void init_processes(){
 
 	if (*table_entry_2 != 0)
 	{
-		processes[2].state = 'A';
+		processes[2].state = 'R';
 		processes[2].pile_u = (void*) 0x28000;
 		processes[2].pile_s = (void*) 0x30000;
 		processes[2].stdout = &sc_p2;
@@ -59,7 +59,7 @@ void init_processes(){
 
 	if (*table_entry_3 != 0)
 	{
-		processes[3].state = 'A';
+		processes[3].state = 'R';
 		processes[3].pile_u = (void*) 0x32000;
 		processes[3].pile_s = (void*) 0x34000;
 		processes[3].stdout = &sc_p3;
@@ -67,11 +67,42 @@ void init_processes(){
 
 	if (*table_entry_4 != 0)
 	{
-		processes[4].state = 'A';
+		processes[4].state = 'R';
 		processes[4].pile_u = (void*) 0x36000;
 		processes[4].pile_s = (void*) 0x38000;
 		processes[4].stdout = &sc_p4;
 	}
 
 
-};
+}
+
+void commute_to(int index_processes)
+{
+	/* Ici, on fait la commutation sur un processus */
+
+	current_process = index_processes;
+	// a rajouter : sauvegarde des piles, jmp de TSS et un SLI !!!
+
+#ifdef DEBUG_PROCESS
+	kprintf(processes[current_process].stdout, "J'ai le CPU !\n");
+#endif
+}
+
+void schedule()
+{
+	int i;
+	int suivant;
+
+	for (i=1; i<=4; i++)
+	{
+		/* On ne compte pas le processus 0 comme faisant partit de la boucle des processus */
+		suivant = ((current_process + i)%4 == 0) ? 4 : (current_process + i)%4;
+		if(processes[suivant].state == 'R'){
+			commute_to(suivant);
+			return;
+		}
+	}
+
+	/* Si on arrive ici, c'est qu'aucun des processus utilisateurs n'est dispo. On va sur 0 */
+	commute_to(0);
+}

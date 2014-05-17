@@ -6,9 +6,9 @@
  */
 
 #include <mini_kernel.h>
-#include "../minikernel_init/kernel.h"
+#include "kernel.h"
 
-#define DEBUG_VGA
+// #define DEBUG_VGA
 
 
 void mini_kernel()
@@ -26,8 +26,9 @@ void mini_kernel()
 	kprintf(&sc_p3, "coucou3\n") ;
 	kprintf(&sc_p4, "coucou4\n") ;
 #endif
-
+#ifdef DEBUG_SYSCALLS
 	function_test();
+#endif
 
 //		while (1) ;
 }

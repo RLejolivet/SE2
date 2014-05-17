@@ -3,7 +3,7 @@
 
 #include "kernel.h"
 
-// #define DEBUG_PROCESS
+#define DEBUG_PROCESS
 
 // avant 1ere commutation : lrt (load registre rt)
 typedef struct{
@@ -63,6 +63,9 @@ extern unsigned short focus_process; // idem current_process
 
 /* Lis la table des points d'entrées et initialise les TSS */
 void init_processes();
+
+/* schedule passe la main au prochain processus disponible */
+void schedule();
 
 
 

@@ -1,6 +1,7 @@
 .global function_test
 function_test:
 	movl $0, %eax
+	movl $0x14, %ebx
 	int $0x80
 	
 	xor %ebx, %ebx

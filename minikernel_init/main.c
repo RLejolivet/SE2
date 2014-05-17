@@ -133,6 +133,9 @@ void do_minikernel_irq0()
 				processes[c].state = 'R';
 		}
 	}
+
+	/* On schedule tous les 5 coups d'horloge */
+	if((count % 5) == 0) schedule();
 }
 
 void do_minikernel_irq1(int code)
