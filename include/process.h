@@ -54,15 +54,12 @@ typedef struct{
 	void* pile_s;
 } task_struct;
 
-extern task_struct process_0; // le process qui fait while(1);
-extern task_struct process_1;
-extern task_struct process_2;
-extern task_struct process_3;
-extern task_struct process_4;
+extern task_struct processes[5];
 
-extern task_struct* current_process;
-extern task_struct* focus_process;
+extern unsigned short current_process; // c'est un index pour le tableau processes
+extern unsigned short focus_process; // idem current_process
 
+/* Lis la table des points d'entrées et initialise les TSS */
 void init_processes();
 
 

@@ -1,14 +1,10 @@
 #include "process.h"
 //#include "alloc.h"
 
-task_struct process_0;
-task_struct process_1;
-task_struct process_2;
-task_struct process_3;
-task_struct process_4;
+task_struct processes[5];
 
-task_struct* current_process = &process_1;
-task_struct* focus_process = &process_1;
+unsigned short current_process = 1;
+unsigned short focus_process = 1;
 
 void init_processes(){
 
@@ -25,37 +21,53 @@ void init_processes(){
 			*table_entry_3, *table_entry_4);
 #endif
 
-	/*
-	process_0.pile_s = pile_s_0;
-	process_1.pile_u = pile_u_1;
-	process_1.pile_s = pile_s_1;
-	process_2.pile_u = pile_u_2;
-	process_2.pile_s = pile_s_2;
-	process_3.pile_u = pile_u_3;
-	process_3.pile_s = pile_s_3;
-	process_4.pile_u = pile_u_4;
-	process_4.pile_s = pile_s_4;
-	*/
 
 	/* Les pid c'est pas trop dur */
-	process_0.pid = 0;
-	process_1.pid = 1;
-	process_2.pid = 2;
-	process_3.pid = 3;
-	process_4.pid = 4;
+	processes[0].pid = 0;
+	processes[1].pid = 1;
+	processes[2].pid = 2;
+	processes[3].pid = 3;
+	processes[4].pid = 4;
 
 	/* Au début, tous les processus n'existent pas. On va vérifier s'ils existent après */
-	process_1.state = 'I';
-	process_2.state = 'I';
-	process_3.state = 'I';
-	process_4.state = 'I';
+	processes[1].state = 'I';
+	processes[2].state = 'I';
+	processes[3].state = 'I';
+	processes[4].state = 'I';
 
 	/* Init du processus 0, qui est toujours là */
-	process_0.state = 'A';
-	process_0.pile_s = 0x22000;
+	processes[0].state = 'A';
+	processes[0].pile_s = (void*) 0x22000;
 
 
 	/* Du coup, on dit que les process existent si leur entrée n'est pas zéro */
+	if (*table_entry_1 != 0)
+	{
+		processes[1].state = 'A';
+		processes[1].pile_u = (void*) 0x24000;
+		processes[1].pile_s = (void*) 0x26000;
+	}
+
+	if (*table_entry_2 != 0)
+	{
+		processes[2].state = 'A';
+		processes[2].pile_u = (void*) 0x28000;
+		processes[2].pile_s = (void*) 0x30000;
+	}
+
+	if (*table_entry_3 != 0)
+	{
+		processes[3].state = 'A';
+		processes[3].pile_u = (void*) 0x32000;
+		processes[3].pile_s = (void*) 0x34000;
+	}
+
+	if (*table_entry_4 != 0)
+	{
+		processes[4].state = 'A';
+		processes[4].pile_u = (void*) 0x36000;
+		processes[4].pile_s = (void*) 0x38000;
+	}
 
 
 };

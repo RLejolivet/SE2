@@ -3,8 +3,8 @@
 
 void sys_sleep(int time)
 {
-	current_process->count = 20 * time;
-	current_process->state = 'A';
+	processes[current_process].count = 20 * time;
+	processes[current_process].state = 'A';
 #ifdef DEBUG_SYSCALLS
 	vgaprintf("appel a sleep successful\n");
 #endif
@@ -12,7 +12,7 @@ void sys_sleep(int time)
 
 char sys_read()
 {
-	// lire un caractère dans current_process->stdin
+	// lire un caractère dans processes[current_process].stdin
 	
 #ifdef DEBUG_SYSCALLS
 	vgaprintf("Lecture presque successful (en fait, on a rien lu !\n");
@@ -24,7 +24,7 @@ char sys_read()
 void sys_write(int input)
 {
 	char affichage = input;
-
+	// afficher un caractère dans processes[current_process].stdout
 #ifdef DEBUG_SYSCALLS
 	vgaprintf("%c", affichage);
 	vgaprintf("\naffichage successful ! je crois ?\n");
@@ -34,7 +34,7 @@ void sys_write(int input)
 
 void kill_process()
 {
-	current_process->state = 'K';
+	processes[current_process].state = 'K';
 
 #ifdef DEBUG_SYSCALLS
 	vgaprintf("Et BAM, le process il est mort !\n");

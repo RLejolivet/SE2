@@ -114,8 +114,8 @@ void do_minikernel_irq0()
 		kprintf(&sc_alive,
 			"\nmini_kernel is alive since %010d secondes, IRQ [15:0]=%02x%02x\n" 
 			"P1:%c   P2:%c   P3:%c   P4:%c      Focus:P%d",
-			time,irq7_0,irq15_8, process_1.state, process_2.state, 
-			process_3.state, process_4.state, focus_process->pid
+			time,irq7_0,irq15_8, processes[1].state, processes[2].state, 
+			processes[3].state, processes[4].state, focus_process
 		);
 
 
