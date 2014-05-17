@@ -6,13 +6,12 @@
 typedef struct _subscreen 
 {
 	char* vidmem;
-	int col_org, line_org ;
 	int nblines, nbcols;
 	int cline, ccol;
 } subscreen;
 
 extern subscreen sc_alive, sc_ttyS0, sc_ttyS1, sc_kernel, sc_user;
-extern subscreen sc_p1, sc_p2, sc_p3, sc_p4 ;
+extern subscreen sc_p1, sc_p2, sc_p3, sc_p4;
 
 void kprintc(subscreen*, char c);
 void kprints(subscreen*, const char* s);
@@ -34,10 +33,11 @@ int  ttyS_detect(unsigned int base);
 
 void minikernel_irq0();
 void minikernel_irq1();
-void minikernel_syscalls();
 
 void do_minikernel_irq0();
 void do_minikernel_irq1(int code);
-void do_minikernel_syscalls(int esp, int ebp);
+
+#include "syscalls.h"
+void minikernel_syscalls();
 
 #endif
