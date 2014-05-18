@@ -164,40 +164,40 @@ void vga_init()
 	#endif
 
 	/* init p1 screen */
-	sc_p1.vidmem= sc_ttyS0.vidmem + sc_ttyS0.nblines * nbcols * 2;
-	sc_p1.line_org = sc_alive.nblines + sc_ttyS0.nblines ;
-	sc_p1.col_org = 0 ;
-	sc_p1.nblines= nbl / 2 ;
-	sc_p1.nbcols= nbcols / 2 ;
-	sc_p1.cline=0;
-	sc_p1.ccol=0;
+	sc_p1.vidmem	=	sc_ttyS0.vidmem + sc_ttyS0.nblines * nbcols * 2;
+	sc_p1.line_org	=	sc_alive.nblines + sc_ttyS0.nblines ;
+	sc_p1.col_org	=	0 ;
+	sc_p1.nblines	=	nbl / 2 ;
+	sc_p1.nbcols	=	nbcols / 2 ;
+	sc_p1.cline		=	0 ;
+	sc_p1.ccol		=	0 ;
 
 	/* init p2 screen */
-	sc_p2.vidmem= sc_p1.vidmem + sc_p1.nbcols * 2 ;
-	sc_p2.line_org = sc_p1.line_org ;
-	sc_p2.col_org  = sc_p1.nbcols ;
-	sc_p2.nblines= nbl / 2 ;
-	sc_p2.nbcols= nbcols / 2 ;
-	sc_p2.cline=0;
-	sc_p2.ccol=0;
+	sc_p2.vidmem	=	sc_p1.vidmem ;
+	sc_p2.line_org	=	sc_p1.line_org ;
+	sc_p2.col_org	=	sc_p1.nbcols ;
+	sc_p2.nblines	=	nbl / 2 ;
+	sc_p2.nbcols	=	nbcols ;
+	sc_p2.cline		=	0 ;
+	sc_p2.ccol		=	sc_p2.col_org ;
 
 	/* init p3 screen */
-	sc_p3.vidmem= sc_p1.vidmem + sc_p1.nblines * nbcols * 2;
-	sc_p3.line_org = sc_p1.line_org + sc_p1.nblines ;
-	sc_p3.col_org = 0 ; 
-	sc_p3.nblines = nbl / 2 ;
-	sc_p3.nbcols = nbcols / 2 ;
-	sc_p3.cline = 0;
-	sc_p3.ccol = 0;
+	sc_p3.vidmem	=	sc_p1.vidmem + sc_p1.nblines * nbcols * 2;
+	sc_p3.line_org	=	sc_p1.line_org + sc_p1.nblines ;
+	sc_p3.col_org	=	0 ; 
+	sc_p3.nblines 	=	nbl / 2 ;
+	sc_p3.nbcols	=	nbcols / 2 ;
+	sc_p3.cline 	=	0 ;
+	sc_p3.ccol		=	0 ;
 
 	/* init p4 screen */
-	sc_p4.vidmem= sc_p3.vidmem + sc_p3.nbcols * 2 ;
-	sc_p4.line_org = sc_p3.line_org ;
-	sc_p4.col_org = sc_p3.nbcols ;
-	sc_p4.nblines= nbl / 2 ;
-	sc_p4.nbcols= nbcols / 2 ;
-	sc_p4.cline=0;
-	sc_p4.ccol=0;
+	sc_p4.vidmem	=	sc_p3.vidmem ;
+	sc_p4.line_org	=	sc_p3.line_org ;
+	sc_p4.col_org	=	sc_p3.nbcols ;
+	sc_p4.nblines	=	nbl / 2 ;
+	sc_p4.nbcols	=	nbcols / 2 ;
+	sc_p4.cline		=	0 ;
+	sc_p4.ccol		=	sc_p4.col_org ;
 }
 
 static void vkprintf(subscreen* psc, const char* fmt, va_list args);
@@ -220,7 +220,7 @@ void kprintc(subscreen* psc, char c)
 
 	if ( c == '\n' ) 
 	{
-		x = 0;
+		x = psc->col_org ;
 		if ( ++y >= psc->nblines ) 
 		{
 			scroll(psc);
@@ -229,10 +229,10 @@ void kprintc(subscreen* psc, char c)
 	} 
 	else
 	{
-		vidmem [ (psc->line_org + y) * nbcols * 2 + (psc->col_org + x) * 2] = c; 
+		psc->vidmem [ (x + y * nbcols) * 2 ] = c; 
 		if ( ++x >= psc->nbcols ) 
 		{
-			x = 0;
+			x = psc->col_org ;
 			if ( ++y >= psc->nblines ) 
 			{
 				scroll(psc);

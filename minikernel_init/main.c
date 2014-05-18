@@ -143,7 +143,7 @@ void do_minikernel_irq1(int code)
 	static int count = 0 ;
 	static bool caps = false, make_extended = false, break_extended = false ;
 	char caractere ;
-	subscreen* psc = &sc_p1 ;
+	subscreen* psc = &sc_p2 ;
 
 	switch(code)
 	{
@@ -202,7 +202,7 @@ void do_minikernel_irq1(int code)
 					if(psc->ccol > 0)	
 					{
 						psc->ccol-- ;
-						vgaprintf(" ") ;
+						kprintc(psc, ' ') ;
 						psc->ccol-- ;
 					}
 				}
