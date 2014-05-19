@@ -173,6 +173,7 @@ void do_minikernel_irq1(int code)
 		default :
 			if(make_extended)
 			{
+				make_extended = false ;
 				switch(code)
 				{
 					case UP: 
