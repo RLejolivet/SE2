@@ -2,6 +2,10 @@
 #include "keyboard.h"
 #include "process.h"
 #define SCREEN_INFO (*(struct screen_info *)0x90000)
+#define	UP		0x48
+#define DOWN	0x50
+#define LEFT	0x4b
+#define	RIGHT	0X4d
 
 unsigned char  inb  (unsigned short port) 
 { 
@@ -113,7 +117,7 @@ void do_minikernel_irq0()
 
 		kprintf(&sc_alive,
 			"\nmini_kernel is alive since %010d secondes, IRQ [15:0]=%02x%02x\n" 
-			"P1:%c   P2:%c   P3:%c   P4:%c      Focus:P%d",
+			"P1:%c   P2:%c   P3:%c   P4:%c    Focus:P%d",
 			time,irq7_0,irq15_8, processes[1].state, processes[2].state, 
 			processes[3].state, processes[4].state, focus_process
 		);
@@ -143,7 +147,7 @@ void do_minikernel_irq1(int code)
 	static int count = 0 ;
 	static bool caps = false, make_extended = false, break_extended = false ;
 	char caractere ;
-	subscreen* psc = &sc_p2 ;
+	subscreen* psc =  processes[focus_process].stdout ;
 
 	switch(code)
 	{
@@ -171,21 +175,21 @@ void do_minikernel_irq1(int code)
 			{
 				switch(code)
 				{
-					case 0x48: //haut
-						if(psc->cline > 0)
-							psc->cline-- ;
+					case UP: 
+						if(focus_process > 2)
+							focus_process -= 2 ;
 						break ;
-					case 0x4d: //droite
-						if(psc->ccol < 16 * 12)
-							psc->ccol++ ;
+					case RIGHT:
+						if(focus_process % 2 != 0)
+							focus_process++ ;
 						break ;
-					case 0x50: //bas
-						if(psc->cline < 9 * 12)
-							psc->cline++ ;
+					case DOWN:
+						if(focus_process <= 2)
+							focus_process += 2 ;
 						break ;
-					case 0x4b: //gauche
-						if(psc->ccol > 0)
-							psc->ccol-- ;
+					case LEFT :
+						if(focus_process % 2 == 0)
+							focus_process-- ;
 						break ;
 				}
 			}

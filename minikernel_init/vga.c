@@ -167,33 +167,33 @@ void vga_init()
 	sc_p1.vidmem	=	sc_ttyS0.vidmem + sc_ttyS0.nblines * nbcols * 2;
 	sc_p1.line_org	=	sc_alive.nblines + sc_ttyS0.nblines ;
 	sc_p1.col_org	=	0 ;
-	sc_p1.nblines	=	nbl / 2 ;
-	sc_p1.nbcols	=	nbcols / 2 ;
+	sc_p1.nblines	=	nbl / 2 - 1 ;
+	sc_p1.nbcols	=	nbcols / 2 - 1 ;
 	sc_p1.cline		=	0 ;
 	sc_p1.ccol		=	0 ;
 
 	/* init p2 screen */
 	sc_p2.vidmem	=	sc_p1.vidmem ;
 	sc_p2.line_org	=	sc_p1.line_org ;
-	sc_p2.col_org	=	sc_p1.nbcols ;
-	sc_p2.nblines	=	nbl / 2 ;
-	sc_p2.nbcols	=	nbcols ;
+	sc_p2.col_org	=	sc_p1.nbcols + 1 ;
+	sc_p2.nblines	=	nbl / 2 - 1;
+	sc_p2.nbcols	=	nbcols / 2;
 	sc_p2.cline		=	0 ;
 	sc_p2.ccol		=	sc_p2.col_org ;
 
 	/* init p3 screen */
-	sc_p3.vidmem	=	sc_p1.vidmem + sc_p1.nblines * nbcols * 2;
-	sc_p3.line_org	=	sc_p1.line_org + sc_p1.nblines ;
+	sc_p3.vidmem	=	sc_p1.vidmem + (sc_p1.nblines + 1) * nbcols * 2;
+	sc_p3.line_org	=	sc_p1.line_org + sc_p1.nblines + 1 ;
 	sc_p3.col_org	=	0 ; 
 	sc_p3.nblines 	=	nbl / 2 ;
-	sc_p3.nbcols	=	nbcols / 2 ;
+	sc_p3.nbcols	=	nbcols / 2 - 1 ;
 	sc_p3.cline 	=	0 ;
 	sc_p3.ccol		=	0 ;
 
 	/* init p4 screen */
 	sc_p4.vidmem	=	sc_p3.vidmem ;
 	sc_p4.line_org	=	sc_p3.line_org ;
-	sc_p4.col_org	=	sc_p3.nbcols ;
+	sc_p4.col_org	=	sc_p3.nbcols + 1 ;
 	sc_p4.nblines	=	nbl / 2 ;
 	sc_p4.nbcols	=	nbcols / 2 ;
 	sc_p4.cline		=	0 ;
@@ -202,14 +202,6 @@ void vga_init()
 
 static void vkprintf(subscreen* psc, const char* fmt, va_list args);
 static void scroll(subscreen *psc);
-int ctol(int col, int line, int ncols) ;
-
-int ctol(int line, int col, int ncols)
-{
-	return line * ncols + col ;
-}
-
-
 
 void kprintc(subscreen* psc, char c)
 {
@@ -230,7 +222,7 @@ void kprintc(subscreen* psc, char c)
 	else
 	{
 		psc->vidmem [ (x + y * nbcols) * 2 ] = c; 
-		if ( ++x >= psc->nbcols ) 
+		if ( ++x  - psc->col_org >= psc->nbcols ) 
 		{
 			x = psc->col_org ;
 			if ( ++y >= psc->nblines ) 
@@ -287,16 +279,29 @@ void vgaprintf(const char* fmt,...)
 
 static void scroll(subscreen *psc)
 {
-	int i;
+	int colonne = 0, ligne = 0 ;
 
-	if ( psc->nblines>1 )
+	if (psc->nblines > 1)
+	/*
 		memcpy ( psc->vidmem,
 			 psc->vidmem + psc->nbcols * 2,
 			( psc->nblines - 1 ) * psc->nbcols * 2
 		);
+	*/
+	{
+		for(ligne = 0 ; ligne < psc->nblines - 1 ; ligne++)
+		{
+			for(colonne = 0 ; colonne < psc->nbcols ; colonne++)
+			{
+				psc->vidmem[(ligne * nbcols + psc->col_org + colonne) * 2] = psc->vidmem[((ligne + 1) * nbcols + psc->col_org + colonne) * 2] ;
+			}
+		}
+	}
 
-	for ( i = ( psc->nblines - 1 ) * psc->nbcols * 2; i < psc->nblines * psc->nbcols * 2; i += 2 )
-		psc->vidmem[i] = ' ';
+	for(colonne = 0 ; colonne < psc->nbcols ; colonne++)
+	{
+		psc->vidmem[((psc->nblines - 1) * nbcols + psc->col_org  + colonne) * 2] = ' ' ;
+	}
 }
 
 static void vkprintf_str(subscreen* psc, const char* str, int len, char fillwith, int placeleft, int signe)
