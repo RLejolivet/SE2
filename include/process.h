@@ -18,27 +18,27 @@ typedef struct{
 	short ss_2;
 	short null_2;
 	int cr3;
-	int eip;
+	int eip; // adresse code
 	int eflags;
 	int eax;
 	int ecx;
 	int edx;
 	int ebx;
-	int esp;
+	int esp; // fin du segment pile
 	int ebp;
 	int esi;
 	int edi;
-	short es;
+	short es; // idem ds
 	short null_es;
-	short cs;
+	short cs; // segment code
 	short null_cs;
-	short ss;
+	short ss; // segment pile
 	short null_ss;
-	short ds;
+	short ds; // segment data
 	short null_ds;
-	short fs;
+	short fs; // idem ds
 	short null_fs;
-	short gs;
+	short gs; // idem ds
 	short null_gs;
 	short ldt;
 	short null_ldt;
@@ -60,6 +60,11 @@ extern task_struct processes[5];
 
 extern unsigned short current_process; // c'est un index pour le tableau processes
 extern unsigned short focus_process; // idem current_process
+
+/* Définis si le premier schedule est fait.
+ * Une fois fait, on peut communter sur 0 normalement, et surtout les interuptions timer commencent
+ */
+extern unsigned char first_schedule;
 
 /* Lis la table des points d'entrées et initialise les TSS */
 void init_processes();

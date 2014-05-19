@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "libc.h"
 
 int seed = 40 ;
 

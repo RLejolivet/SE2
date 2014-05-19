@@ -26,10 +26,13 @@ void mini_kernel()
 	kprintf(&sc_p3, "coucou3\n") ;
 	kprintf(&sc_p4, "coucou4\n") ;
 #endif
+	// Cette fonction de test ne devrait pas être appellée si les commutations fonctionnent
 #ifdef DEBUG_SYSCALLS
-	function_test();
+	//function_test();
 #endif
 
-//		while (1) ;
+	/* THIS IS PROCESS 0! (omg) */
+	schedule();
+	while (1) ;
 }
 

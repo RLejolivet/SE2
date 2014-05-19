@@ -1,6 +1,5 @@
 #include "pokemon_arena.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "libc.h"
 
 int main()
 {

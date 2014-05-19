@@ -3,8 +3,10 @@
 
 task_struct processes[5];
 
-unsigned short current_process = 1;
+unsigned short current_process = 0;
 unsigned short focus_process = 1;
+
+unsigned char first_schedule = 0;
 
 void init_processes(){
 
@@ -78,7 +80,8 @@ void init_processes(){
 
 void commute_to(int index_processes)
 {
-	/* Ici, on fait la commutation sur un processus */
+	/* Ici, on fait la commutation sur un processus, sauf s'il est déjà actif */
+	if (current_process == index_processes) return;
 
 	current_process = index_processes;
 	// a rajouter : sauvegarde des piles, jmp de TSS et un SLI !!!
@@ -92,6 +95,8 @@ void schedule()
 {
 	int i;
 	int suivant;
+
+	first_schedule = 1;
 
 	for (i=1; i<=4; i++)
 	{
