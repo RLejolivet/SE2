@@ -34,6 +34,13 @@ objcopy -O binary -R .note -R .comment -S tmp/minikernel.elf tmp/minikernel.bin
 dd if=tmp/minikernel.bin of=tmp/minikernel.extended count=1 bs=32768 conv=sync
 
 # generation des processus user
+gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.c -o user_tmp/libc.o
+gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.S -o user_tmp/libcS.o
+### template :
+### gcc -m32 -fno-stack-protector -Iuser_includes -c 'name'.c -o user_tmp/'name'.o
+### ld user_tmp/'name'.o user_temp/libc.o user_tmp/libcS.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/'name'.elf
+### objcopy -O binary -R .note -R .comment -S tmp/'name'.elf 'name'.bin
+### dd if=tmp/'name'.bin of=tmp/'name'.extended count=1 bs=16384 conv=sync
 
 # generation de la table des points d'entrées. celle-ci est bidon et sert pour des tests
 echo -e "A00\x00B00\x00C00\x00D00\x00" > tmp/table

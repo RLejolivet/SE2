@@ -4,8 +4,9 @@ int seed = 40 ;
 
 void set_seed()
 {
-	printf("Graine ?\n") ;
-	scanf("%d", &seed) ;
+	char format1[10] = "Graine ?\n", format2[3] = "%d";
+	printf(format1) ;
+	scanf(format2, &seed) ;
 }
 
 int rand()
