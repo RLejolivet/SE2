@@ -1,0 +1,38 @@
+#include <stdarg.h>
+
+int scanf(char* fmt, ...)
+{
+	va_list args ;
+	va_start(args, fmt) ;
+	char buff[BUFFER_SIZE] ;
+	int i = 0 ;
+
+	while(*fmt)
+	{
+		switch(*fmt)
+		{
+			case '%' :
+				fmt++ ;
+				while(*fmt)
+				{
+					switch(*fmt)
+					{
+						case '%' :
+							fmt++;
+							buff[i] = '%' ;
+							i++ ;
+							continue ;
+						case 's' :
+						case 'c' :
+						case 'x' :
+						
+						case 'd' :
+						case 'i' : 
+					}
+				}
+			default :
+				fmt++ ;
+				continue ;
+		}
+	}
+}
