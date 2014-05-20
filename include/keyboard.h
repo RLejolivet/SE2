@@ -23,6 +23,7 @@ struct stdin
 	char* buffer_read[BUFFER_SIZE] ;
 	int pos_lecture ;
 	int pos_ecriture ;
+	bool unread ; //indique qu'il y a des caractères pas encore lus lorsque l'écrivain "fait le tour" du buffer
 } ;
 
 extern char mappings[] ;
