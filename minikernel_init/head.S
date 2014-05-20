@@ -57,6 +57,7 @@ startup_32:
 	movb $0xF8,%al		
 	outb %al,$0x21		/* enable IRQ: +00,-01,+02,-03,-04,-05,-06,-07  */
 	sti
+	call init_processes
 	call mini_kernel
 1:	
 	jmp 1b

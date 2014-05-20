@@ -12,13 +12,17 @@ void init_processes(){
 
 	/* Je SAIS où est ma table. Du coup j'y vais, comme ça, trop facile */
 	int* table_entry_1 = (int*) 0x9000;
-	int* table_entry_2 = (int*) 0x9004;
-	int* table_entry_3 = (int*) 0x9008;
-	int* table_entry_4 = (int*) 0x900c;
+	int* exists_entry_1 = (int*) 0x9004;
+	int* table_entry_2 = (int*) 0x9008;
+	int* exists_entry_2 = (int*) 0x900c;
+	int* table_entry_3 = (int*) 0x9010;
+	int* exists_entry_3 = (int*) 0x9014;
+	int* table_entry_4 = (int*) 0x9018;
+	int* exists_entry_4 = (int*) 0x901c;
 	
 #ifdef DEBUG_PROCESS
 	/* En fait, je savais pas tellement où était ma table :/ */
-	vgaprintf("JE SUIS LAAAA : %x\n%x\n%x\n%x (ici)\n",
+	vgaprintf("JE SUIS LAAAA : %x %x %x %x (ici)\n",
 			*table_entry_1, *table_entry_2, 
 			*table_entry_3, *table_entry_4);
 #endif
@@ -43,7 +47,7 @@ void init_processes(){
 
 
 	/* Du coup, on dit que les process existent si leur entrée n'est pas zéro */
-	if (*table_entry_1 != 0)
+	if (*exists_entry_1 != 0)
 	{
 		processes[1].state = 'R';
 		processes[1].pile_u = (void*) 0x24000;
@@ -51,7 +55,7 @@ void init_processes(){
 		processes[1].stdout = &sc_p1;
 	}
 
-	if (*table_entry_2 != 0)
+	if (*exists_entry_2 != 0)
 	{
 		processes[2].state = 'R';
 		processes[2].pile_u = (void*) 0x28000;
@@ -59,7 +63,7 @@ void init_processes(){
 		processes[2].stdout = &sc_p2;
 	}
 
-	if (*table_entry_3 != 0)
+	if (*exists_entry_3 != 0)
 	{
 		processes[3].state = 'R';
 		processes[3].pile_u = (void*) 0x32000;
@@ -67,7 +71,7 @@ void init_processes(){
 		processes[3].stdout = &sc_p3;
 	}
 
-	if (*table_entry_4 != 0)
+	if (*exists_entry_4 != 0)
 	{
 		processes[4].state = 'R';
 		processes[4].pile_u = (void*) 0x36000;
@@ -87,7 +91,7 @@ void commute_to(int index_processes)
 	// a rajouter : sauvegarde des piles, jmp de TSS et un SLI !!!
 
 #ifdef DEBUG_PROCESS
-	kprintf(processes[current_process].stdout, "J'ai le CPU !\n");
+	//kprintf(processes[current_process].stdout, "J'ai le CPU !\n");
 #endif
 }
 

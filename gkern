@@ -39,11 +39,126 @@ gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.S -o user_
 ### template :
 ### gcc -m32 -fno-stack-protector -Iuser_includes -c 'name'.c -o user_tmp/'name'.o
 ### ld user_tmp/'name'.o user_temp/libc.o user_tmp/libcS.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/'name'.elf
-### objcopy -O binary -R .note -R .comment -S tmp/'name'.elf 'name'.bin
+### objcopy -O binary -R .note -R .comment -S user_tmp/'name'.elf user_tmp/'name'.bin
 ### dd if=tmp/'name'.bin of=tmp/'name'.extended count=1 bs=16384 conv=sync
 
-# generation de la table des points d'entrées. celle-ci est bidon et sert pour des tests
-echo -e "A00\x00B00\x00C00\x00D00\x00" > tmp/table
+echo -e "\n\n******************************************"
+echo -e "Debut de la compilation des processus user.\n\t Ca va faire mal\n\n"
+
+entry1=00000000
+entry2=00000000
+entry3=00000000
+entry4=00000000
+exists1=00000000
+exists2=00000000
+exists3=00000000
+exists4=00000000
+
+
+if [ -z $1 ]
+then
+	echo "Un kernel qui ne lance aucun processus ? Ca semble utile"
+else
+	if [ `echo $1 | cut -f2 -d '.'` == "c" ]
+	then
+		name=$(basename $1 .c)
+		gcc -m32 -fno-stack-protector -Iuser_includes -c $1 -o user_tmp/$name.o
+	else
+		if [ `echo $1 | cut -f2 -d '.'` == "o" ]
+		then
+			name=$(basename $1 .o)
+		else
+			echo "Nom du premier processus invalide. Arret de gkern"
+			exit
+		fi
+	fi
+	# ATTENTION !
+	# Il manque temporairement les fichiers de la libc ici, pour les tests.
+	ld user_tmp/$name.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
+	entry1=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
+	exists1=11111111
+	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin
+	dd if=user_tmp/$name.bin of=user_tmp/$name.extended count=1 bs=16384 conv=sync
+fi
+
+if [ $2 ] #si $2 existe
+then
+	if [ `echo $2 | cut -f2 -d '.'` == "c" ]
+	then
+		name=$(basename $2 .c)
+		gcc -m32 -fno-stack-protector -Iuser_includes -c $2 -o user_tmp/$name.o
+	else
+		if [ `echo $2 | cut -f2 -d '.'` == "o" ]
+		then
+			name=$(basename $2 .o)
+		else
+			echo "Nom du deuxième processus invalide. Arret de gkern"
+			exit
+		fi
+	fi
+	# ATTENTION !
+	# Il manque temporairement les fichiers de la libc ici, pour les tests.
+	ld user_tmp/$name.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
+	entry2=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
+	exists2=11111111
+	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin
+	dd if=user_tmp/$name.bin of=user_tmp/$name.extended count=1 bs=16384 conv=sync
+fi
+
+if [ $3 ] #si $3 existe
+then
+	if [ `echo $3 | cut -f2 -d '.'` == "c" ]
+	then
+		name=$(basename $3 .c)
+		gcc -m32 -fno-stack-protector -Iuser_includes -c $3 -o user_tmp/$name.o
+	else
+		if [ `echo $3 | cut -f2 -d '.'` == "o" ]
+		then
+			name=$(basename $3 .o)
+		else
+			echo "Nom du troisieme processus invalide. Arret de gkern"
+			exit
+		fi
+	fi 
+	# ATTENTION !
+	# Il manque temporairement les fichiers de la libc ici, pour les tests.
+	ld user_tmp/$name.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
+	entry3=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
+	exists3=11111111
+	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin
+	dd if=user_tmp/$name.bin of=user_tmp/$name.extended count=1 bs=16384 conv=sync
+fi
+
+if [ $4 ] #si $4 existe
+then
+	if [ `echo $4 | cut -f2 -d '.'` == "c" ]
+	then
+		name=$(basename $4 .c)
+		gcc -m32 -fno-stack-protector -Iuser_includes -c $4 -o user_tmp/$name.o
+	else
+		if [ `echo $4 | cut -f2 -d '.'` == "o" ]
+		then
+			name=$(basename $4 .o)
+		else
+			echo "Nom du quatrieme processus invalide. Arret de gkern"
+			exit
+		fi
+	fi
+	# ATTENTION !
+	# Il manque temporairement les fichiers de la libc ici, pour les tests.
+	ld user_tmp/$name.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
+	entry4=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
+	exists4=11111111
+	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin
+	dd if=user_tmp/$name.bin of=user_tmp/$name.extended count=1 bs=16384 conv=sync
+fi
+
+
+echo -e "\n\nFin de la compilation des processus user.\n\t Tout le monde va bien ?"
+echo -e "******************************************\n\n"
+
+# Cette table me paraît tellement legit.
+echo -e "\x$(echo $entry1 | cut -c7-8)\x$(echo $entry1 | cut -c5-6)\x$(echo $entry1 | cut -c3-4)\x$(echo $entry1 | cut -c1-2)\x$(echo $exists1 | cut -c7-8)\x$(echo $exists1 | cut -c5-6)\x$(echo $exists1 | cut -c3-4)\x$(echo $exists1 | cut -c1-2)\x$(echo $entry2 | cut -c7-8)\x$(echo $entry2 | cut -c5-6)\x$(echo $entry2 | cut -c3-4)\x$(echo $entry2 | cut -c1-2)\x$(echo $exists2 | cut -c7-8)\x$(echo $exists2 | cut -c5-6)\x$(echo $exists2 | cut -c3-4)\x$(echo $exists2 | cut -c1-2)\x$(echo $entry3 | cut -c7-8)\x$(echo $entry3 | cut -c5-6)\x$(echo $entry3 | cut -c3-4)\x$(echo $entry3 | cut -c1-2)\x$(echo $exists3 | cut -c7-8)\x$(echo $exists3 | cut -c5-6)\x$(echo $exists3 | cut -c3-4)\x$(echo $exists3 | cut -c1-2)\x$(echo $entry4 | cut -c7-8)\x$(echo $entry4 | cut -c5-6)\x$(echo $entry4 | cut -c3-4)\x$(echo $entry4 | cut -c1-2)\x$(echo $exists4 | cut -c7-8)\x$(echo $exists4 | cut -c5-6)\x$(echo $exists4 | cut -c3-4)\x$(echo $exists4 | cut -c1-2)" > tmp/table
 
 # ajout de la table après le kernel. a modifier pour mettre les processus aussi
 cat tmp/minikernel.extended tmp/table > tmp/minikernel

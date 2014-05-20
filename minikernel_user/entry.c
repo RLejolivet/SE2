@@ -33,6 +33,6 @@ void mini_kernel()
 
 	/* THIS IS PROCESS 0! (omg) */
 	schedule();
-	while (1) ;
+	//while (1) ;
 }
 

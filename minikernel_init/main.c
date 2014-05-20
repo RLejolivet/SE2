@@ -97,8 +97,6 @@ void main_init()
 		pidt[3] = (((long)addr)>>16) & 0xffff; 
 	}
 
-	/* init processes */
-	init_processes();
 }
 
 void do_minikernel_irq0()
