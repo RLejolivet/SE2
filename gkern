@@ -1,5 +1,6 @@
 #!/bin/bash
 
+/bin/rm tmp/*
 # generation du boot
 cc -m32 -traditional -E -Iinclude boot/bootsect.S > tmp/bootsect.s 
 as86 -0 -a -o tmp/bootsect.o tmp/bootsect.s

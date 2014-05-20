@@ -353,108 +353,108 @@ static void vkprintf(subscreen* psc, const char* fmt, va_list args)
 		switch (*fmt) 
 		{
 			case '%' :
-			fmt++;
-			while (*fmt) 
-			{
-				switch (*fmt) 
+				fmt++;
+				while (*fmt) 
 				{
-					case '%' : 
-						fmt++; kprintc(psc,'%'); 
-						goto leave_printarg;
-					case 's' : 
-						vkprintf_str(psc,va_arg(args, char*), len, fillwith, placeleft,0);
-						fmt++;
-						goto leave_printarg;
-					case 'c' :
-						kprintc(psc,va_arg(args, int)&0xff);
-						fmt++;
-						goto leave_printarg;
-					case 'x' :
-					case 'X' : 
+					switch (*fmt) 
 					{
-						char* p=buf;
-						unsigned int x= va_arg(args, int);
-						int i;
-						for (i=0 ; i<7 ; i++, x <<= 4) 
-						{
-							if ( (x&0xf0000000)!=0 )
-								break;
-						}
-						for ( ; i<8 ; i++, x <<= 4) 
-						{
-							char c= (x>>28)&0xf;
-							if ( c>=10 )
-								*p++= c-10+'a';
-							else
-								*p++= c+'0';
-						}
-						*p=0;
-						vkprintf_str(psc,buf, len, fillwith, placeleft,0);
-						fmt++;
-						goto leave_printarg;
-					}
-					case 'd' :
-					case 'i' : 
-					{
-						char* p=buf;
-						int y=1000000000;
-						int x= va_arg(args, int);
-						if (x<0) 
-						{
-							signe = '-';
-							x = -x;
-						} 
-						else if (signe)
-							signe = '+';
-							
-						for (    ; y>=10 ; y /= 10) 
-						{
-							if ( (x/y)>0 )
-								break;
-						}
-						for (    ; y>=10 ; y /= 10) 
-						{
-							*p++ = (x / y) + '0';
-							x = x % y;
-						}
-						*p++ = x + '0';
-						*p=0;
-						if (placeleft)
-							fillwith=' ';
-						vkprintf_str(psc, buf, len, fillwith, placeleft, signe);
-						fmt++;
-						goto leave_printarg;
-					}
-					case '0' : 
-						fmt++; fillwith='0'; 
-						continue;
-					case '+' : 
-						fmt++; signe= 1; 
-						continue;
-					case '-' : 
-						fmt++; placeleft= 1; 
-						continue;
-					default:
-						if ( (*fmt<'1') || ('9'<=*fmt) ) 
-						{
-							/* ignore char */
-							continue;
-						}
-						/* get number */
-						while (*fmt && !((*fmt<'0') || ('9'<*fmt)) ) 
-						{
-							len = len*10 + *fmt-'0';
+						case '%' : 
+							fmt++; kprintc(psc,'%'); 
+							goto leave_printarg;
+						case 's' : 
+							vkprintf_str(psc,va_arg(args, char*), len, fillwith, placeleft,0);
 							fmt++;
+							goto leave_printarg;
+						case 'c' :
+							kprintc(psc,va_arg(args, int)&0xff);
+							fmt++;
+							goto leave_printarg;
+						case 'x' :
+						case 'X' : 
+						{
+							char* p=buf;
+							unsigned int x= va_arg(args, int);
+							int i;
+							for (i=0 ; i<7 ; i++, x <<= 4) 
+							{
+								if ( (x & 0xf0000000) != 0 )
+									break;
+							}
+							for ( ; i<8 ; i++, x <<= 4) 
+							{
+								char c= (x>>28)&0xf;
+								if ( c>=10 )
+									*p++= c-10+'a';
+								else
+									*p++= c+'0';
+							}
+							*p=0;
+							vkprintf_str(psc,buf, len, fillwith, placeleft,0);
+							fmt++;
+							goto leave_printarg;
 						}
-						continue;
-				}	
-			}
-			leave_printarg:
-				len=0;
-				fillwith=' ';
-				placeleft=0;
-				signe=0;
-				continue;
+						case 'd' :
+						case 'i' : 
+						{
+							char* p=buf;
+							int y=1000000000;
+							int x= va_arg(args, int);
+							if (x<0) 
+							{
+								signe = '-';
+								x = -x;
+							} 
+							else if (signe)
+								signe = '+';
+								
+							for (    ; y>=10 ; y /= 10) 
+							{
+								if ( (x/y)>0 )
+									break;
+							}
+							for (    ; y>=10 ; y /= 10) 
+							{
+								*p++ = (x / y) + '0';
+								x = x % y;
+							}
+							*p++ = x + '0';
+							*p=0;
+							if (placeleft)
+								fillwith=' ';
+							vkprintf_str(psc, buf, len, fillwith, placeleft, signe);
+							fmt++;
+							goto leave_printarg;
+						}
+						case '0' : 
+							fmt++; fillwith='0'; 
+							continue;
+						case '+' : 
+							fmt++; signe= 1; 
+							continue;
+						case '-' : 
+							fmt++; placeleft= 1; 
+							continue;
+						default:
+							if ( (*fmt<'1') || ('9'<=*fmt) ) 
+							{
+								/* ignore char */
+								continue;
+							}
+							/* get number */
+							while (*fmt && !((*fmt<'0') || ('9'<*fmt)) ) 
+							{
+								len = len*10 + *fmt-'0';
+								fmt++;
+							}
+							continue;
+					}	
+				}
+				leave_printarg:
+					len=0;
+					fillwith=' ';
+					placeleft=0;
+					signe=0;
+					continue;
 			default:
 				kprintc(psc,*fmt++);
 				continue;

@@ -2,10 +2,6 @@
 #include "keyboard.h"
 #include "process.h"
 #define SCREEN_INFO (*(struct screen_info *)0x90000)
-#define	UP		0x48
-#define DOWN	0x50
-#define LEFT	0x4b
-#define	RIGHT	0X4d
 
 unsigned char  inb  (unsigned short port) 
 { 

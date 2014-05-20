@@ -1,35 +1,28 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
+#include "process.h"
+
 #define BUFFER_SIZE 1024
+
 #define LEFT_SHIFT_MC 0x2a
 #define LEFT_SHIFT_BC 0xaa
 #define RIGHT_SHIFT_MC 0x36
 #define RIGHT_SHIFT_BC 0xb6
 #define CAPS_LOCK_MC 0x3a
 #define CAPS_LOCK_BC 0xba
+#define	UP		0x48
+#define DOWN	0x50
+#define LEFT	0x4b
+#define	RIGHT	0X4d
 
 typedef enum bool {false, true} bool ;
 
-struct buffer_keyboard 
+struct stdin 
 {
-	char* buffer1 ;
-	char* buffer2 ;
-	char* buffer3 ;
-	char* buffer4 ; 
-	bool to_read1 ;
-	bool to_read2 ;
-	bool to_read3 ;
-	bool to_read4 ;
-	
-	/* tiar stands for There Is A Reader */
-	bool tiar1 ;
-	bool tiar2 ;
-	bool tiar3 ;
-	bool tiar4 ;
-
-
-	char write_to ;
+	char* buffer_read[BUFFER_SIZE] ;
+	int pos_lecture ;
+	int pos_ecriture ;
 } ;
 
 extern char mappings[] ;
