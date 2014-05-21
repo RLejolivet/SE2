@@ -32,11 +32,11 @@ gcc -m32 -fno-stack-protector -Iinclude -c minikernel_user/ttyS_util.S -o tmp/tt
 ld -m elf_i386 -Ttext 0x1000 -e startup_32 -o tmp/minikernel.elf  tmp/head.o  tmp/util.o  tmp/vga.o  tmp/main.o  tmp/ttyS_asm.o  tmp/ttyS.o  tmp/user_test.o tmp/entry.o  tmp/ttyS_util.o tmp/keyboard.o tmp/process.o tmp/syscalls.o
 objcopy -O binary -R .note -R .comment -S tmp/minikernel.elf tmp/minikernel.bin
 
-# extention du kernel pour faire 32 ko, comme ça on sait où sera la table
+# extension du kernel pour faire 32 ko, comme ça on sait où sera la table
 dd if=tmp/minikernel.bin of=tmp/minikernel.extended count=1 bs=32768 conv=sync
 
-# generation des processus user
 echo -e "\E[32m\n\nDebut de la compilation de la libc\n"
+# generation de la libc
 gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.c -o user_tmp/libc.o
 
 # pas sûr qu'on en ai besoin après tout
@@ -80,7 +80,7 @@ else
 	fi
 	# ATTENTION !
 	# Il manque temporairement les fichiers de la libc ici, pour les tests.
-	ld user_tmp/$name.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
+	ld user_tmp/{$name.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
 	entry1=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
 	exists1=11111111
 	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin

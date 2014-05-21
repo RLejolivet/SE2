@@ -1,8 +1,13 @@
 #include <stdarg.h>
-#include "libc.h"
+#include "../user_includes/libc.h"
 
 //copie la chaine qui est dans le buffer dans le char* passé en paramètre
-static void scanf_str(va_arg(args, char*)) ;
+static void scanf_str(char* s) ;
+static void scanf_str(char* s) 
+{
+	
+}
+
 int scanf(const char* fmt, ...)
 {
 	va_list args ;
@@ -33,7 +38,7 @@ int scanf(const char* fmt, ...)
 							fmt++;
 							continue ;
 						case 'c' :
-							*va_arg = read() ;
+							*va_arg(args, char*) = read() ;
 							fmt++;
 							continue ;
 						case 'x' :
