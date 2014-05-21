@@ -1,6 +1,7 @@
 #!/bin/bash
 
 /bin/rm tmp/*
+echo -e "\E[35mDebut de la compilation du kernel\n"
 # generation du boot
 cc -m32 -traditional -E -Iinclude boot/bootsect.S > tmp/bootsect.s 
 as86 -0 -a -o tmp/bootsect.o tmp/bootsect.s
@@ -35,6 +36,7 @@ objcopy -O binary -R .note -R .comment -S tmp/minikernel.elf tmp/minikernel.bin
 dd if=tmp/minikernel.bin of=tmp/minikernel.extended count=1 bs=32768 conv=sync
 
 # generation des processus user
+echo -e "\E[32m\n\nDebut de la compilation de la libc\n"
 gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.c -o user_tmp/libc.o
 
 # pas sûr qu'on en ai besoin après tout
@@ -46,7 +48,7 @@ gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.c -o user_
 ### objcopy -O binary -R .note -R .comment -S user_tmp/'name'.elf user_tmp/'name'.bin
 ### dd if=tmp/'name'.bin of=tmp/'name'.extended count=1 bs=16384 conv=sync
 
-echo -e "\n\n******************************************"
+echo -e "\E[36m\n\n******************************************"
 echo -e "Debut de la compilation des processus user.\n\t Ca va faire mal\n\n"
 
 entry1=00000000
@@ -159,7 +161,7 @@ fi
 
 
 echo -e "\n\nFin de la compilation des processus user.\n\t Tout le monde va bien ?"
-echo -e "******************************************\n\n"
+echo -e "******************************************\n\n\E[0mDebut de l'assemblage final\n"
 
 # Cette table me paraît tellement legit.
 echo -e "\x$(echo $entry1 | cut -c7-8)\x$(echo $entry1 | cut -c5-6)\x$(echo $entry1 | cut -c3-4)\x$(echo $entry1 | cut -c1-2)\x$(echo $exists1 | cut -c7-8)\x$(echo $exists1 | cut -c5-6)\x$(echo $exists1 | cut -c3-4)\x$(echo $exists1 | cut -c1-2)\x$(echo $entry2 | cut -c7-8)\x$(echo $entry2 | cut -c5-6)\x$(echo $entry2 | cut -c3-4)\x$(echo $entry2 | cut -c1-2)\x$(echo $exists2 | cut -c7-8)\x$(echo $exists2 | cut -c5-6)\x$(echo $exists2 | cut -c3-4)\x$(echo $exists2 | cut -c1-2)\x$(echo $entry3 | cut -c7-8)\x$(echo $entry3 | cut -c5-6)\x$(echo $entry3 | cut -c3-4)\x$(echo $entry3 | cut -c1-2)\x$(echo $exists3 | cut -c7-8)\x$(echo $exists3 | cut -c5-6)\x$(echo $exists3 | cut -c3-4)\x$(echo $exists3 | cut -c1-2)\x$(echo $entry4 | cut -c7-8)\x$(echo $entry4 | cut -c5-6)\x$(echo $entry4 | cut -c3-4)\x$(echo $entry4 | cut -c1-2)\x$(echo $exists4 | cut -c7-8)\x$(echo $exists4 | cut -c5-6)\x$(echo $exists4 | cut -c3-4)\x$(echo $exists4 | cut -c1-2)" > tmp/table

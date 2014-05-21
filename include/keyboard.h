@@ -18,7 +18,7 @@ typedef enum bool {false, true} bool ;
 
 typedef struct
 {
-	char* buffer_read[BUFFER_SIZE] ;
+	char buffer_read[BUFFER_SIZE] ;
 	int pos_lecture ;
 	int pos_ecriture ;
 	bool unread ; //indique qu'il y a des caractères pas encore lus lorsque l'écrivain "fait le tour" du buffer
@@ -26,6 +26,7 @@ typedef struct
 
 #include "process.h"
 
+extern input_buffer in1, in2, in3, in4;
 extern char mappings[] ;
 
 void print_char(int code) ;

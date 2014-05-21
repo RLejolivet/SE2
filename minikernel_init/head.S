@@ -87,9 +87,9 @@ minikernel_irq0:
 	movl $(__KERNEL_DS),%eax /* __KERNEL_DS = 0x18 */
 	movl %eax,%ds
 	movl %eax,%es
-	call do_minikernel_irq0
 	movb $0x20,%al
 	outb %al,$0x20
+	call do_minikernel_irq0
 	popl %ds
 	popl %es
 	popl %edx

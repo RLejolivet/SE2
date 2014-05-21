@@ -1,5 +1,7 @@
 #include "kernel.h"
 
+input_buffer in1, in2, in3, in4;
+
 char mappings[88] = 
 { 
 	'\0',

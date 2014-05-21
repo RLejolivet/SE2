@@ -48,12 +48,13 @@ typedef struct{
 typedef struct{
 	tss* ptss;
 	char state; // I: inactif, R: actif, A: en attente, K: killed
-	input_buffer stdin;
+	input_buffer* stdin;
 	subscreen* stdout;
 	unsigned int count;
 	unsigned int pid;
 	void* pile_u;
 	void* pile_s;
+	int tss_entry;
 } task_struct;
 
 extern task_struct processes[5];
