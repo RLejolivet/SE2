@@ -1,5 +1,6 @@
 #ifndef KERNEL_H
 #define KERNEL_H
+
 /**********************************************************************/
 /**** sub screen, and print function                               ****/
 
@@ -10,6 +11,8 @@ typedef struct _subscreen
 	int nblines, nbcols;
 	int cline, ccol;
 } subscreen;
+
+#include "keyboard.h"
 
 extern subscreen sc_alive, sc_ttyS0, sc_ttyS1, sc_kernel, sc_user;
 extern subscreen sc_p1, sc_p2, sc_p3, sc_p4;

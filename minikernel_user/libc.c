@@ -1,8 +1,9 @@
 #include <stdarg.h>
+#include "libc.h"
 
 //copie la chaine qui est dans le buffer dans le char* passé en paramètre
 static void scanf_str(va_arg(args, char*)) ;
-int scanf(char* fmt, ...)
+int scanf(const char* fmt, ...)
 {
 	va_list args ;
 	va_start(args, fmt) ;
@@ -49,4 +50,47 @@ int scanf(char* fmt, ...)
 				continue ;
 		}
 	}
+}
+
+void sleep(int time)
+{
+
+	__asm__ __volatile__(
+			"movl $0x0, %%eax\n\t"
+			"movl %0, %%ebx\n\t"
+			"int $0x80"		/* Appel système */
+			: 
+			: "m" (time)		/* Passe time comme argument dans ebx */
+			: "%eax", "%ebx"
+			);
+}
+
+char read()
+{
+	int res;
+
+	__asm__ __volatile__(
+			"movl $0x2, %%eax\n\t"
+			"int $0x80\n\t"		/* Appel système */
+			"movl %%eax, %0"
+			: "=m" (res)		/* Met le résultat de l'appel (eax) dans res */
+			: 
+			: "eax");
+
+	return res;
+
+}
+
+void write(char input)
+{
+	int extended_input = input;
+	
+	__asm__ __volatile__(
+			"movl $0x1, %%eax\n\t"
+			"movl %0, %%ebx\n\t"
+			"int $0x80"		/* Appel système */
+			: 
+			: "m" (extended_input)	/* Passe extended_input comme argument dans ebx */
+			: "eax", "ebx"
+			);
 }

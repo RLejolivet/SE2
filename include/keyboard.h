@@ -1,8 +1,6 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-#include "process.h"
-
 #define BUFFER_SIZE 1024
 
 #define LEFT_SHIFT_MC 0x2a
@@ -18,13 +16,15 @@
 
 typedef enum bool {false, true} bool ;
 
-struct stdin 
+typedef struct
 {
 	char* buffer_read[BUFFER_SIZE] ;
 	int pos_lecture ;
 	int pos_ecriture ;
 	bool unread ; //indique qu'il y a des caractères pas encore lus lorsque l'écrivain "fait le tour" du buffer
-} ;
+} input_buffer;
+
+#include "process.h"
 
 extern char mappings[] ;
 

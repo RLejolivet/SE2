@@ -36,7 +36,10 @@ dd if=tmp/minikernel.bin of=tmp/minikernel.extended count=1 bs=32768 conv=sync
 
 # generation des processus user
 gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.c -o user_tmp/libc.o
-gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.S -o user_tmp/libcS.o
+
+# pas sûr qu'on en ai besoin après tout
+# gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.S -o user_tmp/libcS.o
+
 ### template :
 ### gcc -m32 -fno-stack-protector -Iuser_includes -c 'name'.c -o user_tmp/'name'.o
 ### ld user_tmp/'name'.o user_temp/libc.o user_tmp/libcS.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/'name'.elf

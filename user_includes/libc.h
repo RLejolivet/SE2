@@ -1,6 +1,8 @@
 #ifndef MINI_LIBC_HEADER
 #define MINI_LIBC_HEADER
 
+#define BUFFER_SIZE 1024
+
 /* Format is a string that will be printed
  * and may contain the following sequences to insert values :
  * - %s for a string

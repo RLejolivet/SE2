@@ -48,7 +48,7 @@ typedef struct{
 typedef struct{
 	tss* ptss;
 	char state; // I: inactif, R: actif, A: en attente, K: killed
-	char* buffer_read;
+	input_buffer stdin;
 	subscreen* stdout;
 	unsigned int count;
 	unsigned int pid;
