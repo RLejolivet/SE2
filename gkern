@@ -37,7 +37,7 @@ dd if=tmp/minikernel.bin of=tmp/minikernel.extended count=1 bs=32768 conv=sync
 
 echo -e "\E[32m\n\nDebut de la compilation de la libc\n"
 # generation de la libc
-gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.c -o user_tmp/libc.o
+gcc -m32 -fno-stack-protector -Iinclude -Iuser_includes -c minikernel_user/libc.c -o user_tmp/libc.o
 
 # pas sûr qu'on en ai besoin après tout
 # gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.S -o user_tmp/libcS.o
@@ -78,8 +78,6 @@ else
 			exit
 		fi
 	fi
-	# ATTENTION !
-	# Il manque temporairement les fichiers de la libc ici, pour les tests.
 	ld user_tmp/{$name.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
 	entry1=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
 	exists1=11111111
@@ -102,9 +100,7 @@ then
 			exit
 		fi
 	fi
-	# ATTENTION !
-	# Il manque temporairement les fichiers de la libc ici, pour les tests.
-	ld user_tmp/$name.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
+	ld user_tmp/{$name.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
 	entry2=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
 	exists2=11111111
 	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin
@@ -126,9 +122,7 @@ then
 			exit
 		fi
 	fi 
-	# ATTENTION !
-	# Il manque temporairement les fichiers de la libc ici, pour les tests.
-	ld user_tmp/$name.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
+	ld user_tmp/{$name.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
 	entry3=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
 	exists3=11111111
 	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin
@@ -150,9 +144,7 @@ then
 			exit
 		fi
 	fi
-	# ATTENTION !
-	# Il manque temporairement les fichiers de la libc ici, pour les tests.
-	ld user_tmp/$name.o -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
+	ld user_tmp/{$name.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
 	entry4=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
 	exists4=11111111
 	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin

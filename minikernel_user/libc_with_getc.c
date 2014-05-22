@@ -1,7 +1,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include "libc.h"
-
 //copie la chaine qui est dans le buffer dans le char* passé en paramètre
 static void scanf_str(char* s) ;
 static void scanf_str(char* s) 
@@ -11,7 +10,6 @@ static void scanf_str(char* s)
 	while(c != ' ' && c != '\n' && c != '\t')
 	{
 		c = getchar() ;
-		//putc(c, stdout) ;
 		*s++ = c ;
 	}
 	/* -1 pour remplacer le \n final */
@@ -40,7 +38,6 @@ int get_int_from_stdin(int hexa)
 	return res ;
 
 }
-
 
 int miniscanf(const char* fmt, ...)
 {
