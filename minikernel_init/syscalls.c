@@ -21,10 +21,14 @@ char sys_read()
 #ifdef DEBUG_SYSCALLS
 	vgaprintf("Lecture presque successful (en fait, on a rien lu !)\n");
 #endif
+	
+	//beurk, une attente active ! mais ai-je le choix ?
+	while(!bouffeur_dinput_lol->unread) ;
 
-	c = bouffeur_dinput_lol->buffer_read[*cursor];
+	c = bouffeur_dinput_lol->buffer_read[*cursor % BUFFER_SIZE];
+	(*cursor)++ ; 
 
-	*cursor = (*cursor + 1) % BUFFER_SIZE ;
+	bouffeur_dinput_lol->unread = *cursor == bouffeur_dinput_lol->pos_ecriture ? false : true ;
 
 	return c ;
 }

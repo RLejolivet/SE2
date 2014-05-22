@@ -182,7 +182,23 @@ void init_processes(){
 		processes[4].ptss->gs = processes[4].ptss->ds;
 	}
 
+	init_buffers() ;
+}
 
+void init_buffers()
+{
+	int i = 0 , p = 0 ;
+
+	for (p = 0 ; p < 5 ; p++)
+	{
+		for(i = 0 ; i < BUFFER_SIZE ; i++)
+		{
+			processes[p].stdin->buffer_read[i] = '\0' ;
+		}
+		processes[p].stdin->pos_lecture = 0 ;
+		processes[p].stdin->pos_ecriture = 0 ;
+		processes[p].stdin->unread = false ;
+	}
 }
 
 void commute_to(int index_processes)

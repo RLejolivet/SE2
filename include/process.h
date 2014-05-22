@@ -70,6 +70,9 @@ extern unsigned char first_schedule;
 /* Lis la table des points d'entrées et initialise les TSS */
 void init_processes();
 
+/* initialise les buffers */
+void init_buffers() ;
+
 /* schedule passe la main au prochain processus disponible */
 void schedule();
 
