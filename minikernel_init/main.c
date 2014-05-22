@@ -197,7 +197,7 @@ void do_minikernel_irq1(int code)
 					caractere = uppercase(code) ;
 
 				if (caractere != '\0')
-					focused_process->stdin->buffer_read[(*cursor)++] = caractere ;
+					focused_process->stdin->buffer_read[(*cursor)++ % BUFFER_SIZE] = caractere ;
 				else if (code == BACKSPACE)
 				{
 					if(*cursor > 0)	
