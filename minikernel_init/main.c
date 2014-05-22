@@ -141,7 +141,9 @@ void do_minikernel_irq1(int code)
 	static int count = 0 ;
 	static bool caps = false, make_extended = false, break_extended = false ;
 	char caractere ;
-	subscreen* psc =  processes[focus_process].stdout ;
+	task_struct* focused_process = processes + focus_process ;
+	subscreen* psc =  focused_process->stdout ;
+	int* cursor = &((focused_process->stdin)->pos_lecture) ;
 
 	switch(code)
 	{
@@ -195,14 +197,13 @@ void do_minikernel_irq1(int code)
 					caractere = uppercase(code) ;
 
 				if (caractere != '\0')
-					kprintc(psc, caractere) ;
-				else if (code == 0x0e)
+					focused_process->stdin->buffer_read[(*cursor)++] = caractere ;
+				else if (code == BACKSPACE)
 				{
-					if(psc->ccol > 0)	
+					if(*cursor > 0)	
 					{
-						psc->ccol-- ;
-						kprintc(psc, ' ') ;
-						psc->ccol-- ;
+						(*cursor)-- ;
+						focused_process->stdin->buffer_read[*cursor] = ' ' ;
 					}
 				}
 			}

@@ -12,15 +12,21 @@ void sys_sleep(int time)
 #endif
 }
 
+// lire un caractère dans processes[current_process].stdin
 char sys_read()
 {
-	// lire un caractère dans processes[current_process].stdin
-	
+	char c ;
+	input_buffer* bouffeur_dinput_lol = processes[current_process].stdin ;
+	int* cursor = &(bouffeur_dinput_lol->pos_lecture) ;
 #ifdef DEBUG_SYSCALLS
 	vgaprintf("Lecture presque successful (en fait, on a rien lu !)\n");
 #endif
 
-	return 'A';
+	c = bouffeur_dinput_lol->buffer_read[*cursor];
+
+	*cursor = (*cursor + 1) % BUFFER_SIZE ;
+
+	return c ;
 }
 
 void sys_write(int input)

@@ -9,10 +9,11 @@
 #define RIGHT_SHIFT_BC 0xb6
 #define CAPS_LOCK_MC 0x3a
 #define CAPS_LOCK_BC 0xba
-#define	UP		0x48
-#define DOWN	0x50
-#define LEFT	0x4b
-#define	RIGHT	0X4d
+#define	UP			0x48
+#define DOWN		0x50
+#define LEFT		0x4b
+#define	RIGHT		0x4d
+#define BACKSPACE	0x0e
 
 typedef enum bool {false, true} bool ;
 
