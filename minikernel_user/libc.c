@@ -2,6 +2,17 @@
 #include "mini_kernel.h"
 #include "../user_includes/libc.h"
 
+// ben strlen quoi
+int strlen(const char*p)
+{
+	int len=0;
+
+	while (*p++) 
+		len += 1;
+
+	return len;
+}
+
 //copie la chaine qui est dans le buffer dans le char* passé en paramètre
 static void scanf_str(char* s) ;
 static void scanf_str(char* s) 
