@@ -51,14 +51,14 @@ void init_tss(tss* ptss){
 void init_processes(){
 
 	/* Je SAIS où est ma table. Du coup j'y vais, comme ça, trop facile */
-	int* table_entry_1 = (int*) 0x9000;
-	int* exists_entry_1 = (int*) 0x9004;
-	int* table_entry_2 = (int*) 0x9008;
-	int* exists_entry_2 = (int*) 0x900c;
-	int* table_entry_3 = (int*) 0x9010;
-	int* exists_entry_3 = (int*) 0x9014;
-	int* table_entry_4 = (int*) 0x9018;
-	int* exists_entry_4 = (int*) 0x901c;
+	int* table_entry_1 = (int*) 0xB000;
+	int* exists_entry_1 = (int*) 0xB004;
+	int* table_entry_2 = (int*) 0xB008;
+	int* exists_entry_2 = (int*) 0xB00c;
+	int* table_entry_3 = (int*) 0xB010;
+	int* exists_entry_3 = (int*) 0xB014;
+	int* table_entry_4 = (int*) 0xB018;
+	int* exists_entry_4 = (int*) 0xB01c;
 	
 #ifdef DEBUG_PROCESS
 	/* En fait, je savais pas tellement où était ma table :/ */

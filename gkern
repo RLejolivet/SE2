@@ -33,7 +33,7 @@ ld -m elf_i386 -Ttext 0x1000 -e startup_32 -o tmp/minikernel.elf  tmp/head.o  tm
 objcopy -O binary -R .note -R .comment -S tmp/minikernel.elf tmp/minikernel.bin
 
 # extension du kernel pour faire 32 ko, comme ça on sait où sera la table
-dd if=tmp/minikernel.bin of=tmp/minikernel.extended count=1 bs=32768 conv=sync
+dd if=tmp/minikernel.bin of=tmp/minikernel.extended count=1 bs=40960 conv=sync
 
 echo -e "\E[32m\n\nDebut de la compilation de la libc\n"
 # generation de la libc
