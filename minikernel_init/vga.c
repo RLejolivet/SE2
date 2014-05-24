@@ -205,13 +205,16 @@ void border_color(char color, subscreen* sc) ;
 
 void border_color(char color, subscreen* sc)
 {
-	int i ;
-	vgaprintf("%d %d\n", sc->nblines, sc->nbcols) ;
+	int i, j ;
 
-	for(i = 0 ; i < sc->nblines * sc->nbcols ; i++)
+	for(i = 1 ; i < sc->nbcols * 2 ; i +=2)
 	{
-		vgaprintf("\ncoucou\n") ;
-		kprintc(sc, color) ;
+		sc->vidmem[(sc->col_org - nbcols) * 2 + i] = color ; 
+		sc->vidmem[(sc->col_org - nbcols) * 2 + i + (sc->nblines+1) * nbcols * 2] = color ; 
+	}
+	for(i = 0 ; i <= sc->nblines ; i++)
+	{
+		sc->vidmem[(sc->col_org +  sc->nbcols - nbcols) * 2 + i * nbcols * 2 + 1] = color ;
 	}
 
 }

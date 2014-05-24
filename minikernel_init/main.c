@@ -140,7 +140,7 @@ void do_minikernel_irq1(int code)
 	static int count = 0 ;
 	static bool caps = false, make_extended = false, break_extended = false ;
 	char caractere ;
-	task_struct* focused_process = processes + focus_process ;
+	task_struct* focused_process = processes + focus_process*sizeof(task_struct);
 	subscreen* psc =  focused_process->stdout ;
 	int* cursor = &((focused_process->stdin)->pos_lecture) ;
 
@@ -174,7 +174,7 @@ void do_minikernel_irq1(int code)
 					case UP: 
 						if(focus_process > 2)
 						{
-							border_color(DEFAULT_COLORS, processes[focus_process].stdout) ;
+							border_color(0xff - DEFAULT_COLORS, processes[focus_process].stdout) ;
 							focus_process -= 2 ;
 							border_color(FOCUS__BG_COLOR, processes[focus_process].stdout) ;
 						}
@@ -182,7 +182,7 @@ void do_minikernel_irq1(int code)
 					case RIGHT:
 						if(focus_process % 2 != 0)
 						{
-							border_color(DEFAULT_COLORS, processes[focus_process].stdout) ;
+							border_color(0xff - DEFAULT_COLORS, processes[focus_process].stdout) ;
 							focus_process++ ;
 							border_color(FOCUS__BG_COLOR, processes[focus_process].stdout) ;
 						}
@@ -190,7 +190,7 @@ void do_minikernel_irq1(int code)
 					case DOWN:
 						if(focus_process <= 2)
 						{
-							border_color(DEFAULT_COLORS, processes[focus_process].stdout) ;
+							border_color(0xff - DEFAULT_COLORS, processes[focus_process].stdout) ;
 							focus_process += 2 ;
 							border_color(FOCUS__BG_COLOR, processes[focus_process].stdout) ;
 						}
@@ -198,7 +198,7 @@ void do_minikernel_irq1(int code)
 					case LEFT :
 						if(focus_process % 2 == 0)
 						{
-							border_color(DEFAULT_COLORS, processes[focus_process].stdout) ;
+							border_color(0xff - DEFAULT_COLORS, processes[focus_process].stdout) ;
 							focus_process-- ;
 							border_color(FOCUS__BG_COLOR, processes[focus_process].stdout) ;
 						}

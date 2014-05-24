@@ -9,7 +9,7 @@
 #include "kernel.h"
 #include "../user_includes/libc.h"
 
-#define DEBUG_VGA
+//#define DEBUG_VGA
 
 
 void mini_kernel()
