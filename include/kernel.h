@@ -30,6 +30,7 @@ void vga_init();
 void ttyS_init();
 void interrupt_init();
 void main_init();
+void init_borders() ;
 
 /**********************************************************************/
 /**** other functions                                              ****/

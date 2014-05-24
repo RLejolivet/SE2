@@ -11,11 +11,24 @@
 
 //#define DEBUG_VGA
 
+void init_borders()
+{
+	int  p = 0 ;
+
+	for (p = 1 ; p < 5 ; p++)
+	{
+		border_color(0xff - DEFAULT_COLORS, processes[p].stdout) ;
+	}
+	border_color(FOCUS__BG_COLOR, processes[1].stdout) ;
+}
+
 
 void mini_kernel()
 {
 	int i;
 	int cnt=56;
+
+	init_borders() ;
 
 
 #ifdef DEBUG_VGA

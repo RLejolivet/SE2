@@ -74,6 +74,7 @@ void init_processes();
 /* Initialise les buffers */
 void init_buffers() ;
 
+
 /* schedule passe la main au prochain processus disponible */
 void schedule();
 
