@@ -29,7 +29,7 @@ gcc -m32 -fno-stack-protector -Iinclude -c minikernel_user/entry.c -o tmp/entry.
 gcc -m32 -fno-stack-protector -Iinclude -c minikernel_user/ttyS_util.S -o tmp/ttyS_util.o
 
 # generation du kernel
-ld -m elf_i386 -Ttext 0x1000 -e startup_32 -o tmp/minikernel.elf  tmp/head.o  tmp/util.o  tmp/vga.o  tmp/main.o  tmp/ttyS_asm.o  tmp/ttyS.o  tmp/user_test.o tmp/entry.o  tmp/ttyS_util.o tmp/keyboard.o tmp/process.o tmp/syscalls.o
+ld -m elf_i386 -Ttext 0x1000 -e startup_32 -o tmp/minikernel.elf  tmp/head.o  tmp/util.o  tmp/vga.o  tmp/main.o  tmp/ttyS_asm.o  tmp/ttyS.o  tmp/user_test.o tmp/entry.o  tmp/ttyS_util.o tmp/keyboard.o tmp/process.o tmp/syscalls.o user_tmp/libc.o
 objcopy -O binary -R .note -R .comment -S tmp/minikernel.elf tmp/minikernel.bin
 
 # extension du kernel pour faire 32 ko, comme ça on sait où sera la table

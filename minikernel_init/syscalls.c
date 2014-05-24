@@ -19,11 +19,14 @@ char sys_read()
 	input_buffer* bouffeur_dinput_lol = processes[current_process].stdin ;
 	int* cursor = &(bouffeur_dinput_lol->pos_lecture) ;
 #ifdef DEBUG_SYSCALLS
-	vgaprintf("Lecture presque successful (en fait, on a rien lu !)\n");
+	bouffeur_dinput_lol = &in3 ;
 #endif
 	
-	//beurk, une attente active ! mais ai-je le choix ?
-	while(!bouffeur_dinput_lol->unread) ;
+	if(!bouffeur_dinput_lol->unread)
+	{
+		processes[current_process].state = 'B' ;
+		schedule() ;
+	}
 
 	c = bouffeur_dinput_lol->buffer_read[*cursor % BUFFER_SIZE];
 	(*cursor)++ ; 
@@ -36,11 +39,12 @@ char sys_read()
 void sys_write(int input)
 {
 	char affichage = input;
+#ifdef DEBUG_SYSCALLS
+	//vgaprintf("\naffichage successful ! je crois ?\n");
+	kprintc(&sc_p3, affichage);
+#endif
 	// afficher un caractère dans processes[current_process].stdout
 	kprintc(processes[current_process].stdout, affichage);
-#ifdef DEBUG_SYSCALLS
-	vgaprintf("\naffichage successful ! je crois ?\n");
-#endif
 
 }
 

@@ -3,7 +3,7 @@
 
 #include "kernel.h"
 
-#define DEBUG_PROCESS
+//#define DEBUG_PROCESS
 
 // avant 1ere commutation : lrt (load registre rt)
 typedef struct{
@@ -47,7 +47,7 @@ typedef struct{
 
 typedef struct{
 	tss* ptss;
-	char state; // I: inactif, R: actif, A: en attente, K: killed
+	char state; // I: inactif, R: actif, A: en attente, K: killed, B: blocked
 	input_buffer* stdin;
 	subscreen* stdout;
 	unsigned int count;
@@ -56,6 +56,7 @@ typedef struct{
 	void* pile_s;
 	int tss_entry;
 } task_struct;
+
 
 extern task_struct processes[5];
 

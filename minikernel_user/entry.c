@@ -7,8 +7,9 @@
 
 #include <mini_kernel.h>
 #include "kernel.h"
+#include "../user_includes/libc.h"
 
-// #define DEBUG_VGA
+#define DEBUG_VGA
 
 
 void mini_kernel()
@@ -34,6 +35,21 @@ void mini_kernel()
 
 	/* THIS IS PROCESS 0! */
 	// Il manque un LRT ici, je crois - inline assembler for the win
+	/* THIS IS PROCESS 0! (omg) */
+
+#ifdef DEBUG_SYSCALLS //test printf
+	printf("printf :\n%d %s %x", i, "\ncoucou\n", i) ;
+
+	//test scanf 
+	scanf("%d %x %s", &i, &i, lol) ;
+#endif
+
+#ifdef DEBUG_VGA
+	processes[1].stdout = &sc_p1 ;
+	processes[2].stdout = &sc_p2 ;
+	processes[3].stdout = &sc_p3 ;
+	processes[4].stdout = &sc_p4 ;
+#endif
 	schedule();
 	//while (1) ;
 }

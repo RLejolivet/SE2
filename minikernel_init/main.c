@@ -1,7 +1,6 @@
 #include "kernel.h"
 #include "keyboard.h"
 #include "process.h"
-#define SCREEN_INFO (*(struct screen_info *)0x90000)
 
 unsigned char  inb  (unsigned short port) 
 { 
@@ -174,19 +173,35 @@ void do_minikernel_irq1(int code)
 				{
 					case UP: 
 						if(focus_process > 2)
+						{
+							border_color(DEFAULT_COLORS, processes[focus_process].stdout) ;
 							focus_process -= 2 ;
+							border_color(FOCUS__BG_COLOR, processes[focus_process].stdout) ;
+						}
 						break ;
 					case RIGHT:
 						if(focus_process % 2 != 0)
+						{
+							border_color(DEFAULT_COLORS, processes[focus_process].stdout) ;
 							focus_process++ ;
+							border_color(FOCUS__BG_COLOR, processes[focus_process].stdout) ;
+						}
 						break ;
 					case DOWN:
 						if(focus_process <= 2)
+						{
+							border_color(DEFAULT_COLORS, processes[focus_process].stdout) ;
 							focus_process += 2 ;
+							border_color(FOCUS__BG_COLOR, processes[focus_process].stdout) ;
+						}
 						break ;
 					case LEFT :
 						if(focus_process % 2 == 0)
+						{
+							border_color(DEFAULT_COLORS, processes[focus_process].stdout) ;
 							focus_process-- ;
+							border_color(FOCUS__BG_COLOR, processes[focus_process].stdout) ;
+						}
 						break ;
 				}
 			}
@@ -200,7 +215,14 @@ void do_minikernel_irq1(int code)
 				{
 					focused_process->stdin->buffer_read[*cursor % BUFFER_SIZE] = caractere ;
 					(*cursor)++ ;
-					focused_process->stdin->unread = true ;
+					if(!focused_process->stdin->unread)
+					{
+						//focused_process->state = 'R' ;
+						focused_process->stdin->unread = true ;
+					}
+					#ifdef DEBUG_SYSCALLS
+						in3.unread = true ;
+					#endif
 				}
 				else if (code == BACKSPACE)
 				{

@@ -6,7 +6,6 @@
 #include "kernel.h"
 #include <mini_kernel.h>
 
-
 /*
  * setup has initialiszed the handler and put all
  * information at 0x90000 adressese
@@ -117,7 +116,7 @@ void vga_init()
 		 * E : jaune
 		 * F : blanc
 		 */
-		vidmem[i] = 0x0d ;
+		vidmem[i] = DEFAULT_COLORS ;
 	}
 
 	nbl= nblines;
@@ -202,6 +201,20 @@ void vga_init()
 
 static void vkprintf(subscreen* psc, const char* fmt, va_list args);
 static void scroll(subscreen *psc);
+void border_color(char color, subscreen* sc) ;
+
+void border_color(char color, subscreen* sc)
+{
+	int i ;
+	vgaprintf("%d %d\n", sc->nblines, sc->nbcols) ;
+
+	for(i = 0 ; i < sc->nblines * sc->nbcols ; i++)
+	{
+		vgaprintf("\ncoucou\n") ;
+		kprintc(sc, color) ;
+	}
+
+}
 
 void kprintc(subscreen* psc, char c)
 {
