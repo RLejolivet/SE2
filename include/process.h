@@ -7,42 +7,42 @@
 
 // avant 1ere commutation : lrt (load registre rt)
 typedef struct{
-	int retour_arriere;
-	int esp_0;
-	short ss_0;
-	short null_0;
-	int esp_1;
-	short ss_1;
-	short null_1;
-	int esp_2;
-	short ss_2;
-	short null_2;
-	int cr3;
-	int eip; // adresse code
-	int eflags;
-	int eax;
-	int ecx;
-	int edx;
-	int ebx;
-	int esp; // fin du segment pile
-	int ebp;
-	int esi;
-	int edi;
-	short es; // idem ds
-	short null_es;
-	short cs; // segment code
-	short null_cs;
-	short ss; // segment pile
-	short null_ss;
-	short ds; // segment data
-	short null_ds;
-	short fs; // idem ds
-	short null_fs;
-	short gs; // idem ds
-	short null_gs;
-	short ldt;
-	short null_ldt;
-	int fin;
+	unsigned int retour_arriere;
+	unsigned int esp_0;
+	unsigned short ss_0;
+	unsigned short null_0;
+	unsigned int esp_1;
+	unsigned short ss_1;
+	unsigned short null_1;
+	unsigned int esp_2;
+	unsigned short ss_2;
+	unsigned short null_2;
+	unsigned int cr3;
+	unsigned int eip; // adresse code
+	unsigned int eflags;
+	unsigned int eax;
+	unsigned int ecx;
+	unsigned int edx;
+	unsigned int ebx;
+	unsigned int esp; // fin du segment pile
+	unsigned int ebp;
+	unsigned int esi;
+	unsigned int edi;
+	unsigned short es; // idem ds
+	unsigned short null_es;
+	unsigned short cs; // segment code
+	unsigned short null_cs;
+	unsigned short ss; // segment pile
+	unsigned short null_ss;
+	unsigned short ds; // segment data
+	unsigned short null_ds;
+	unsigned short fs; // idem ds
+	unsigned short null_fs;
+	unsigned short gs; // idem ds
+	unsigned short null_gs;
+	unsigned short ldt;
+	unsigned short null_ldt;
+	unsigned int fin;
 } __attribute__ ((packed)) tss;
 
 typedef struct{
@@ -70,7 +70,7 @@ extern unsigned char first_schedule;
 /* Lis la table des points d'entrées et initialise les TSS */
 void init_processes();
 
-/* initialise les buffers */
+/* Initialise les buffers */
 void init_buffers() ;
 
 /* schedule passe la main au prochain processus disponible */

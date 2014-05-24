@@ -26,12 +26,14 @@ void mini_kernel()
 	kprintf(&sc_p3, "coucou3\n") ;
 	kprintf(&sc_p4, "coucou4\n") ;
 #endif
-	// Cette fonction de test ne devrait pas être appellée si les commutations fonctionnent
+
 #ifdef DEBUG_SYSCALLS
+	// Cette fonction de test ne devrait pas être appellée si les commutations fonctionnent
 	//function_test();
 #endif
 
-	/* THIS IS PROCESS 0! (omg) */
+	/* THIS IS PROCESS 0! */
+	// Il manque un LRT ici, je crois - inline assembler for the win
 	schedule();
 	//while (1) ;
 }

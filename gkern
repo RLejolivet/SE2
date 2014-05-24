@@ -67,88 +67,88 @@ then
 else
 	if [ `echo $1 | cut -f2 -d '.'` == "c" ]
 	then
-		name=$(basename $1 .c)
-		gcc -m32 -fno-stack-protector -Iuser_includes -c $1 -o user_tmp/$name.o
+		name1=$(basename $1 .c)
+		gcc -m32 -fno-stack-protector -Iuser_includes -c $1 -o user_tmp/$name1.o
 	else
 		if [ `echo $1 | cut -f2 -d '.'` == "o" ]
 		then
-			name=$(basename $1 .o)
+			name1=$(basename $1 .o)
 		else
 			echo "Nom du premier processus invalide. Arret de gkern"
 			exit
 		fi
 	fi
-	ld user_tmp/{$name.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
-	entry1=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
+	ld user_tmp/{$name1.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name1.elf
+	entry1=$(objdump -d user_tmp/$name1.elf | grep main | cut -f1 -d ' ')
 	exists1=11111111
-	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin
-	dd if=user_tmp/$name.bin of=user_tmp/$name.extended count=1 bs=16384 conv=sync
+	objcopy -O binary -R .note -R .comment -S user_tmp/$name1.elf user_tmp/$name1.bin
+	dd if=user_tmp/$name1.bin of=user_tmp/$name1.extended count=1 bs=16384 conv=sync
 fi
 
 if [ $2 ] #si $2 existe
 then
 	if [ `echo $2 | cut -f2 -d '.'` == "c" ]
 	then
-		name=$(basename $2 .c)
-		gcc -m32 -fno-stack-protector -Iuser_includes -c $2 -o user_tmp/$name.o
+		name2=$(basename $2 .c)
+		gcc -m32 -fno-stack-protector -Iuser_includes -c $2 -o user_tmp/$name2.o
 	else
 		if [ `echo $2 | cut -f2 -d '.'` == "o" ]
 		then
-			name=$(basename $2 .o)
+			name2=$(basename $2 .o)
 		else
 			echo "Nom du deuxième processus invalide. Arret de gkern"
 			exit
 		fi
 	fi
-	ld user_tmp/{$name.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
-	entry2=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
+	ld user_tmp/{$name2.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name2.elf
+	entry2=$(objdump -d user_tmp/$name2.elf | grep main | cut -f1 -d ' ')
 	exists2=11111111
-	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin
-	dd if=user_tmp/$name.bin of=user_tmp/$name.extended count=1 bs=16384 conv=sync
+	objcopy -O binary -R .note -R .comment -S user_tmp/$name2.elf user_tmp/$name2.bin
+	dd if=user_tmp/$name2.bin of=user_tmp/$name2.extended count=1 bs=16384 conv=sync
 fi
 
 if [ $3 ] #si $3 existe
 then
 	if [ `echo $3 | cut -f2 -d '.'` == "c" ]
 	then
-		name=$(basename $3 .c)
-		gcc -m32 -fno-stack-protector -Iuser_includes -c $3 -o user_tmp/$name.o
+		name3=$(basename $3 .c)
+		gcc -m32 -fno-stack-protector -Iuser_includes -c $3 -o user_tmp/$name3.o
 	else
 		if [ `echo $3 | cut -f2 -d '.'` == "o" ]
 		then
-			name=$(basename $3 .o)
+			name3=$(basename $3 .o)
 		else
 			echo "Nom du troisieme processus invalide. Arret de gkern"
 			exit
 		fi
 	fi 
-	ld user_tmp/{$name.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
-	entry3=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
+	ld user_tmp/{$name3.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name3.elf
+	entry3=$(objdump -d user_tmp/$name3.elf | grep main | cut -f1 -d ' ')
 	exists3=11111111
-	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin
-	dd if=user_tmp/$name.bin of=user_tmp/$name.extended count=1 bs=16384 conv=sync
+	objcopy -O binary -R .note -R .comment -S user_tmp/$name3.elf user_tmp/$name3.bin
+	dd if=user_tmp/$name3.bin of=user_tmp/$name3.extended count=1 bs=16384 conv=sync
 fi
 
 if [ $4 ] #si $4 existe
 then
 	if [ `echo $4 | cut -f2 -d '.'` == "c" ]
 	then
-		name=$(basename $4 .c)
-		gcc -m32 -fno-stack-protector -Iuser_includes -c $4 -o user_tmp/$name.o
+		name4=$(basename $4 .c)
+		gcc -m32 -fno-stack-protector -Iuser_includes -c $4 -o user_tmp/$name4.o
 	else
 		if [ `echo $4 | cut -f2 -d '.'` == "o" ]
 		then
-			name=$(basename $4 .o)
+			name4=$(basename $4 .o)
 		else
 			echo "Nom du quatrieme processus invalide. Arret de gkern"
 			exit
 		fi
 	fi
-	ld user_tmp/{$name.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name.elf
-	entry4=$(objdump -d user_tmp/$name.elf | grep main | cut -f1 -d ' ')
+	ld user_tmp/{$name4.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name4.elf
+	entry4=$(objdump -d user_tmp/$name4.elf | grep main | cut -f1 -d ' ')
 	exists4=11111111
-	objcopy -O binary -R .note -R .comment -S user_tmp/$name.elf user_tmp/$name.bin
-	dd if=user_tmp/$name.bin of=user_tmp/$name.extended count=1 bs=16384 conv=sync
+	objcopy -O binary -R .note -R .comment -S user_tmp/$name4.elf user_tmp/$name4.bin
+	dd if=user_tmp/$name4.bin of=user_tmp/$name4.extended count=1 bs=16384 conv=sync
 fi
 
 
@@ -158,8 +158,29 @@ echo -e "******************************************\n\n\E[0mDebut de l'assemblag
 # Cette table me paraît tellement legit.
 echo -e "\x$(echo $entry1 | cut -c7-8)\x$(echo $entry1 | cut -c5-6)\x$(echo $entry1 | cut -c3-4)\x$(echo $entry1 | cut -c1-2)\x$(echo $exists1 | cut -c7-8)\x$(echo $exists1 | cut -c5-6)\x$(echo $exists1 | cut -c3-4)\x$(echo $exists1 | cut -c1-2)\x$(echo $entry2 | cut -c7-8)\x$(echo $entry2 | cut -c5-6)\x$(echo $entry2 | cut -c3-4)\x$(echo $entry2 | cut -c1-2)\x$(echo $exists2 | cut -c7-8)\x$(echo $exists2 | cut -c5-6)\x$(echo $exists2 | cut -c3-4)\x$(echo $exists2 | cut -c1-2)\x$(echo $entry3 | cut -c7-8)\x$(echo $entry3 | cut -c5-6)\x$(echo $entry3 | cut -c3-4)\x$(echo $entry3 | cut -c1-2)\x$(echo $exists3 | cut -c7-8)\x$(echo $exists3 | cut -c5-6)\x$(echo $exists3 | cut -c3-4)\x$(echo $exists3 | cut -c1-2)\x$(echo $entry4 | cut -c7-8)\x$(echo $entry4 | cut -c5-6)\x$(echo $entry4 | cut -c3-4)\x$(echo $entry4 | cut -c1-2)\x$(echo $exists4 | cut -c7-8)\x$(echo $exists4 | cut -c5-6)\x$(echo $exists4 | cut -c3-4)\x$(echo $exists4 | cut -c1-2)" > tmp/table
 
-# ajout de la table après le kernel. a modifier pour mettre les processus aussi
-cat tmp/minikernel.extended tmp/table > tmp/minikernel
+dd if=tmp/table of=tmp/table.extended count=1 bs=1024 conv=sync
+
+# ajout de la table + processus après le kernel
+if [ -z $1 ]
+then
+	cat tmp/minikernel.extended tmp/table.extended > tmp/minikernel
+fi
+if [ $1 ] && [ -z $2 ]
+then
+	cat tmp/minikernel.extended tmp/table.extended user_tmp/$name1.extended > tmp/minikernel
+fi
+if [ $2 ] && [ -z $3 ]
+then
+	cat tmp/minikernel.extended tmp/table.extended user_tmp/$name1.extended user_tmp/$name2.extended > tmp/minikernel
+fi
+if [ $3 ] && [ -z $4 ]
+then
+	cat tmp/minikernel.extended tmp/table.extended user_tmp/$name1.extended user_tmp/$name2.extended user_tmp/$name3.extended > tmp/minikernel
+fi
+if [ $4 ]
+then
+	cat tmp/minikernel.extended tmp/table.extended user_tmp/$name1.extended user_tmp/$name2.extended user_tmp/$name3.extended user_tmp/$name4.extended > tmp/minikernel
+fi
 
 # generation de l'image bootable
 test -f tmp/build || cc boot/build.c -o tmp/build
