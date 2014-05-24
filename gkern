@@ -158,7 +158,7 @@ echo -e "******************************************\n\n\E[0mDebut de l'assemblag
 # Cette table me paraît tellement legit.
 echo -e "\x$(echo $entry1 | cut -c7-8)\x$(echo $entry1 | cut -c5-6)\x$(echo $entry1 | cut -c3-4)\x$(echo $entry1 | cut -c1-2)\x$(echo $exists1 | cut -c7-8)\x$(echo $exists1 | cut -c5-6)\x$(echo $exists1 | cut -c3-4)\x$(echo $exists1 | cut -c1-2)\x$(echo $entry2 | cut -c7-8)\x$(echo $entry2 | cut -c5-6)\x$(echo $entry2 | cut -c3-4)\x$(echo $entry2 | cut -c1-2)\x$(echo $exists2 | cut -c7-8)\x$(echo $exists2 | cut -c5-6)\x$(echo $exists2 | cut -c3-4)\x$(echo $exists2 | cut -c1-2)\x$(echo $entry3 | cut -c7-8)\x$(echo $entry3 | cut -c5-6)\x$(echo $entry3 | cut -c3-4)\x$(echo $entry3 | cut -c1-2)\x$(echo $exists3 | cut -c7-8)\x$(echo $exists3 | cut -c5-6)\x$(echo $exists3 | cut -c3-4)\x$(echo $exists3 | cut -c1-2)\x$(echo $entry4 | cut -c7-8)\x$(echo $entry4 | cut -c5-6)\x$(echo $entry4 | cut -c3-4)\x$(echo $entry4 | cut -c1-2)\x$(echo $exists4 | cut -c7-8)\x$(echo $exists4 | cut -c5-6)\x$(echo $exists4 | cut -c3-4)\x$(echo $exists4 | cut -c1-2)" > tmp/table
 
-dd if=tmp/table of=tmp/table.extended count=1 bs=1024 conv=sync
+dd if=tmp/table of=tmp/table.extended count=1 bs=4048 conv=sync
 
 # ajout de la table + processus après le kernel
 if [ -z $1 ]
