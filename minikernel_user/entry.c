@@ -27,6 +27,7 @@ void mini_kernel()
 {
 	int i;
 	int cnt=56;
+	unsigned short tss0;
 
 	init_borders() ;
 
@@ -46,10 +47,6 @@ void mini_kernel()
 	//function_test();
 #endif
 
-	/* THIS IS PROCESS 0! */
-	// Il manque un LRT ici, je crois - inline assembler for the win
-	/* THIS IS PROCESS 0! (omg) */
-
 #ifdef DEBUG_SYSCALLS //test printf
 	printf("printf :\n%d %s %x", i, "\ncoucou\n", i) ;
 
@@ -57,11 +54,15 @@ void mini_kernel()
 	scanf("%d %x %s", &i, &i, lol) ;
 #endif
 
-#ifdef DEBUG_VGA
-	processes[1].stdout = &sc_p1 ;
-	processes[2].stdout = &sc_p2 ;
-	processes[3].stdout = &sc_p3 ;
-	processes[4].stdout = &sc_p4 ;
+	/* THIS IS PROCESS 0! */
+	// Il manque un LTR ici, je crois - inline assembler for the win
+#ifdef COMMUTE_ON
+	tss0 = 0x20;
+	__asm__ __volatile__(
+			"ltr %0"
+			:
+			: "r" (tss0)
+			);
 #endif
 	schedule();
 	//while (1) ;

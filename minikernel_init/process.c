@@ -1,4 +1,5 @@
 #include "process.h"
+#include "gdt.h"
 //#include "alloc.h"
 
 task_struct processes[5];
@@ -182,6 +183,7 @@ void init_processes(){
 		processes[4].ptss->gs = processes[4].ptss->ds;
 	}
 
+	init_gdt();
 	init_buffers() ;
 }
 
@@ -207,15 +209,18 @@ void commute_to(int index_processes)
 	if (current_process == index_processes) return;
 
 	current_process = index_processes;
-	// a rajouter : sauvegarde des piles, jmp de TSS et un SLI !!!
-	/*
+
+	vgaprintf("J'ai envie de commuter sur %d, avec %x", index_processes, processes[index_processes].tss_entry);
+#ifdef COMMUTE_ON
 	__asm__ __volatile__(
-		"sli\n\t"
-		"jmp %0"
+		"sti\n\t"
+		"movl %0, %%eax\n\t"
+		"ljmp $0x0028,$0xB17E"
 		:
 		: "m" (processes[index_processes].tss_entry)
+		: "eax"
 	);
-	 */
+#endif
 
 #ifdef DEBUG_PROCESS
 	//kprintf(processes[current_process].stdout, "J'ai le CPU !\n");
