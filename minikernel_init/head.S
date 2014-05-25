@@ -155,6 +155,35 @@ minikernel_irq1:
 	popl %eax
 	sti
 	iret
+
+.globl minikernel_exception 
+minikernel_exception:
+	cld
+	cli
+	pusha
+	pushl %cs
+	pushl %ds
+	pushl %es
+	pushl %ss
+	pushl %esi
+	pushl %edi
+	movl $(__KERNEL_DS),%eax /* __KERNEL_DS = 0x18 */
+	movl %eax,%ds
+	movl %eax,%es
+	call handle_exception 
+	add $4,%esp
+	movb $0x20,%al
+	outb %al,$0x20
+	popl %edi
+	popl %esi
+	popl %ss
+	popl %es
+	popl %ds
+	pop %ax
+	movw %ax,%cs
+	popa
+	sti
+	iret
 	
 .globl minikernel_syscalls
 minikernel_syscalls:

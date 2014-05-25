@@ -54,6 +54,8 @@ typedef struct{
 	unsigned int pid;
 	void* pile_u;
 	void* pile_s;
+	
+	//sélecteur de tss
 	int tss_entry;
 } task_struct;
 

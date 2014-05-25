@@ -45,9 +45,6 @@ void mini_kernel()
 #ifdef DEBUG_SYSCALLS
 	// Cette fonction de test ne devrait pas être appellée si les commutations fonctionnent
 	//function_test();
-#endif
-
-#ifdef DEBUG_SYSCALLS //test printf
 	printf("printf :\n%d %s %x", i, "\ncoucou\n", i) ;
 
 	//test scanf 
@@ -57,12 +54,16 @@ void mini_kernel()
 	/* THIS IS PROCESS 0! */
 	// Il manque un LTR ici, je crois - inline assembler for the win
 #ifdef COMMUTE_ON
+	
+			vgaprintf("ltr \n") ;
 	tss0 = 0x20;
 	__asm__ __volatile__(
 			"ltr %0"
 			:
 			: "r" (tss0)
+			:
 			);
+			vgaprintf("ltr successful\n") ;
 #endif
 	schedule();
 	//while (1) ;

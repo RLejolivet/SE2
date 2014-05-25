@@ -1,6 +1,12 @@
 #include "kernel.h"
 #include "keyboard.h"
 #include "process.h"
+#define CREATE_IDT_ENTRY(number)	long addr = (long)minikernel_exception; \
+									unsigned short* pidt = (unsigned short*)(idt_table + (number<<1));\
+									pidt[0] = addr ;\
+									pidt[3] = (((long)addr)>>16) & 0xffff;
+	
+   
 
 unsigned char  inb  (unsigned short port) 
 { 
@@ -59,7 +65,7 @@ void outw_p (unsigned   short   value, unsigned short port)
 */
 
 char saved_char ;
-void main_init()
+void main_init() 
 {
 	char rtc_A, rtc_B, rtc_C;
 	int i;
@@ -83,6 +89,16 @@ void main_init()
 		pidt[0] = addr ;
 		pidt[3] = (((long)addr)>>16) & 0xffff; 
 	}
+
+	/* init exception entries 0x00 - 0x1f */
+	{
+		int i ;
+		for(i = 0 ; i < 0x20 ; i++)
+		{
+			CREATE_IDT_ENTRY(i) ;
+		}
+	}
+	
 
 	/* init syscalls entry 0x80 (syscalls) */
 	{	
@@ -244,3 +260,7 @@ void do_minikernel_irq1(int code)
 		vgaprintf("keyboard pressed %010d : %x\n", ++count, code) ;*/
 }
 
+void handle_exception(int code)
+{
+	vgaprintf("exception %d\n", code) ;
+}

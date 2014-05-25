@@ -85,7 +85,7 @@ void init_processes(){
 
 	/* Init du processus 0, qui est toujours là */
 	processes[0].ptss = tss_table;
-	processes[0].tss_entry = 0x23;
+	processes[0].tss_entry = 0x20;
 	processes[0].state = 'R';
 	processes[0].pile_s = (void*) 0x22000;
 

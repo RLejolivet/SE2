@@ -42,9 +42,11 @@ int  ttyS_detect(unsigned int base);
 
 void minikernel_irq0();
 void minikernel_irq1();
+void minikernel_exception() ;
 
 void do_minikernel_irq0();
 void do_minikernel_irq1(int code);
+void handle_exception(int code) ;
 
 #include "syscalls.h"
 void minikernel_syscalls();
