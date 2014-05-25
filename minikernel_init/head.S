@@ -84,12 +84,24 @@ minikernel_irq0:
 	pushl %edx
 	pushl %es
 	pushl %ds
+	pushl %fs
+	pushl %gs
+
 	movl $(__KERNEL_DS),%eax /* __KERNEL_DS = 0x18 */
 	movl %eax,%ds
 	movl %eax,%es
+	movl %eax,%fs
+	movl %eax,%gs
+
+	ljmp $(__KERNEL_CS),$1f /* __KERNEL_CS = 0x10 */
+	1:
+
 	movb $0x20,%al
 	outb %al,$0x20
 	call do_minikernel_irq0
+
+	popl %gs
+	popl %fs
 	popl %ds
 	popl %es
 	popl %edx
@@ -110,9 +122,17 @@ minikernel_irq1:
 	pushl %esi
 	pushl %es
 	pushl %ds
+	pushl %fs
+	pushl %gs
+
 	movl $(__KERNEL_DS),%eax /* __KERNEL_DS = 0x18 */
 	movl %eax,%ds
 	movl %eax,%es
+	movl %eax,%fs
+	movl %eax,%gs
+
+	ljmp $(__KERNEL_CS),$1f /* __KERNEL_CS = 0x10 */
+	1:
 
 	xor %eax,%eax
 	inb $0x60,%al
@@ -122,6 +142,9 @@ minikernel_irq1:
 	add $4,%esp
 	movb $0x20,%al
 	outb %al,$0x20
+
+	popl %gs
+	popl %fs
 	popl %ds
 	popl %es
 	popl %esi
@@ -142,11 +165,18 @@ minikernel_syscalls:
 	pushl %esi
 	pushl %es
 	pushl %ds
+	pushl %fs
+	pushl %gs
 	pushl %ebx
 
 	movl $(__KERNEL_DS),%ebx # __KERNEL_DS = 0x18
 	movl %ebx,%ds
 	movl %ebx,%es
+	movl %eax,%fs
+	movl %eax,%gs
+
+	ljmp $(__KERNEL_CS),$1f /* __KERNEL_CS = 0x10 */
+	1:
 
 	movl $0, %ebx
 	cmpl %eax, %ebx
@@ -180,6 +210,8 @@ call_kill_process:
 
 end_minikernel_syscalls:
 	popl %ebx
+	popl %gs
+	popl %fs
 	popl %ds
 	popl %es
 	popl %esi
