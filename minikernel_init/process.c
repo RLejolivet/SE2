@@ -210,8 +210,8 @@ void commute_to(int index_processes)
 
 	current_process = index_processes;
 
-	vgaprintf("J'ai envie de commuter sur %d, avec %x", index_processes, processes[index_processes].tss_entry);
 #ifdef COMMUTE_ON
+	vgaprintf("J'ai envie de commuter sur %d, avec %x", index_processes, processes[index_processes].tss_entry);
 	__asm__ __volatile__(
 		"sti\n\t"
 		"movl %0, %%eax\n\t"
