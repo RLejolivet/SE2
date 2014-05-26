@@ -10,16 +10,24 @@ typedef struct {
 	unsigned short base_addr_15_0;	/* 16 bits, première moitié de l'adresse physique */
 
 	/* Troisième word */
+	unsigned char base_addr_23_16:8;	/* 8 bits, troisième quart de l'adresse physique */
+
 	unsigned char seg_type:4 ;	/* 4 bits, data=0011 code=1011 tss=1001 */
-	unsigned char desc_type:1;	/* 1 bit, segment = 1, reste(dont descripteur de tacheh) = 0 */
+	unsigned char desc_type:1;	/* 1 bit, segment = 1, reste(dont descripteur de tache) = 0 */
 	unsigned char dpl:2;		/* 2 bits, 00=system, 11=user */
 	unsigned char present:1;	/* 1 bit, le segment est-il là ? */
-	unsigned char base_addr_23_16:8;	/* 8 bits, troisième quart de l'adresse physique */
 
 	/* Quatrième word */
 	unsigned char limit_19_16:4;	/* 4 bits, le reste de la limite */
-	unsigned char g_d_b_avl:4;	/* 4 bits, granularity / operator size / zero / custom tss=0000, reste=0100 */
+
+	unsigned char custom:1;		/* 1 bit, 0 */
+	unsigned char zero:1;		/* 1 bit, 0 */
+	unsigned char op_size:1;	/* 1 bit : 0=16 bit, 1=32bit */
+	unsigned char granularity:1;	/* 0=limite en octets, 1=limite en pages */
+
 	unsigned char base_addr_31_24:8;	/* 8 bits, dernier quart de l'adresse physique */
+
+
 } __attribute__ ((packed, aligned(8))) gdt_entry;
 
 gdt_entry gdt[26];
@@ -43,12 +51,15 @@ void init_desc_tss(gdt_entry* entry, unsigned int base)
 	
 	entry->seg_type = 0x9;
 	entry->desc_type = 0;
-	entry->dpl = 0x3;
+	entry->dpl = 0x0;
 	entry->present = 1;
 
 	entry->limit_19_16 = 0;
 
-	entry->g_d_b_avl = 0;
+	entry->custom = 0;
+	entry->zero = 0;
+	entry->op_size = 0;
+	entry->granularity = 0;
 
 	entry->base_addr_31_24 = (base >> 24) & 0xFF;
 }
@@ -62,14 +73,17 @@ void init_segment_user(gdt_entry* entry, char code, unsigned int base)
 	entry->base_addr_15_0 = base & 0xFFFF;
 	entry->base_addr_23_16 = (base >> 16) & 0xFF;
 
-	entry->seg_type = (code == 'T') ? 0xB: 0x3;
+	entry->seg_type = (code == 'T') ? 0xA: 0x2;
 	entry->desc_type = 1;
-	entry->dpl = 0x3;
+	entry->dpl = 0x0;
 	entry->present = 1;
 
 	entry->limit_19_16 = 0;
 
-	entry->g_d_b_avl = 0x4;
+	entry->custom = 0;
+	entry->zero = 0;
+	entry->op_size = 1;
+	entry->granularity = 0;
 
 	entry->base_addr_31_24 = (base >> 24) & 0xFF;
 }
@@ -79,18 +93,24 @@ void init_segment_user(gdt_entry* entry, char code, unsigned int base)
  */
 void init_segment_noyau(gdt_entry* entry, char code)
 {
+
 	entry->limit_15_0 = 0xFFFF;
 	entry->base_addr_15_0 = 0;
 	entry->base_addr_23_16 = 0;
 
-	entry->seg_type = (code == 'T') ? 0xB: 0x3;
-	entry->desc_type = 1;
-	entry->dpl = 0;
+
 	entry->present = 1;
+	entry->dpl = 0;
+	entry->desc_type = 1;
+
+	entry->seg_type = (code == 'T') ? 0x5: 0x2;
+
+	entry->custom = 0;
+	entry->zero = 0;
+	entry->op_size = 1;
+	entry->granularity = 1;
 
 	entry->limit_19_16 = 0xF;
-
-	entry->g_d_b_avl = 0xC;
 
 	entry->base_addr_31_24 = 0;
 }
@@ -134,11 +154,20 @@ void init_gdt()
 	gdtr.padding = ~0;
 	gdtr.limit = sizeof(gdt) -1;
 	gdtr.base_addr = (int) gdt;
-
+	
+	vgaprintf("Je suis avant LGDT\n");
 
 #ifdef COMMUTE_ON
 	__asm__ __volatile__(
 			"lgdt %0		\n\t"
+			:
+			: "m" (gdtr.limit)
+			: "eax"
+			);
+
+	vgaprintf("Je suis apres LGDT\n");
+
+	asm volatile(
 			"ljmp $0x10,$1f		\n\t"
 			"1:			\n\t"
 			"movw $0x18, %%ax	\n\t"
@@ -148,10 +177,12 @@ void init_gdt()
 			"movw %%ax, %%fs	\n\t"
 			"movw %%ax, %%gs	\n\t"
 			:
-			: "m" (gdtr.limit)
-			: "eax"
-			);
+			:
+			:"eax"
+		    );
 
 #endif
+
+	vgaprintf("Je suis apres LJMP\n");
 
 }

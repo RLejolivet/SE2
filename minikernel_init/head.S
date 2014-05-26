@@ -93,9 +93,6 @@ minikernel_irq0:
 	movl %eax,%fs
 	movl %eax,%gs
 
-	ljmp $(__KERNEL_CS),$1f /* __KERNEL_CS = 0x10 */
-	1:
-
 	movb $0x20,%al
 	outb %al,$0x20
 	call do_minikernel_irq0
@@ -131,9 +128,6 @@ minikernel_irq1:
 	movl %eax,%fs
 	movl %eax,%gs
 
-	ljmp $(__KERNEL_CS),$1f /* __KERNEL_CS = 0x10 */
-	1:
-
 	xor %eax,%eax
 	inb $0x60,%al
 
@@ -161,26 +155,32 @@ minikernel_exception:
 	cld
 	cli
 	pusha
-	pushl %cs
 	pushl %ds
 	pushl %es
 	pushl %ss
 	pushl %esi
 	pushl %edi
+
 	movl $(__KERNEL_DS),%eax /* __KERNEL_DS = 0x18 */
 	movl %eax,%ds
 	movl %eax,%es
-	call handle_exception 
-	add $4,%esp
+	movl %eax,%fs
+	movl %eax,%gs
+
 	movb $0x20,%al
 	outb %al,$0x20
+	sti
+
+	call handle_exception
+
+	movb $0x20,%al
+	outb %al,$0x20
+
 	popl %edi
 	popl %esi
 	popl %ss
 	popl %es
 	popl %ds
-	pop %ax
-	movw %ax,%cs
 	popa
 	sti
 	iret
@@ -203,9 +203,6 @@ minikernel_syscalls:
 	movl %ebx,%es
 	movl %eax,%fs
 	movl %eax,%gs
-
-	ljmp $(__KERNEL_CS),$1f /* __KERNEL_CS = 0x10 */
-	1:
 
 	movl $0, %ebx
 	cmpl %eax, %ebx

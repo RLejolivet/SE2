@@ -85,7 +85,7 @@ void init_processes(){
 
 	/* Init du processus 0, qui est toujours là */
 	processes[0].ptss = tss_table;
-	processes[0].tss_entry = 0x20;
+	processes[0].tss_entry = 0x23;
 	processes[0].state = 'R';
 	processes[0].pile_s = (void*) 0x22000;
 
@@ -106,9 +106,9 @@ void init_processes(){
 		processes[1].ptss->ss_0 = 0xB0;
 		processes[1].ptss->eip = *table_entry_1;
 		processes[1].ptss->esp = 0x1FFF;
-		processes[1].ptss->cs = 0x4B;
-		processes[1].ptss->ds = 0x6B;
-		processes[1].ptss->ss = 0x8B;
+		processes[1].ptss->cs = 0x48;
+		processes[1].ptss->ds = 0x68;
+		processes[1].ptss->ss = 0x88;
 		processes[1].ptss->es = processes[1].ptss->ds;
 		processes[1].ptss->fs = processes[1].ptss->ds;
 		processes[1].ptss->gs = processes[1].ptss->ds;
@@ -203,23 +203,73 @@ void init_buffers()
 	}
 }
 
+
+#ifdef DEBUG_COMMUTE
+void dump_tss()
+{
+	vgaprintf("%x  ", processes[current_process].ptss->retour_arriere);
+	vgaprintf("%x  ", processes[current_process].ptss->esp_0);
+	vgaprintf("%x  ", processes[current_process].ptss->ss_0);
+	vgaprintf("%x  ", processes[current_process].ptss->esp_1);
+	vgaprintf("%x\n", processes[current_process].ptss->ss_1);
+	vgaprintf("%x  ", processes[current_process].ptss->esp_2);
+	vgaprintf("%x  ", processes[current_process].ptss->ss_2);
+	vgaprintf("%x  ", processes[current_process].ptss->cr3);
+	vgaprintf("%x  ", processes[current_process].ptss->eip);
+	vgaprintf("%x\n", processes[current_process].ptss->eflags);
+	vgaprintf("%x  ", processes[current_process].ptss->eax);
+	vgaprintf("%x  ", processes[current_process].ptss->ecx);
+	vgaprintf("%x  ", processes[current_process].ptss->edx);
+	vgaprintf("%x  ", processes[current_process].ptss->ebx);
+	vgaprintf("%x\n", processes[current_process].ptss->esp);
+	vgaprintf("%x  ", processes[current_process].ptss->ebp);
+	vgaprintf("%x  ", processes[current_process].ptss->esi);
+	vgaprintf("%x  ", processes[current_process].ptss->edi);
+	vgaprintf("%x  ", processes[current_process].ptss->es);
+	vgaprintf("%x\n", processes[current_process].ptss->cs);
+	vgaprintf("%x  ", processes[current_process].ptss->ss);
+	vgaprintf("%x  ", processes[current_process].ptss->ds);
+	vgaprintf("%x  ", processes[current_process].ptss->fs);
+	vgaprintf("%x  ", processes[current_process].ptss->gs);
+	vgaprintf("%x  ", processes[current_process].ptss->ldt);
+	vgaprintf("%x\n", processes[current_process].ptss->null_ldt);
+}
+#endif
+
 void commute_to(int index_processes)
 {
 	/* Ici, on fait la commutation sur un processus, sauf s'il est déjà actif */
 	if (current_process == index_processes) return;
 
 	current_process = index_processes;
+#ifdef DEBUG_COMMUTE
+	dump_tss();
+#endif
 
 #ifdef COMMUTE_ON
 	vgaprintf("J'ai envie de commuter sur %d, avec %x", index_processes, processes[index_processes].tss_entry);
-	__asm__ __volatile__(
-		"sti\n\t"
-		"movl %0, %%eax\n\t"
-		"ljmp $0x0028,$0xB17E"
-		:
-		: "m" (processes[index_processes].tss_entry)
-		: "eax"
-	);
+	if (first_schedule == 0) // en fait ça veut dire qu'on fait la première commutation
+	{
+		__asm__ __volatile__(
+			"movl %0, %%eax\n\t"
+			"ljmp $0x0028,$0x0"
+			:
+			: "m" (processes[index_processes].tss_entry)
+			: "eax"
+		);
+	}
+	else
+	{
+
+		__asm__ __volatile__(
+			"sti\n\t"
+			"movl %0, %%eax\n\t"
+			"ljmp $0x0028,$0x0"
+			:
+			: "m" (processes[index_processes].tss_entry)
+			: "eax"
+		);
+	}
 #endif
 
 #ifdef DEBUG_PROCESS
@@ -233,6 +283,10 @@ void schedule()
 	int suivant;
 
 	first_schedule = 1;
+
+#ifdef DEBUG_COMMUTE
+	dump_tss();
+#endif
 
 	for (i=1; i<=4; i++)
 	{

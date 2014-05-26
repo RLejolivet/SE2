@@ -92,8 +92,7 @@ void main_init()
 
 	/* init exception entries 0x00 - 0x1f */
 	{
-		int i ;
-		for(i = 0 ; i < 0x20 ; i++)
+		for(i = 0 ; i < 0x12 ; i++)
 		{
 			CREATE_IDT_ENTRY(i) ;
 		}
@@ -239,6 +238,15 @@ void do_minikernel_irq1(int code)
 					#ifdef DEBUG_SYSCALLS
 						in3.unread = true ;
 					#endif
+int strlen(const char*p)
+{
+	int len=0;
+
+	while (*p++) 
+		len += 1;
+
+	return len;
+}
 				}
 				else if (code == BACKSPACE)
 				{
@@ -262,5 +270,7 @@ void do_minikernel_irq1(int code)
 
 void handle_exception(int code)
 {
-	vgaprintf("exception %d\n", code) ;
+	kprintf(&sc_p2,"Exception");
+	while(1);
+	asm volatile("ljmp $0x20,$0x0");
 }

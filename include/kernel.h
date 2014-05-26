@@ -1,7 +1,7 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-//#define COMMUTE_ON
+#define COMMUTE_ON
 
 #define DEFAULT_COLORS 0x0d
 #define FOCUS__BG_COLOR 0xa0
