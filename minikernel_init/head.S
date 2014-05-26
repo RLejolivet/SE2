@@ -93,9 +93,10 @@ minikernel_irq0:
 	movl %eax,%fs
 	movl %eax,%gs
 
+	call do_minikernel_irq0
+
 	movb $0x20,%al
 	outb %al,$0x20
-	call do_minikernel_irq0
 
 	popl %gs
 	popl %fs

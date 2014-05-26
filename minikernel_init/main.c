@@ -143,7 +143,6 @@ void do_minikernel_irq0()
 {
 	static int count=-1;
 	static int time=0;
-	static bool blink = false ;
 	char c ;
 
 	count++;
@@ -164,6 +163,22 @@ void do_minikernel_irq0()
 		time++;
 
 	}
+
+#if 0
+	/* Debug de ESP et SS, a SUPPRIMER quand ça fonctionne */
+	if (current_process == 2)
+	{
+		short test = 0;
+		kprintc(&sc_p4,'A');
+		asm volatile("movw %%ss, %0":"=m" (test));
+		if(test == 0xb8)kprintc(&sc_p3,'W');
+		if(test == 0x90)kprintc(&sc_p3,'Z');
+		if(test == 0x18)kprintc(&sc_p3,'X');
+		if(test == 0)kprintc(&sc_p3,'V');
+		else kprintc(&sc_p3,'Y');
+
+	}
+#endif
 
 	// On décrémente les compteurs d'attente, et libère les processes qui ne sont plus bloqués
 	for(c=1; c<=4; c++)
@@ -301,128 +316,160 @@ int strlen(const char*p)
 void handle_exception0(int code) 
 {
 	kprintf(&sc_p2,"exception 0 %d\n", code) ;
+	kill_process();
 }
 void handle_exception1(int code) 
 {
 	kprintf(&sc_p2,"exception 1 %d\n", code) ;
+	kill_process();
 }
 void handle_exception2(int code) 
 {
 	kprintf(&sc_p2,"exception 2 %d\n", code) ;
+	kill_process();
 }
 void handle_exception3(int code) 
 {
 	kprintf(&sc_p2,"exception 3 %d\n", code) ;
+	kill_process();
 }
 void handle_exception4(int code) 
 {
 	kprintf(&sc_p2,"exception 4 %d\n", code) ;
+	kill_process();
 }
 void handle_exception5(int code) 
 {
 	kprintf(&sc_p2,"exception 5 %d\n", code) ;
+	kill_process();
 }
 void handle_exception6(int code) 
 {
 	kprintf(&sc_p2,"exception 6 %d\n", code) ;
+	kill_process();
 }
 void handle_exception7(int code) 
 {
 	kprintf(&sc_p2,"exception 7 %d\n", code) ;
+	kill_process();
 }
 void handle_exception8(int code) 
 {
 	kprintf(&sc_p2,"exception 8 %d\n", code) ;
+	kill_process();
 }
 void handle_exception9(int code) 
 {
 	kprintf(&sc_p2,"exception 9 %d\n", code) ;
+	kill_process();
 }
 void handle_exception10(int code) 
 {
 	kprintf(&sc_p2,"exception 10 %d\n", code) ;
+	kill_process();
 }
 void handle_exception11(int code) 
 {
 	kprintf(&sc_p2,"exception 11 %d\n", code) ;
+	kill_process();
 }
 void handle_exception12(int code) 
 {
 	kprintf(&sc_p2,"exception 12 %d\n", code) ;
+	kill_process();
 }
 void handle_exception13(int code) 
 {
 	kprintf(&sc_p2,"exception 13 %d\n", code) ;
+	kill_process();
 }
 void handle_exception14(int code) 
 {
 	kprintf(&sc_p2,"exception 14 %d\n", code) ;
+	kill_process();
 }
 void handle_exception15(int code) 
 {
 	kprintf(&sc_p2,"exception 15 %d\n", code) ;
+	kill_process();
 }
 void handle_exception16(int code) 
 {
 	kprintf(&sc_p2,"exception 16 %d\n", code) ;
+	kill_process();
 }
 void handle_exception17(int code) 
 {
 	kprintf(&sc_p2,"exception %d\n", code) ;
+	kill_process();
 }
 void handle_exception18(int code) 
 {
 	kprintf(&sc_p2,"exception %d\n", code) ;
+	kill_process();
 }
 void handle_exception19(int code) 
 {
 	kprintf(&sc_p2,"exception %d\n", code) ;
+	kill_process();
 }
 void handle_exception20(int code) 
 {
 	kprintf(&sc_p2,"exception %d\n", code) ;
+	kill_process();
 }
 void handle_exception21(int code) 
 {
 	kprintf(&sc_p2,"exception %d\n", code) ;
+	kill_process();
 }
 void handle_exception22(int code) 
 {
 	kprintf(&sc_p2,"exception %d\n", code) ;
+	kill_process();
 }
 void handle_exception23(int code) 
 {
 	kprintf(&sc_p2,"exception 23 %d\n", code) ;
+	kill_process();
 }
 void handle_exception24(int code) 
 {
 	kprintf(&sc_p2,"exception 24 %d\n", code) ;
+	kill_process();
 }
 void handle_exception25(int code) 
 {
 	kprintf(&sc_p2,"exception 25 %d\n", code) ;
+	kill_process();
 }
 void handle_exception26(int code) 
 {
 	kprintf(&sc_p2,"exception 26 %d\n", code) ;
+	kill_process();
 }
 void handle_exception27(int code) 
 {
 	kprintf(&sc_p2,"exception 27 %d\n", code) ;
+	kill_process();
 }
 void handle_exception28(int code) 
 {
 	kprintf(&sc_p2,"exception 28 %d\n", code) ;
+	kill_process();
 }
 void handle_exception29(int code) 
 {
 	kprintf(&sc_p2,"exception 29 %d\n", code) ;
+	kill_process();
 }
 void handle_exception30(int code) 
 {
 	kprintf(&sc_p2,"exception 30 %d\n", code) ;
+	kill_process();
 }
 void handle_exception31(int code) 
 {
 	kprintf(&sc_p2,"exception 31 %d\n", code) ;
+	kill_process();
 }

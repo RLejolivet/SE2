@@ -41,7 +41,6 @@ void sys_write(int input)
 	char affichage = input;
 #ifdef DEBUG_SYSCALLS
 	//vgaprintf("\naffichage successful ! je crois ?\n");
-	kprintc(&sc_p3, affichage);
 #endif
 	// afficher un caractère dans processes[current_process].stdout
 	kprintc(processes[current_process].stdout, affichage);

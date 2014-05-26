@@ -129,6 +129,7 @@ void vga_init()
 	sc_alive.ccol=0;
 	nbl--;
 
+	#if 0
 	/* init sc_ttyS0 screen */
 	sc_ttyS0.vidmem= sc_alive.vidmem + sc_alive.nblines * nbcols * 2;
 	sc_ttyS0.nblines= 1;
@@ -137,7 +138,6 @@ void vga_init()
 	sc_ttyS0.ccol=0;
 	nbl--;
 
-	#if 0
 	/* init sc_ttyS1 screen */
 	sc_ttyS1.vidmem= sc_ttyS0.vidmem + sc_ttyS0.nblines * nbcols * 2;
 	sc_ttyS1.nblines= 1;
@@ -163,7 +163,7 @@ void vga_init()
 	#endif
 
 	/* init p1 screen */
-	sc_p1.vidmem	=	sc_ttyS0.vidmem + sc_ttyS0.nblines * nbcols * 2;
+	sc_p1.vidmem	=	sc_alive.vidmem + sc_alive.nblines * nbcols * 2 + 1 * nbcols * 2;
 	sc_p1.line_org	=	sc_alive.nblines + sc_ttyS0.nblines ;
 	sc_p1.col_org	=	0 ;
 	sc_p1.nblines	=	nbl / 2 - 1 ;

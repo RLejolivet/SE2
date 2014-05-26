@@ -149,7 +149,7 @@ void init_gdt()
 	init_segment_user(&gdt[22], 'P', 0x20000);
 	init_segment_user(&gdt[23], 'P', 0x24000);
 	init_segment_user(&gdt[24], 'P', 0x28000);
-	init_segment_user(&gdt[24], 'P', 0x2C000);
+	init_segment_user(&gdt[25], 'P', 0x2C000);
 
 	gdtr.padding = ~0;
 	gdtr.limit = sizeof(gdt) -1;

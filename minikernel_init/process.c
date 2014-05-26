@@ -23,7 +23,6 @@ void init_tss(tss* ptss){
 	ptss->null_2 = 0;
 	ptss->cr3 = 0;
 	// on n'initialise pas eip vu qu'on le connais pas ici
-	ptss->eflags = 0;
 	ptss->eax = 0;
 	ptss->ecx = 0;
 	ptss->edx = 0;
@@ -60,6 +59,8 @@ void init_processes(){
 	int* exists_entry_3 = (int*) 0xB014;
 	int* table_entry_4 = (int*) 0xB018;
 	int* exists_entry_4 = (int*) 0xB01c;
+
+	int eflags;
 	
 #ifdef DEBUG_PROCESS
 	/* En fait, je savais pas tellement où était ma table :/ */
@@ -90,6 +91,12 @@ void init_processes(){
 	processes[0].pile_s = (void*) 0x22000;
 
 
+	asm volatile("pushf\n\t"
+			"popl %%eax\n\t"
+			"movl %%eax, %0\n\t"
+			: "=m" (eflags)
+		);
+
 	/* Du coup, on dit que les process existent si leur entrée n'est pas zéro */
 	if (*exists_entry_1 != 0)
 	{
@@ -112,6 +119,8 @@ void init_processes(){
 		processes[1].ptss->es = processes[1].ptss->ds;
 		processes[1].ptss->fs = processes[1].ptss->ds;
 		processes[1].ptss->gs = processes[1].ptss->ds;
+		processes[1].ptss->eflags = eflags;
+
 	}
 
 	if (*exists_entry_2 != 0)
@@ -135,6 +144,7 @@ void init_processes(){
 		processes[2].ptss->es = processes[2].ptss->ds;
 		processes[2].ptss->fs = processes[2].ptss->ds;
 		processes[2].ptss->gs = processes[2].ptss->ds;
+		processes[2].ptss->eflags = eflags;
 	}
 
 	if (*exists_entry_3 != 0)
@@ -158,6 +168,7 @@ void init_processes(){
 		processes[3].ptss->es = processes[3].ptss->ds;
 		processes[3].ptss->fs = processes[3].ptss->ds;
 		processes[3].ptss->gs = processes[3].ptss->ds;
+		processes[3].ptss->eflags = eflags;
 	}
 
 	if (*exists_entry_4 != 0)
@@ -181,6 +192,7 @@ void init_processes(){
 		processes[4].ptss->es = processes[4].ptss->ds;
 		processes[4].ptss->fs = processes[4].ptss->ds;
 		processes[4].ptss->gs = processes[4].ptss->ds;
+		processes[4].ptss->eflags = eflags;
 	}
 
 	init_gdt();
@@ -247,16 +259,43 @@ void commute_to(int index_processes)
 #endif
 
 #ifdef COMMUTE_ON
-	//vgaprintf("J'ai envie de commuter sur %d, avec %x", index_processes, processes[index_processes].tss_entry);
-
+	//vgaprintf("J'ai envie de commuter sur %d, avec %x\n", index_processes, processes[index_processes].tss_entry);
+	if (first_schedule == 0)
+	{
+		first_schedule = 1;
+	}
+	else
+	{
+		__asm__ __volatile__("sti");
+	}
+	switch(index_processes)
+	{
+	case 0:
 		__asm__ __volatile__(
-			"sti\n\t"
-			"movl %0, %%eax\n\t"
-			"ljmp $0x0028,$0x0"
-			:
-			: "m" (processes[index_processes].tss_entry)
-			: "eax"
+			"ljmp $0x0020,$0x0"
 		);
+		break;
+	case 1:
+		__asm__ __volatile__(
+			"ljmp $0x0028,$0x0"
+		);
+		break;
+	case 2:
+		__asm__ __volatile__(
+			"ljmp $0x0030,$0x0"
+		);
+		break;
+	case 3:
+		__asm__ __volatile__(
+			"ljmp $0x0038,$0x0"
+		);
+		break;
+	case 4:
+		__asm__ __volatile__(
+			"ljmp $0x0040,$0x0"
+		);
+		break;
+	}
 #endif
 
 #ifdef DEBUG_PROCESS
@@ -269,10 +308,8 @@ void schedule()
 	int i;
 	int suivant;
 
-	first_schedule = 1;
-
-#ifdef DEBUG_COMMUTE
-	dump_tss();
+#ifdef DEBUG_SYSCALLS
+	//kprintf(&sc_p4, "Appel de schedule\n");
 #endif
 
 	for (i=1; i<=4; i++)

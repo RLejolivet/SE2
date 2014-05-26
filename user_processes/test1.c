@@ -15,5 +15,8 @@ int main()
 	i = 0x41;
 	printf("test numero 52 %c\n", i) ;
 	write(i) ;
-	while(1);
+	while(1) {
+		sleep(5);
+		write(i);
+	}
 }
