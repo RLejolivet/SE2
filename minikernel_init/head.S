@@ -7,7 +7,7 @@
  * High loaded stuff by Hans Lermen & Werner Almesberger, Feb. 1996
  */
 
-#include <config.h>
+#include "../include/config.h"
 .text
 .globl startup_32
 .globl idt_table
@@ -150,40 +150,7 @@ minikernel_irq1:
 	sti
 	iret
 
-.globl minikernel_exception 
-minikernel_exception:
-	cld
-	cli
-	pusha
-	pushl %ds
-	pushl %es
-	pushl %ss
-	pushl %esi
-	pushl %edi
-
-	movl $(__KERNEL_DS),%eax /* __KERNEL_DS = 0x18 */
-	movl %eax,%ds
-	movl %eax,%es
-	movl %eax,%fs
-	movl %eax,%gs
-
-	movb $0x20,%al
-	outb %al,$0x20
-	sti
-
-	call handle_exception
-
-	movb $0x20,%al
-	outb %al,$0x20
-
-	popl %edi
-	popl %esi
-	popl %ss
-	popl %es
-	popl %ds
-	popa
-	sti
-	iret
+#include "../include/exception_routines.h"
 	
 .globl minikernel_syscalls
 minikernel_syscalls:

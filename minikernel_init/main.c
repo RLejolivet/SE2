@@ -1,10 +1,10 @@
 #include "kernel.h"
 #include "keyboard.h"
 #include "process.h"
-#define CREATE_IDT_ENTRY(number)	long addr = (long)minikernel_exception; \
-									unsigned short* pidt = (unsigned short*)(idt_table + (number<<1));\
-									pidt[0] = addr ;\
-									pidt[3] = (((long)addr)>>16) & 0xffff;
+#define CREATE_IDT_ENTRY(number)	addr = (long)minikernel_exception##number ; \
+									pidt = (unsigned short*)(idt_table + (number<<1)); \
+									pidt[0] = addr ; \
+									pidt[3] = (((long)addr)>>16) & 0xffff ;
 	
    
 
@@ -92,10 +92,40 @@ void main_init()
 
 	/* init exception entries 0x00 - 0x1f */
 	{
-		for(i = 0 ; i < 0x12 ; i++)
-		{
-			CREATE_IDT_ENTRY(i) ;
-		}
+		long addr ;
+		unsigned short* pidt ;
+		CREATE_IDT_ENTRY(0) ;
+		CREATE_IDT_ENTRY(1) ;
+		CREATE_IDT_ENTRY(2) ;
+		CREATE_IDT_ENTRY(3) ;
+		CREATE_IDT_ENTRY(4) ;
+		CREATE_IDT_ENTRY(5) ;
+		CREATE_IDT_ENTRY(6) ;
+		CREATE_IDT_ENTRY(7) ;
+		CREATE_IDT_ENTRY(8) ;
+		CREATE_IDT_ENTRY(9) ;
+		CREATE_IDT_ENTRY(10) ;
+		CREATE_IDT_ENTRY(11) ;
+		CREATE_IDT_ENTRY(12) ;
+		CREATE_IDT_ENTRY(13) ;
+		CREATE_IDT_ENTRY(14) ;
+		CREATE_IDT_ENTRY(15) ;
+		CREATE_IDT_ENTRY(16) ;
+		CREATE_IDT_ENTRY(17) ;
+		CREATE_IDT_ENTRY(18) ;
+		CREATE_IDT_ENTRY(19) ;
+		CREATE_IDT_ENTRY(20) ;
+		CREATE_IDT_ENTRY(21) ;
+		CREATE_IDT_ENTRY(22) ;
+		CREATE_IDT_ENTRY(23) ;
+		CREATE_IDT_ENTRY(24) ;
+		CREATE_IDT_ENTRY(25) ;
+		CREATE_IDT_ENTRY(26) ;
+		CREATE_IDT_ENTRY(27) ;
+		CREATE_IDT_ENTRY(28) ;
+		CREATE_IDT_ENTRY(29) ;
+		CREATE_IDT_ENTRY(30) ;
+		CREATE_IDT_ENTRY(31) ;
 	}
 	
 
@@ -268,9 +298,131 @@ int strlen(const char*p)
 		vgaprintf("keyboard pressed %010d : %x\n", ++count, code) ;*/
 }
 
-void handle_exception(int code)
+void handle_exception0(int code) 
 {
-	kprintf(&sc_p2,"Exception");
-	while(1);
-	asm volatile("ljmp $0x20,$0x0");
+	kprintf(&sc_p2,"exception 0 %d\n", code) ;
+}
+void handle_exception1(int code) 
+{
+	kprintf(&sc_p2,"exception 1 %d\n", code) ;
+}
+void handle_exception2(int code) 
+{
+	kprintf(&sc_p2,"exception 2 %d\n", code) ;
+}
+void handle_exception3(int code) 
+{
+	kprintf(&sc_p2,"exception 3 %d\n", code) ;
+}
+void handle_exception4(int code) 
+{
+	kprintf(&sc_p2,"exception 4 %d\n", code) ;
+}
+void handle_exception5(int code) 
+{
+	kprintf(&sc_p2,"exception 5 %d\n", code) ;
+}
+void handle_exception6(int code) 
+{
+	kprintf(&sc_p2,"exception 6 %d\n", code) ;
+}
+void handle_exception7(int code) 
+{
+	kprintf(&sc_p2,"exception 7 %d\n", code) ;
+}
+void handle_exception8(int code) 
+{
+	kprintf(&sc_p2,"exception 8 %d\n", code) ;
+}
+void handle_exception9(int code) 
+{
+	kprintf(&sc_p2,"exception 9 %d\n", code) ;
+}
+void handle_exception10(int code) 
+{
+	kprintf(&sc_p2,"exception 10 %d\n", code) ;
+}
+void handle_exception11(int code) 
+{
+	kprintf(&sc_p2,"exception 11 %d\n", code) ;
+}
+void handle_exception12(int code) 
+{
+	kprintf(&sc_p2,"exception 12 %d\n", code) ;
+}
+void handle_exception13(int code) 
+{
+	kprintf(&sc_p2,"exception 13 %d\n", code) ;
+}
+void handle_exception14(int code) 
+{
+	kprintf(&sc_p2,"exception 14 %d\n", code) ;
+}
+void handle_exception15(int code) 
+{
+	kprintf(&sc_p2,"exception 15 %d\n", code) ;
+}
+void handle_exception16(int code) 
+{
+	kprintf(&sc_p2,"exception 16 %d\n", code) ;
+}
+void handle_exception17(int code) 
+{
+	kprintf(&sc_p2,"exception %d\n", code) ;
+}
+void handle_exception18(int code) 
+{
+	kprintf(&sc_p2,"exception %d\n", code) ;
+}
+void handle_exception19(int code) 
+{
+	kprintf(&sc_p2,"exception %d\n", code) ;
+}
+void handle_exception20(int code) 
+{
+	kprintf(&sc_p2,"exception %d\n", code) ;
+}
+void handle_exception21(int code) 
+{
+	kprintf(&sc_p2,"exception %d\n", code) ;
+}
+void handle_exception22(int code) 
+{
+	kprintf(&sc_p2,"exception %d\n", code) ;
+}
+void handle_exception23(int code) 
+{
+	kprintf(&sc_p2,"exception 23 %d\n", code) ;
+}
+void handle_exception24(int code) 
+{
+	kprintf(&sc_p2,"exception 24 %d\n", code) ;
+}
+void handle_exception25(int code) 
+{
+	kprintf(&sc_p2,"exception 25 %d\n", code) ;
+}
+void handle_exception26(int code) 
+{
+	kprintf(&sc_p2,"exception 26 %d\n", code) ;
+}
+void handle_exception27(int code) 
+{
+	kprintf(&sc_p2,"exception 27 %d\n", code) ;
+}
+void handle_exception28(int code) 
+{
+	kprintf(&sc_p2,"exception 28 %d\n", code) ;
+}
+void handle_exception29(int code) 
+{
+	kprintf(&sc_p2,"exception 29 %d\n", code) ;
+}
+void handle_exception30(int code) 
+{
+	kprintf(&sc_p2,"exception 30 %d\n", code) ;
+}
+void handle_exception31(int code) 
+{
+	kprintf(&sc_p2,"exception 31 %d\n", code) ;
 }

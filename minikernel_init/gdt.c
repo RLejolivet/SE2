@@ -103,7 +103,7 @@ void init_segment_noyau(gdt_entry* entry, char code)
 	entry->dpl = 0;
 	entry->desc_type = 1;
 
-	entry->seg_type = (code == 'T') ? 0x5: 0x2;
+	entry->seg_type = (code == 'T') ? 0xB: 0x3;
 
 	entry->custom = 0;
 	entry->zero = 0;

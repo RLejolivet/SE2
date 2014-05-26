@@ -12,6 +12,6 @@ int main()
 {
 	i=5;
 	test42();
-	scanf("%d", &i) ;
-	write('a') ;
+	printf("%d\n", i) ;
+	while(1) ;
 }
