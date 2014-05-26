@@ -161,6 +161,7 @@ static void writes(const char* s)
 static void printf_str(const char* str, int len, char fillwith, int placeleft, int signe)
 {
 	int i;
+	/* Ceci est du code copié collé so....what the HELL IS 'len' ???? */
 	if (len==0) 
 	{
 		if (signe) 
@@ -264,11 +265,9 @@ int printf(const char* fmt, ...)
 						{
 							char nb[12] ;
 							int x = va_arg(args, int) ;
+
+
 							
-							if (x < 0)
-							{
-								nb[0] = '-' ;
-							}
 						/*
 							char* p = buf;
 							int y = 1000000000;
