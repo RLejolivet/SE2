@@ -262,9 +262,17 @@ int printf(const char* fmt, ...)
 						case 'd' :
 						case 'i' : 
 						{
+							char nb[12] ;
+							int x = va_arg(args, int) ;
+							
+							if (x < 0)
+							{
+								nb[0] = '-' ;
+							}
+						/*
 							char* p = buf;
 							int y = 1000000000;
-							int x = va_arg(args, int);
+
 							if (x < 0) 
 							{
 								signe = '-' ;
@@ -289,6 +297,7 @@ int printf(const char* fmt, ...)
 								fillwith=' ';
 							printf_str(buf, len, fillwith, placeleft, signe);
 							fmt++;
+							*/
 							goto leave_printarg;
 						}
 						case '0' : 
