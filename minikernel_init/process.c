@@ -100,7 +100,7 @@ void init_processes(){
 		processes[1].stdin = &in1;
 		processes[1].stdout = &sc_p1;
 
-		processes[1].tss_entry = 0x2B;
+		processes[1].tss_entry = 0x28;
 		init_tss(processes[1].ptss);
 		processes[1].ptss->esp_0 = 0x1FFF;
 		processes[1].ptss->ss_0 = 0xB0;
@@ -123,15 +123,15 @@ void init_processes(){
 		processes[2].stdin = &in2;
 		processes[2].stdout = &sc_p2;
 
-		processes[2].tss_entry = 0x33;
+		processes[2].tss_entry = 0x30;
 		init_tss(processes[1].ptss);
 		processes[2].ptss->esp_0 = 0x1FFF;
 		processes[2].ptss->ss_0 = 0xB8;
 		processes[2].ptss->eip = *table_entry_1;
 		processes[2].ptss->esp = 0x1FFF;
-		processes[2].ptss->cs = 0x53;
-		processes[2].ptss->ds = 0x73;
-		processes[2].ptss->ss = 0x93;
+		processes[2].ptss->cs = 0x50;
+		processes[2].ptss->ds = 0x70;
+		processes[2].ptss->ss = 0x90;
 		processes[2].ptss->es = processes[2].ptss->ds;
 		processes[2].ptss->fs = processes[2].ptss->ds;
 		processes[2].ptss->gs = processes[2].ptss->ds;
@@ -146,15 +146,15 @@ void init_processes(){
 		processes[3].stdin = &in3;
 		processes[3].stdout = &sc_p3;
 
-		processes[3].tss_entry = 0x3B;
+		processes[3].tss_entry = 0x38;
 		init_tss(processes[1].ptss);
 		processes[3].ptss->esp_0 = 0x1FFF;
 		processes[3].ptss->ss_0 = 0xC0;
 		processes[3].ptss->eip = *table_entry_1;
 		processes[3].ptss->esp = 0x1FFF;
-		processes[3].ptss->cs = 0x5B;
-		processes[3].ptss->ds = 0x7B;
-		processes[3].ptss->ss = 0x9B;
+		processes[3].ptss->cs = 0x58;
+		processes[3].ptss->ds = 0x78;
+		processes[3].ptss->ss = 0x98;
 		processes[3].ptss->es = processes[3].ptss->ds;
 		processes[3].ptss->fs = processes[3].ptss->ds;
 		processes[3].ptss->gs = processes[3].ptss->ds;
@@ -169,15 +169,15 @@ void init_processes(){
 		processes[4].stdin = &in4;
 		processes[4].stdout = &sc_p4;
 		
-		processes[4].tss_entry = 0x43;
+		processes[4].tss_entry = 0x40;
 		init_tss(processes[1].ptss);
 		processes[4].ptss->esp_0 = 0x1FFF;
 		processes[4].ptss->ss_0 = 0xC8;
 		processes[4].ptss->eip = *table_entry_1;
 		processes[4].ptss->esp = 0x1FFF;
-		processes[4].ptss->cs = 0x63;
-		processes[4].ptss->ds = 0x83;
-		processes[4].ptss->ss = 0xA3;
+		processes[4].ptss->cs = 0x60;
+		processes[4].ptss->ds = 0x80;
+		processes[4].ptss->ss = 0xA0;
 		processes[4].ptss->es = processes[4].ptss->ds;
 		processes[4].ptss->fs = processes[4].ptss->ds;
 		processes[4].ptss->gs = processes[4].ptss->ds;
@@ -247,19 +247,7 @@ void commute_to(int index_processes)
 #endif
 
 #ifdef COMMUTE_ON
-	vgaprintf("J'ai envie de commuter sur %d, avec %x", index_processes, processes[index_processes].tss_entry);
-	if (first_schedule == 0) // en fait ça veut dire qu'on fait la première commutation
-	{
-		__asm__ __volatile__(
-			"movl %0, %%eax\n\t"
-			"ljmp $0x0028,$0x0"
-			:
-			: "m" (processes[index_processes].tss_entry)
-			: "eax"
-		);
-	}
-	else
-	{
+	//vgaprintf("J'ai envie de commuter sur %d, avec %x", index_processes, processes[index_processes].tss_entry);
 
 		__asm__ __volatile__(
 			"sti\n\t"
@@ -269,7 +257,6 @@ void commute_to(int index_processes)
 			: "m" (processes[index_processes].tss_entry)
 			: "eax"
 		);
-	}
 #endif
 
 #ifdef DEBUG_PROCESS

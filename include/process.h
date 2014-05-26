@@ -3,7 +3,7 @@
 
 #include "kernel.h"
 
-#define DEBUG_PROCESS
+//#define DEBUG_PROCESS
 
 // avant 1ere commutation : lrt (load registre rt)
 typedef struct{

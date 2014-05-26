@@ -73,7 +73,7 @@ void init_segment_user(gdt_entry* entry, char code, unsigned int base)
 	entry->base_addr_15_0 = base & 0xFFFF;
 	entry->base_addr_23_16 = (base >> 16) & 0xFF;
 
-	entry->seg_type = (code == 'T') ? 0xA: 0x2;
+	entry->seg_type = (code == 'T') ? 0xB: 0x3;
 	entry->desc_type = 1;
 	entry->dpl = 0x0;
 	entry->present = 1;
@@ -155,7 +155,7 @@ void init_gdt()
 	gdtr.limit = sizeof(gdt) -1;
 	gdtr.base_addr = (int) gdt;
 	
-	vgaprintf("Je suis avant LGDT\n");
+	//vgaprintf("Je suis avant LGDT\n");
 
 #ifdef COMMUTE_ON
 	__asm__ __volatile__(
@@ -165,7 +165,7 @@ void init_gdt()
 			: "eax"
 			);
 
-	vgaprintf("Je suis apres LGDT\n");
+	//vgaprintf("Je suis apres LGDT\n");
 
 	asm volatile(
 			"ljmp $0x10,$1f		\n\t"
@@ -183,6 +183,6 @@ void init_gdt()
 
 #endif
 
-	vgaprintf("Je suis apres LJMP\n");
+	//vgaprintf("Je suis apres LJMP\n");
 
 }

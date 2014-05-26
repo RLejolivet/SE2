@@ -55,7 +55,7 @@ void mini_kernel()
 	// Il manque un LTR ici, je crois - inline assembler for the win
 #ifdef COMMUTE_ON
 	
-			vgaprintf("ltr \n") ;
+			//vgaprintf("ltr \n") ;
 	tss0 = 0x20;
 	__asm__ __volatile__(
 			"ltr %0"
@@ -63,7 +63,7 @@ void mini_kernel()
 			: "r" (tss0)
 			:
 			);
-			vgaprintf("ltr successful\n") ;
+			//vgaprintf("ltr successful\n") ;
 #endif
 	schedule();
 	//while (1) ;

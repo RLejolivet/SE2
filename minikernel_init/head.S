@@ -202,6 +202,9 @@ call_kill_process:
 	jmp end_minikernel_syscalls # techniquement, si on revient ici, il y a un gros problème
 
 end_minikernel_syscalls:
+	movb $0x20,%al
+	outb %al,$0x20
+
 	popl %ebx
 	popl %gs
 	popl %fs

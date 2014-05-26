@@ -12,6 +12,8 @@ int main()
 {
 	i=5;
 	test42();
-	printf("%d\n", i) ;
-	while(1) ;
+	i = 0x41;
+	printf("test numero 52") ;
+	write(i) ;
+	while(1);
 }

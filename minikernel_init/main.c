@@ -185,7 +185,7 @@ void do_minikernel_irq1(int code)
 	static int count = 0 ;
 	static bool caps = false, make_extended = false, break_extended = false ;
 	char caractere ;
-	task_struct* focused_process = processes + focus_process*sizeof(task_struct);
+	task_struct* focused_process = &processes[focus_process];
 	subscreen* psc =  focused_process->stdout ;
 	int* cursor = &((focused_process->stdin)->pos_lecture) ;
 
