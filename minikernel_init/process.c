@@ -109,10 +109,11 @@ void init_processes(){
 
 		processes[1].tss_entry = 0x28;
 		init_tss(processes[1].ptss);
-		processes[1].ptss->esp_0 = 0x1FFF;
+		processes[1].ptss->esp_0 = 0x1FF0;
 		processes[1].ptss->ss_0 = 0xB0;
 		processes[1].ptss->eip = *table_entry_1;
-		processes[1].ptss->esp = 0x1FFF;
+		processes[1].ptss->esp = 0x1FF0;
+		processes[1].ptss->ebp = processes[1].ptss->esp;
 		processes[1].ptss->cs = 0x48;
 		processes[1].ptss->ds = 0x68;
 		processes[1].ptss->ss = 0x88;
@@ -134,10 +135,11 @@ void init_processes(){
 
 		processes[2].tss_entry = 0x30;
 		init_tss(processes[1].ptss);
-		processes[2].ptss->esp_0 = 0x1FFF;
+		processes[2].ptss->esp_0 = 0x1FF0;
 		processes[2].ptss->ss_0 = 0xB8;
-		processes[2].ptss->eip = *table_entry_1;
-		processes[2].ptss->esp = 0x1FFF;
+		processes[2].ptss->eip = *table_entry_2;
+		processes[2].ptss->esp = 0x1FF0;
+		processes[2].ptss->ebp = processes[2].ptss->esp;
 		processes[2].ptss->cs = 0x50;
 		processes[2].ptss->ds = 0x70;
 		processes[2].ptss->ss = 0x90;
@@ -158,10 +160,11 @@ void init_processes(){
 
 		processes[3].tss_entry = 0x38;
 		init_tss(processes[1].ptss);
-		processes[3].ptss->esp_0 = 0x1FFF;
+		processes[3].ptss->esp_0 = 0x1FF0;
 		processes[3].ptss->ss_0 = 0xC0;
-		processes[3].ptss->eip = *table_entry_1;
-		processes[3].ptss->esp = 0x1FFF;
+		processes[3].ptss->eip = *table_entry_3;
+		processes[3].ptss->esp = 0x1FF0;
+		processes[3].ptss->ebp = processes[3].ptss->esp;
 		processes[3].ptss->cs = 0x58;
 		processes[3].ptss->ds = 0x78;
 		processes[3].ptss->ss = 0x98;
@@ -182,10 +185,11 @@ void init_processes(){
 		
 		processes[4].tss_entry = 0x40;
 		init_tss(processes[1].ptss);
-		processes[4].ptss->esp_0 = 0x1FFF;
+		processes[4].ptss->esp_0 = 0x1FF0;
 		processes[4].ptss->ss_0 = 0xC8;
-		processes[4].ptss->eip = *table_entry_1;
-		processes[4].ptss->esp = 0x1FFF;
+		processes[4].ptss->eip = *table_entry_4;
+		processes[4].ptss->esp = 0x1FF0;
+		processes[4].ptss->ebp = processes[4].ptss->esp;
 		processes[4].ptss->cs = 0x60;
 		processes[4].ptss->ds = 0x80;
 		processes[4].ptss->ss = 0xA0;
@@ -259,7 +263,7 @@ void commute_to(int index_processes)
 #endif
 
 #ifdef COMMUTE_ON
-	//vgaprintf("J'ai envie de commuter sur %d, avec %x\n", index_processes, processes[index_processes].tss_entry);
+	//kprintf(processes[current_process].stdout,"J'ai envie de commuter sur %d\n", index_processes);
 	if (first_schedule == 0)
 	{
 		first_schedule = 1;

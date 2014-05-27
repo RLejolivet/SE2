@@ -31,7 +31,7 @@ char sys_read()
 	c = bouffeur_dinput_lol->buffer_read[*cursor % BUFFER_SIZE];
 	(*cursor)++ ; 
 
-	bouffeur_dinput_lol->unread = *cursor == bouffeur_dinput_lol->pos_ecriture ? false : true ;
+	bouffeur_dinput_lol->unread = (*cursor == bouffeur_dinput_lol->pos_ecriture) ? false : true ;
 
 	return c ;
 }
@@ -51,9 +51,9 @@ void kill_process()
 {
 	processes[current_process].state = 'K';
 
-#ifdef DEBUG_SYSCALLS
-	vgaprintf("Et BAM, le process il est mort !\n");
-#endif
+//#ifdef DEBUG_SYSCALLS
+	kprintf(processes[current_process].stdout,"\nProcessus %d mort\n", current_process);
+//#endif
 
 	schedule();
 

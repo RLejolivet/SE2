@@ -79,8 +79,8 @@ else
 			exit
 		fi
 	fi
-	ld user_tmp/{$name1.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name1.elf
-	entry1=$(objdump -d user_tmp/$name1.elf | grep main | cut -f1 -d ' ')
+	ld user_tmp/{$name1.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e entry_user -o user_tmp/$name1.elf
+	entry1=$(objdump -d user_tmp/$name1.elf | grep entry_user | cut -f1 -d ' ')
 	exists1=11111111
 	objcopy -O binary -R .note -R .comment -S user_tmp/$name1.elf user_tmp/$name1.bin
 	dd if=user_tmp/$name1.bin of=user_tmp/$name1.extended count=1 bs=16384 conv=sync
@@ -101,8 +101,8 @@ then
 			exit
 		fi
 	fi
-	ld user_tmp/{$name2.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name2.elf
-	entry2=$(objdump -d user_tmp/$name2.elf | grep main | cut -f1 -d ' ')
+	ld user_tmp/{$name2.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e entry_user -o user_tmp/$name2.elf
+	entry2=$(objdump -d user_tmp/$name2.elf | grep entry_user | cut -f1 -d ' ')
 	exists2=11111111
 	objcopy -O binary -R .note -R .comment -S user_tmp/$name2.elf user_tmp/$name2.bin
 	dd if=user_tmp/$name2.bin of=user_tmp/$name2.extended count=1 bs=16384 conv=sync
@@ -123,8 +123,8 @@ then
 			exit
 		fi
 	fi 
-	ld user_tmp/{$name3.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name3.elf
-	entry3=$(objdump -d user_tmp/$name3.elf | grep main | cut -f1 -d ' ')
+	ld user_tmp/{$name3.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e entry_user -o user_tmp/$name3.elf
+	entry3=$(objdump -d user_tmp/$name3.elf | grep entry_user | cut -f1 -d ' ')
 	exists3=11111111
 	objcopy -O binary -R .note -R .comment -S user_tmp/$name3.elf user_tmp/$name3.bin
 	dd if=user_tmp/$name3.bin of=user_tmp/$name3.extended count=1 bs=16384 conv=sync
@@ -145,8 +145,8 @@ then
 			exit
 		fi
 	fi
-	ld user_tmp/{$name4.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e main -o user_tmp/$name4.elf
-	entry4=$(objdump -d user_tmp/$name4.elf | grep main | cut -f1 -d ' ')
+	ld user_tmp/{$name4.o,libc.o} -m elf_i386 -Ttext 0 -Tdata 0x2000 -e entry_user -o user_tmp/$name4.elf
+	entry4=$(objdump -d user_tmp/$name4.elf | grep entry_user | cut -f1 -d ' ')
 	exists4=11111111
 	objcopy -O binary -R .note -R .comment -S user_tmp/$name4.elf user_tmp/$name4.bin
 	dd if=user_tmp/$name4.bin of=user_tmp/$name4.extended count=1 bs=16384 conv=sync

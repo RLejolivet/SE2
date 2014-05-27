@@ -202,7 +202,7 @@ void do_minikernel_irq1(int code)
 	char caractere ;
 	task_struct* focused_process = &processes[focus_process];
 	subscreen* psc =  focused_process->stdout ;
-	int* cursor = &((focused_process->stdin)->pos_lecture) ;
+	int* cursor = &((focused_process->stdin)->pos_ecriture) ;
 
 	switch(code)
 	{
@@ -215,15 +215,7 @@ void do_minikernel_irq1(int code)
 			break ;
 		case 0xe0:
 			if(!make_extended)
-			{
 				make_extended = true ;
-				break_extended = false ;
-			}
-			else
-			{
-				make_extended = false ;
-				break_extended = true ;
-			}
 			break ;
 		default :
 			if(make_extended)
@@ -277,7 +269,7 @@ void do_minikernel_irq1(int code)
 					(*cursor)++ ;
 					if(!focused_process->stdin->unread)
 					{
-						//focused_process->state = 'R' ;
+						focused_process->state = 'R' ;
 						focused_process->stdin->unread = true ;
 					}
 					#ifdef DEBUG_SYSCALLS
@@ -308,168 +300,168 @@ int strlen(const char*p)
 	}
 
 /*	if(code  == 0xe0)
-		vgaprintf("extended key pressed %03d : %x\n", ++count, code) ;
+		vgaprintf("extended key pr%d\n", codeessed %03d : %x\n", ++count, code) ;
 	else
 		vgaprintf("keyboard pressed %010d : %x\n", ++count, code) ;*/
 }
 
-void handle_exception0(int code) 
+void handle_exception0() 
 {
-	kprintf(&sc_p2,"exception 0 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 0 \n") ;
 	kill_process();
 }
-void handle_exception1(int code) 
+void handle_exception1() 
 {
-	kprintf(&sc_p2,"exception 1 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 1 \n") ;
 	kill_process();
 }
-void handle_exception2(int code) 
+void handle_exception2() 
 {
-	kprintf(&sc_p2,"exception 2 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 2 \n") ;
 	kill_process();
 }
-void handle_exception3(int code) 
+void handle_exception3() 
 {
-	kprintf(&sc_p2,"exception 3 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 3 \n") ;
 	kill_process();
 }
-void handle_exception4(int code) 
+void handle_exception4() 
 {
-	kprintf(&sc_p2,"exception 4 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 4 \n") ;
 	kill_process();
 }
-void handle_exception5(int code) 
+void handle_exception5() 
 {
-	kprintf(&sc_p2,"exception 5 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 5 \n") ;
 	kill_process();
 }
-void handle_exception6(int code) 
+void handle_exception6() 
 {
-	kprintf(&sc_p2,"exception 6 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 6 \n") ;
 	kill_process();
 }
-void handle_exception7(int code) 
+void handle_exception7() 
 {
-	kprintf(&sc_p2,"exception 7 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 7 \n") ;
 	kill_process();
 }
-void handle_exception8(int code) 
+void handle_exception8() 
 {
-	kprintf(&sc_p2,"exception 8 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 8 \n") ;
 	kill_process();
 }
-void handle_exception9(int code) 
+void handle_exception9() 
 {
-	kprintf(&sc_p2,"exception 9 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 9 \n") ;
 	kill_process();
 }
-void handle_exception10(int code) 
+void handle_exception10() 
 {
-	kprintf(&sc_p2,"exception 10 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 10 \n") ;
 	kill_process();
 }
-void handle_exception11(int code) 
+void handle_exception11() 
 {
-	kprintf(&sc_p2,"exception 11 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 11 \n") ;
 	kill_process();
 }
-void handle_exception12(int code) 
+void handle_exception12() 
 {
-	kprintf(&sc_p2,"exception 12 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 12 \n") ;
 	kill_process();
 }
-void handle_exception13(int code) 
+void handle_exception13() 
 {
-	kprintf(&sc_p2,"exception 13 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 13 \n") ;
 	kill_process();
 }
-void handle_exception14(int code) 
+void handle_exception14() 
 {
-	kprintf(&sc_p2,"exception 14 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 14 \n") ;
 	kill_process();
 }
-void handle_exception15(int code) 
+void handle_exception15() 
 {
-	kprintf(&sc_p2,"exception 15 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 15 \n") ;
 	kill_process();
 }
-void handle_exception16(int code) 
+void handle_exception16() 
 {
-	kprintf(&sc_p2,"exception 16 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 16 \n") ;
 	kill_process();
 }
-void handle_exception17(int code) 
+void handle_exception17() 
 {
-	kprintf(&sc_p2,"exception %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 17 \n") ;
 	kill_process();
 }
-void handle_exception18(int code) 
+void handle_exception18() 
 {
-	kprintf(&sc_p2,"exception %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 18 \n") ;
 	kill_process();
 }
-void handle_exception19(int code) 
+void handle_exception19() 
 {
-	kprintf(&sc_p2,"exception %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 19 \n") ;
 	kill_process();
 }
-void handle_exception20(int code) 
+void handle_exception20() 
 {
-	kprintf(&sc_p2,"exception %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 20 \n") ;
 	kill_process();
 }
-void handle_exception21(int code) 
+void handle_exception21() 
 {
-	kprintf(&sc_p2,"exception %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 21 \n") ;
 	kill_process();
 }
-void handle_exception22(int code) 
+void handle_exception22() 
 {
-	kprintf(&sc_p2,"exception %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 22 \n") ;
 	kill_process();
 }
-void handle_exception23(int code) 
+void handle_exception23() 
 {
-	kprintf(&sc_p2,"exception 23 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 23 \n") ;
 	kill_process();
 }
-void handle_exception24(int code) 
+void handle_exception24() 
 {
-	kprintf(&sc_p2,"exception 24 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 24 \n") ;
 	kill_process();
 }
-void handle_exception25(int code) 
+void handle_exception25() 
 {
-	kprintf(&sc_p2,"exception 25 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 25 \n") ;
 	kill_process();
 }
-void handle_exception26(int code) 
+void handle_exception26() 
 {
-	kprintf(&sc_p2,"exception 26 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 26 \n") ;
 	kill_process();
 }
-void handle_exception27(int code) 
+void handle_exception27() 
 {
-	kprintf(&sc_p2,"exception 27 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 27 \n") ;
 	kill_process();
 }
-void handle_exception28(int code) 
+void handle_exception28() 
 {
-	kprintf(&sc_p2,"exception 28 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 28 \n") ;
 	kill_process();
 }
-void handle_exception29(int code) 
+void handle_exception29() 
 {
-	kprintf(&sc_p2,"exception 29 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 29 \n") ;
 	kill_process();
 }
-void handle_exception30(int code) 
+void handle_exception30() 
 {
-	kprintf(&sc_p2,"exception 30 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 30 \n") ;
 	kill_process();
 }
-void handle_exception31(int code) 
+void handle_exception31() 
 {
-	kprintf(&sc_p2,"exception 31 %d\n", code) ;
+	kprintf(processes[current_process].stdout,"exception 31 \n") ;
 	kill_process();
 }
