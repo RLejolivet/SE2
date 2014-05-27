@@ -90,7 +90,7 @@ void init_processes()
 	processes[0].ptss = tss_table;
 	processes[0].tss_entry = 0x23;
 	processes[0].state = 'R';
-	processes[0].pile_s = (void*) 0x22000;
+	processes[0].pile_s = 0x1FF0;
 
 
 	asm volatile("pushf\n\t"
@@ -104,8 +104,8 @@ void init_processes()
 	{
 		processes[1].ptss = &tss_table[1];
 		processes[1].state = 'R';
-		processes[1].pile_u = (void*) 0x24000;
-		processes[1].pile_s = (void*) 0x26000;
+		processes[1].pile_u = 0x1FF0;
+		processes[1].pile_s = 0x1FF0;
 		processes[1].stdin = &in1;
 		processes[1].stdout = &sc_p1;
 
@@ -130,8 +130,8 @@ void init_processes()
 	{
 		processes[2].ptss = &tss_table[2];
 		processes[2].state = 'R';
-		processes[2].pile_u = (void*) 0x28000;
-		processes[2].pile_s = (void*) 0x30000;
+		processes[2].pile_u = 0x1FF0;
+		processes[2].pile_s = 0x1FF0;
 		processes[2].stdin = &in2;
 		processes[2].stdout = &sc_p2;
 
@@ -155,8 +155,8 @@ void init_processes()
 	{
 		processes[3].ptss = &tss_table[3];
 		processes[3].state = 'R';
-		processes[3].pile_u = (void*) 0x32000;
-		processes[3].pile_s = (void*) 0x34000;
+		processes[3].pile_u = 0x1FF0;
+		processes[3].pile_s = 0x1FF0;
 		processes[3].stdin = &in3;
 		processes[3].stdout = &sc_p3;
 
@@ -180,8 +180,8 @@ void init_processes()
 	{
 		processes[4].ptss = &tss_table[4];
 		processes[4].state = 'R';
-		processes[4].pile_u = (void*) 0x36000;
-		processes[4].pile_s = (void*) 0x38000;
+		processes[4].pile_u = 0x1FF0;
+		processes[4].pile_s = 0x1FF0;
 		processes[4].stdin = &in4;
 		processes[4].stdout = &sc_p4;
 		

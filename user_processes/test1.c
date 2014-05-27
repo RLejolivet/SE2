@@ -19,5 +19,8 @@ int main()
 	write('\n');
 	sleep(5);
 	write(i);
-	while(1) sleep(1);
+	while(1) {
+		sleep(1);
+		write(3);
+	}
 }

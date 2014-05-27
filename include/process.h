@@ -52,8 +52,8 @@ typedef struct{
 	subscreen* stdout;
 	unsigned int count;
 	unsigned int pid;
-	void* pile_u;
-	void* pile_s;
+	int pile_u;
+	int pile_s;
 	int tss_entry;
 } task_struct;
 

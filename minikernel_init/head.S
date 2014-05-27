@@ -80,8 +80,35 @@ minikernel_irq0:
 	cld
 	cli
 	pushl %eax
+	pushl %ebx
 	pushl %ecx
 	pushl %edx
+
+
+#if 0
+ // Ce code a été abandonné parce qu'il fait tout planter et on sait pas pourquoi
+	movl processes, %eax			# tableau des processus
+	movl $(current_process), %ebx		# on récupère l'index du proc courant
+
+	xor %ecx, %ecx
+	cmpl %ebx, %ecx
+	je 1f
+
+	movl 0x24, %ecx				# 0x24 c'est la taille d'une task_struct
+	imul %ecx, %ebx				# on veut connaitre l'offset par rapport au tableau
+	add %ebx, %eax				# on avance pour pointer sur le task_struct courant
+
+	movl (%eax), %ebx			# on met l'adresse de la TSS dans ebx
+	movl 0x8(%ebx), %ecx			# si mes calculs sont bon, c'est ss_0
+	shrl $0x10, %ecx			# on met ss_0 dans la partie basse de ecx
+	movw %cx, %ss
+
+	movl %esp, 0x14(%eax)			# si mes calculs sont bon, c'est pile_u
+	movl 0x18(%eax), %esp			# si mes calculs sont bon, c'est pile_s
+1:
+#endif
+
+
 	pushl %es
 	pushl %ds
 	pushl %fs
@@ -102,8 +129,36 @@ minikernel_irq0:
 	popl %fs
 	popl %ds
 	popl %es
+
+
+#if 0
+ // Ce code a été abandonné parce qu'il fait tout planter et on sait pas pourquoi
+	movl processes, %eax			# tableau des processus
+	movl $(current_process), %ebx		# on récupère l'index du proc courant
+
+	xor %ecx, %ecx
+	cmpl %ebx, %ecx
+	je 1f
+
+	movl 0x24, %ecx				# 0x24 c'est la taille d'une task_struct
+	imul %ecx, %ebx				# on veut connaitre l'offset par rapport au tableau
+	add %ebx, %eax				# on avance pour pointer sur le task_struct courant
+
+	
+	movl (%eax), %ebx			# on met l'adresse de la TSS dans ebx
+	movl 0x50(%ebx), %ecx			# si mes calculs sont bon, c'est ss
+	shrl $0x10, %ecx			# on met ss_0 dans la partie basse de ecx
+	movw %cx, %ss
+
+	movl %esp, 0x18(%eax)			# si mes calculs sont bon, c'est pile_u
+	movl 0x14(%eax), %esp			# si mes calculs sont bon, c'est pile_s
+1:
+#endif
+
+
 	popl %edx
 	popl %ecx
+	popl %ebx
 	popl %eax
 	sti
 	iret

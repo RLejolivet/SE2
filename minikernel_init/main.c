@@ -193,6 +193,7 @@ void do_minikernel_irq0()
 
 	/* On schedule tous les 5 coups d'horloge */
 	if((count % 4) == 0 && first_schedule == 1) schedule();
+
 }
 
 void do_minikernel_irq1(int code)
