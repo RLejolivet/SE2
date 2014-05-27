@@ -2,6 +2,7 @@
 #define PROCESS_H
 
 #include "kernel.h"
+#define DEBUG_COMMUTE
 
 //#define DEBUG_PROCESS
 

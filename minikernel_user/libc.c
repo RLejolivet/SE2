@@ -14,7 +14,6 @@ int strlen(const char*p)
 }
 
 //copie la chaine qui est dans le buffer dans le char* passé en paramètre
-static void scanf_str(char* s) ;
 static void scanf_str(char* s) 
 {
 	char c = 'a' ;
@@ -162,11 +161,20 @@ static void writes(const char* s)
 		write(*s++) ;
 }
 
+/*
+ * Fonction annexe à printf
+ *
+ * @param str : la chaîne à afficher
+ * @param len : ?
+ * @param fillwith : ?
+ * @param placeleft : ?
+ * @param signe : entier signé ou non ?
+ */
 static void printf_str(const char* str, int len, char fillwith, int placeleft, int signe)
 {
 	int i;
-	/* Ceci est du code copié collé so....what the HELL IS 'len' ???? */
-	if (len==0) 
+	
+	if (len == 0) 
 	{
 		if (signe) 
 			write(signe);
@@ -174,7 +182,8 @@ static void printf_str(const char* str, int len, char fillwith, int placeleft, i
 	} 
 	else 
 	{
-		int slen=strlen(str) + (signe ? 1 : 0);
+		int slen = strlen(str) + (signe ? 1 : 0);
+
 		if (slen >= len) 
 		{
 			if (signe) 
@@ -207,13 +216,46 @@ static void printf_str(const char* str, int len, char fillwith, int placeleft, i
 	}
 }
 
+void int_to_string(char* res, int x, const int base)
+{
+	int nbdigits = 1 , i, j ;
+	char signe = 0;
+
+	if(x < 0)
+	{
+		signe = '-' ;
+		res[0] = signe ;
+		x = -x ;
+	}
+
+	for(i = base ; (float)x / i >= 1 ; i *= base)
+		nbdigits++;
+	/* Là, i vaut base^nbdigits */
+
+	i /= base ; /* i == base^(nbdigits - 1) */
+	
+	for( ; nbdigits > 0 ; nbdigits--)
+	{
+		int digit = x / i ;
+
+		*(res++ + (signe ? 1 : 0)) = digit + (digit > 9 ? 'a' - 10 : '0');
+		x -= i * digit ;
+		i /= base ;
+	}
+
+	res[nbdigits-1 + (signe ? 1 : 0)] = '\0' ;
+}
+
 int printf(const char* fmt, ...)
 {
-	int len=0;
+	#if 0
+	int len = 0;
 	char fillwith=' ';
 	int	 placeleft=0;
 	int	 signe=0;
 	char buf[100];
+	#endif
+	char res[12] ;
 	va_list args ;
 	
 	va_start(args, fmt) ;
@@ -224,6 +266,35 @@ int printf(const char* fmt, ...)
 		{
 			case '%' :
 				fmt++;
+				switch (*fmt)
+				{
+					case 'c' :
+						write(va_arg(args, int)) ;
+						fmt++ ;
+						continue ;
+					case 's' :
+						writes(va_arg(args, char*)) ;
+						fmt++ ;
+						continue ;
+					case 'd' :
+						int_to_string(res, va_arg(args, int), 10) ;
+
+						writes(res) ;
+						fmt++ ;
+						continue ;
+					case 'x' :
+						int_to_string(res, va_arg(args, int), 16) ;
+
+						writes(res) ;
+						fmt++ ;
+					/*
+					 * C'est invalide. mais fuck la gestion des erreurs
+					 */
+					default :
+						fmt++ ;
+						continue ;
+				}
+				#if 0
 				while (*fmt) 
 				{
 					switch (*fmt) 
@@ -267,12 +338,8 @@ int printf(const char* fmt, ...)
 						case 'd' :
 						case 'i' : 
 						{
-							char nb[12] ;
 							int x = va_arg(args, int) ;
 
-
-							
-						/*
 							char* p = buf;
 							int y = 1000000000;
 
@@ -295,12 +362,11 @@ int printf(const char* fmt, ...)
 								x = x % y;
 							}
 							*p++ = x + '0';
-							*p=0;
+							*p = 0;
 							if (placeleft)
 								fillwith=' ';
 							printf_str(buf, len, fillwith, placeleft, signe);
 							fmt++;
-							*/
 							goto leave_printarg;
 						}
 						case '0' : 
@@ -316,11 +382,10 @@ int printf(const char* fmt, ...)
 							placeleft= 1; 
 							continue;
 						default:
+							/* Si le caractère n'est pas un chiffre, ignorer */
 							if ( (*fmt<'1') || ('9'<=*fmt) ) 
-							{
-								/* ignore char */
 								continue;
-							}
+
 							/* get number */
 							while (*fmt && !((*fmt<'0') || ('9'<*fmt)) ) 
 							{
@@ -339,6 +404,7 @@ int printf(const char* fmt, ...)
 			default:
 				write(*fmt++) ;
 				continue ;
+								#endif
 		}
 	}	
 	return 0 ;

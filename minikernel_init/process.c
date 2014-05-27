@@ -10,7 +10,8 @@ unsigned short focus_process = 1;
 
 unsigned char first_schedule = 0;
 
-void init_tss(tss* ptss){
+void init_tss(tss* ptss)
+{
 	ptss->retour_arriere = 0;
 	// on n'initialise pas esp_0 vu que j'ai la flemme
 	// on n'initialise pas ss_0 vu qu'on le connais pas ici
@@ -48,7 +49,8 @@ void init_tss(tss* ptss){
 	ptss->fin = 0;
 }
 
-void init_processes(){
+void init_processes()
+{
 
 	/* Je SAIS où est ma table. Du coup j'y vais, comme ça, trop facile */
 	int* table_entry_1 = (int*) 0xB000;
@@ -320,7 +322,9 @@ void schedule()
 	{
 		/* On ne compte pas le processus 0 comme faisant partit de la boucle des processus */
 		suivant = ((current_process + i)%4 == 0) ? 4 : (current_process + i)%4;
-		if(processes[suivant].state == 'R'){
+
+		if(processes[suivant].state == 'R')
+		{
 			commute_to(suivant);
 			return;
 		}
