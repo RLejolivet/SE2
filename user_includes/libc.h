@@ -11,7 +11,7 @@
  * Additional arguments must be the ones referred to in format
  * Return value is 0 or the opposite of an error code
  */
-int printf(const char* format, ...);
+int printf(char* format, ...);
 
 /*
  * Format is the same as printf above

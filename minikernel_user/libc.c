@@ -2,7 +2,6 @@
 #include "mini_kernel.h"
 #include "../user_includes/libc.h"
 
-// ben strlen quoi
 int strlen(const char*p)
 {
 	int len=0;
@@ -57,9 +56,7 @@ int scanf(const char* fmt, ...)
 {
 	va_list args ;
 	va_start(args, fmt) ;
-	char buff[BUFFER_SIZE] ;
 	char c ;
-	int i = 0 ;
 
 	while(*fmt)
 	{
@@ -161,6 +158,7 @@ static void writes(const char* s)
 		write(*s++) ;
 }
 
+#if 0
 /*
  * Fonction annexe à printf
  *
@@ -215,10 +213,11 @@ static void printf_str(const char* str, int len, char fillwith, int placeleft, i
 		}	
 	}
 }
+#endif
 
 void int_to_string(char* res, int x, const int base)
 {
-	int nbdigits = 1 , i, j ;
+	int nbdigits = 1 , i ;
 	char signe = 0;
 
 	if(x < 0)
@@ -243,10 +242,10 @@ void int_to_string(char* res, int x, const int base)
 		i /= base ;
 	}
 
-	res[nbdigits-1 + (signe ? 1 : 0)] = '\0' ;
+	res[nbdigits + (signe ? 1 : 0)] = '\0' ;
 }
 
-int printf(const char* fmt, ...)
+int printf(char* fmt, ...)
 {
 	#if 0
 	int len = 0;
@@ -259,6 +258,14 @@ int printf(const char* fmt, ...)
 	va_list args ;
 	
 	va_start(args, fmt) ;
+
+#ifdef DEBUG_COMMUTE
+	if(*fmt == 0)
+		write('X') ;
+	else
+		write('Y') ;
+	write('l') ; write('o') ; write('l') ; write(' ') ; write(*fmt) ;
+#endif
 
 	while (*fmt) 
 	{
@@ -405,6 +412,10 @@ int printf(const char* fmt, ...)
 				write(*fmt++) ;
 				continue ;
 								#endif
+			default :
+				write(*fmt) ;
+				fmt++ ;
+				continue ;
 		}
 	}	
 	return 0 ;

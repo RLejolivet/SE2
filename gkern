@@ -38,7 +38,7 @@ dd if=tmp/minikernel.bin of=tmp/minikernel.extended count=1 bs=40960 conv=sync
 
 echo -e "\E[32m\n\nDebut de la compilation de la libc\n"
 # generation de la libc
-gcc -m32 -fno-stack-protector -Iinclude -Iuser_includes -c minikernel_user/libc.c -o user_tmp/libc.o
+gcc -Wall -Wextra -m32 -fno-stack-protector -Iinclude -Iuser_includes -c minikernel_user/libc.c -o user_tmp/libc.o
 
 # pas sûr qu'on en ai besoin après tout
 # gcc -m32 -fno-stack-protector -Iuser_includes -c minikernel_user/libc.S -o user_tmp/libcS.o

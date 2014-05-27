@@ -276,31 +276,31 @@ void commute_to(int index_processes)
 	}
 	switch(index_processes)
 	{
-	case 0:
-		__asm__ __volatile__(
-			"ljmp $0x0020,$0x0"
-		);
-		break;
-	case 1:
-		__asm__ __volatile__(
-			"ljmp $0x0028,$0x0"
-		);
-		break;
-	case 2:
-		__asm__ __volatile__(
-			"ljmp $0x0030,$0x0"
-		);
-		break;
-	case 3:
-		__asm__ __volatile__(
-			"ljmp $0x0038,$0x0"
-		);
-		break;
-	case 4:
-		__asm__ __volatile__(
-			"ljmp $0x0040,$0x0"
-		);
-		break;
+		case 0:
+			__asm__ __volatile__(
+				"ljmp $0x0020,$0x0"
+			);
+			break;
+		case 1:
+			__asm__ __volatile__(
+				"ljmp $0x0028,$0x0"
+			);
+			break;
+		case 2:
+			__asm__ __volatile__(
+				"ljmp $0x0030,$0x0"
+			);
+			break;
+		case 3:
+			__asm__ __volatile__(
+				"ljmp $0x0038,$0x0"
+			);
+			break;
+		case 4:
+			__asm__ __volatile__(
+				"ljmp $0x0040,$0x0"
+			);
+			break;
 	}
 #endif
 

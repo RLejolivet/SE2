@@ -2,9 +2,8 @@
 #define PROCESS_H
 
 #include "kernel.h"
-#define DEBUG_COMMUTE
 
-//#define DEBUG_PROCESS
+#define DEBUG_PROCESS
 
 // avant 1ere commutation : lrt (load registre rt)
 typedef struct{
