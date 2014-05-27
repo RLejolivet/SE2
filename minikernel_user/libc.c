@@ -20,7 +20,6 @@ static void scanf_str(char* s)
 	while(c != ' ' && c != '\n' && c != '\t')
 	{
 		c = read() ;
-		write(c);
 		*s++ = c ;
 	}
 	/* -1 pour remplacer le \n final */
@@ -30,7 +29,6 @@ static void scanf_str(char* s)
 static int get_int_from_stdin(int hexa)
 {
 	char c = read() ;
-	write(c);
 	int res = 0 ;
 
 	while((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))
@@ -45,7 +43,6 @@ static int get_int_from_stdin(int hexa)
 		//une version sale avec des ternaires imbriquées juste pour le fun
 		//res = (hexa ? 16 : 10) * res + c - (hexa ? 'a' : '0') + ((c >= '0' && c <= '9') ? 0 : (hexa ? 10 : 0) ;
 		c = read() ;
-		write(c);
 	}
 
 	return res ;
@@ -70,7 +67,6 @@ int scanf(const char* fmt, ...)
 					{
 						case '%' :
 							c = read() ;
-							write(c);
 							if(c != '%') //fail
 								return -1 ;
 							fmt++;
@@ -81,7 +77,6 @@ int scanf(const char* fmt, ...)
 							continue ;
 						case 'c' :
 							c = read() ;
-							write(c);
 							*va_arg(args, char*) = c;
 							fmt++;
 							continue ;
@@ -100,7 +95,6 @@ int scanf(const char* fmt, ...)
 				continue ;
 			default :
 				c = read() ;
-				write(c);
 				if(c != *fmt)
 					return -3 ;
 				fmt++ ;
