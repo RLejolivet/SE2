@@ -138,6 +138,22 @@ char read()
 
 }
 
+char read_clear()
+{
+	int res;
+
+	__asm__ __volatile__(
+			"movl $0x2, %%eax\n\t"
+			"int $0x80\n\t"		/* Appel système */
+			"movl %%eax, %0"
+			: "=m" (res)		/* Met le résultat de l'appel (eax) dans res */
+			: 
+			: "eax");
+	write(res);
+	return res;
+
+}
+
 void write(char input)
 {
 	int extended_input = input;
@@ -424,6 +440,7 @@ void main();
 void entry_user()
 {
 	int a[5];
+	a[0]= (a[1] == 2) ? 3:4;
 	main();
 	asm volatile("movl $0x3,%%eax\n\tint $0x80":::"eax");
 }

@@ -260,6 +260,7 @@ void do_minikernel_irq1(int code)
 			}
 			else if (code < 0x81)
 			{
+				if (focused_process->state == 'I') return;
 				caractere = mappings[code - 1] ;
 				if(caps)
 					caractere = uppercase(code) ;

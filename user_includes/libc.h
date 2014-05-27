@@ -34,6 +34,12 @@ void sleep(int time);
 char read();
 
 /*
+ * Read_clear waits for a keyboard interrupt, reads the typed character
+ * and writes it on the screen before returning it.
+ */
+char read_clear();
+
+/*
  * Write writes the character 'input' on the vga screen,
  * in the parameter of the current active process.
  */
